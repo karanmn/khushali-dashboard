@@ -1154,52 +1154,62 @@ window.processAllData = processAllData;
   measurementId: "G-N1PF33P8GG"
   };
 
-  const app = initializeApp(firebaseConfig);
+    const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   const salesRef = collection(db, "sales_orders");
 
-  // 1. Purane 5 mahine ke data ka ek smart backup bana lein
-  if (!window.puranaDataBackup) {
-    window.puranaDataBackup = [...rawSalesDatabase]; 
-  }
+  // 1. Aapka poora purana data yahan rahega (March se August wala)
+  const initialHardcodedData = [
+    // [Yahan aapka poora purana data paste rahega jo pehle se file me tha]
+    { name: "Vivek Varma", phone: "9875575483", date: "2026-03-01", amount: 700, remark: "Kit" },
+    { name: "Pawan Prajapati", phone: "7722942236", date: "2026-03-03", amount: 999, remark: "Combo" }
+    // ... (aur baaki saara purana data)
+  ];
 
-  // 2. Live Sync: Naya data aate hi purane data me mix karna
+  window.rawSalesDatabase = [...initialHardcodedData];
+
+  // 2. Firebase se live sync (Naye orders ke liye)
   const q = query(salesRef, orderBy("date", "desc"));
   onSnapshot(q, (snapshot) => {
-    // Array ko har baar safe purane data par reset karein
-    rawSalesDatabase.length = 0; 
-    rawSalesDatabase.push(...window.puranaDataBackup);
-
-    // Firebase se aane wale saare naye cloud orders isme add karein
+    let firebaseOrders = [];
     snapshot.forEach((doc) => {
-      rawSalesDatabase.push({ id: doc.id, ...doc.data() });
+      firebaseOrders.push({ id: doc.id, ...doc.data() });
     });
     
-    // Aapke dashboard ko refresh karega
-    if (typeof processAllData === 'function') {
-      processAllData();
-    }
+    // Purana data + Firebase ka naya data combine ho jayega
+    window.rawSalesDatabase = [...initialHardcodedData, ...firebaseOrders];
+    
+    if (typeof processAllData === "function") processAllData();
   });
 
-  // 3. Purane 'Save' button ko naye Firebase button me convert karna
+  // 3. Naya order save karne ka function
   window.handleNewOrderSubmit = async function(e) {
     e.preventDefault();
-    const newOrder = {
-      name: document.getElementById('newCustName').value.trim(),
-      phone: document.getElementById('newCustPhone').value.trim(),
-      amount: parseFloat(document.getElementById('newCustAmount').value) || 0,
-      date: document.getElementById('newCustDate').value,
-      remark: document.getElementById('newCustRemark').value.trim() || 'Direct Order'
-    };
-
     try {
-      await addDoc(salesRef, newOrder);
-      if (typeof closeAddOrderModal === 'function') closeAddOrderModal();
+      await addDoc(salesRef, {
+        name: document.getElementById('newCustName').value.trim(),
+        phone: document.getElementById('newCustPhone').value.trim(),
+        amount: parseFloat(document.getElementById('newCustAmount').value) || 0,
+        date: document.getElementById('newCustDate').value,
+        remark: document.getElementById('newCustRemark').value.trim() || 'Direct Order',
+        createdAt: new Date().toISOString()
+      });
+      closeAddOrderModal();
       document.querySelector('form').reset();
     } catch (err) {
-      alert("Error saving order: " + err.message);
+      alert("Save failed: " + err.message);
     }
   };
+
+  // 4. Sabhi Buttons Global Link (Taaki buttons kaam karein)
+  window.setFilter = setFilter;
+  window.openCustomerModal = openCustomerModal;
+  window.closeCustomerModal = closeCustomerModal;
+  window.saveCustomerNote = saveCustomerNote;
+  window.openAddOrderModal = openAddOrderModal;
+  window.closeAddOrderModal = closeAddOrderModal;
+  window.exportToCSV = exportToCSV;
+  window.processAllData = processAllData;
 </script>
 
 </body>
