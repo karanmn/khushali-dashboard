@@ -320,6 +320,34 @@
         <button onclick="closeAddOrderModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form onsubmit="handleNewOrderSubmit(event)" class="p-5 space-y-3.5 text-xs">
+        <!-- Yeh block Add Order Form ke andar replace/add karein -->
+<div class="grid grid-cols-2 gap-2">
+  <div>
+    <label class="block text-slate-300 font-medium mb-1">Select Product *</label>
+    <select id="newCustProduct" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+      <option value="KHU-001">White Phenyl Raw Material</option>
+      <option value="KHU-002">Colour Phenyl (Rose)</option>
+      <option value="KHU-003">Black Phenyl Raw Material</option>
+      <option value="KHU-004">Toilet Cleaner Raw Material</option>
+      <option value="KHU-005">R1 - Bathroom Cleaner</option>
+      <option value="KHU-006">Floor Cleaner (Lemon Flavor)</option>
+      <option value="KHU-007">Floor Cleaner (Rose Flavor)</option>
+      <option value="KHU-008">Hand Wash (Rose) Concentrate</option>
+      <option value="KHU-009">Hand Wash (Dettol Type)</option>
+      <option value="KHU-010">Dishwash Raw Material</option>
+      <option value="KHU-011">Fabric Wash Concentrate</option>
+      <option value="KHU-012">Glass Cleaner Raw Material</option>
+      <option value="KHU-013">Car Wash Shampoo Raw Material</option>
+      <option value="KHU-014">Room Freshener (Rose)</option>
+      <option value="KHU-015">Room Freshener (Lavender)</option>
+    </select>
+  </div>
+  <div>
+    <label class="block text-slate-300 font-medium mb-1">Quantity (KG) *</label>
+    <input type="number" id="newCustQty" step="any" min="0" required placeholder="e.g. 25" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono">
+  </div>
+</div>
+
         <div>
           <label class="block text-slate-300 font-medium mb-1">Customer Name *</label>
           <input type="text" id="newCustName" required placeholder="e.g. Ramesh Sharma" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
