@@ -43,7 +43,7 @@
             <h1 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">Khushali Sales</h1>
             <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[11px] font-bold px-2 py-0.5 rounded-full">After-Sales Portal</span>
           </div>
-          <p class="text-xs text-slate-400">1 March se August 2026 Customer Retention & Order Tracking</p>
+          <p class="text-xs text-slate-400">1 March se September 2026 Customer Retention & Order Tracking</p>
         </div>
       </div>
 
@@ -125,7 +125,7 @@
       <div class="bg-slate-800/60 p-4 rounded-2xl border border-slate-700/60 lg:col-span-2">
         <div class="flex items-center justify-between mb-3">
           <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-            <i class="fa-solid fa-chart-simple text-emerald-400"></i> Mahina-Vaar Sales (March - August 2026)
+            <i class="fa-solid fa-chart-simple text-emerald-400"></i> Mahina-Vaar Sales (March - September 2026)
           </h4>
           <span class="text-xs text-slate-400">Khushali Records</span>
         </div>
@@ -163,15 +163,12 @@
 
     <!-- Filters & Search Toolbar -->
     <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/80 shadow-md flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-3">
-      
-      <!-- Search Input -->
       <div class="relative w-full lg:w-96">
         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
         <input type="text" id="searchInput" placeholder="Customer name, mobile number, ya city search karein..." 
           class="w-full bg-slate-900/90 border border-slate-700 text-slate-100 pl-9 pr-4 py-2 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition">
       </div>
 
-      <!-- Action Segment Filters -->
       <div class="flex flex-wrap items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 custom-scrollbar">
         <button onclick="setFilter('all')" id="btn-all" class="filter-btn active-tab px-3 py-1.5 text-xs font-semibold rounded-lg border bg-emerald-600 border-emerald-500 text-white transition">
           Sabhi (<span id="count-all">0</span>)
@@ -192,12 +189,10 @@
           1-Time Buyers (<span id="count-one_time">0</span>)
         </button>
       </div>
-
     </div>
 
     <!-- Customer Table & List -->
     <div class="bg-slate-800/90 rounded-2xl border border-slate-700/80 shadow-xl overflow-hidden">
-      
       <div class="p-4 border-b border-slate-700/80 flex flex-wrap justify-between items-center gap-2">
         <div class="flex items-center gap-2">
           <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Customer Records</span>
@@ -222,9 +217,7 @@
               <th class="py-3 px-4 text-right">After-Sales Action</th>
             </tr>
           </thead>
-          <tbody id="customerTableBody" class="divide-y divide-slate-700/60">
-            <!-- Populated via Javascript -->
-          </tbody>
+          <tbody id="customerTableBody" class="divide-y divide-slate-700/60"></tbody>
         </table>
       </div>
     </div>
@@ -234,8 +227,6 @@
   <!-- Customer Detail & Order History Timeline Modal -->
   <div id="customerModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
-      
-      <!-- Modal Header -->
       <div class="p-5 bg-slate-900/80 border-b border-slate-700 flex justify-between items-center">
         <div>
           <div class="flex items-center gap-2">
@@ -249,10 +240,7 @@
         </button>
       </div>
 
-      <!-- Modal Body -->
       <div class="p-5 overflow-y-auto custom-scrollbar space-y-5 flex-1">
-        
-        <!-- Summary Stats in Modal -->
         <div class="grid grid-cols-3 gap-3 bg-slate-900/60 p-3.5 rounded-xl border border-slate-700/60 text-center">
           <div>
             <span class="text-[10px] uppercase font-semibold text-slate-400">Total Purchase</span>
@@ -268,17 +256,13 @@
           </div>
         </div>
 
-        <!-- Orders Timeline -->
         <div>
           <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2">
             <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i> Order Date Timeline (Har Order ki Details)
           </h4>
-          <div id="modalOrderTimeline" class="space-y-2">
-            <!-- Populated via Javascript -->
-          </div>
+          <div id="modalOrderTimeline" class="space-y-2"></div>
         </div>
 
-        <!-- After Sales Note Box -->
         <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700/60 space-y-2">
           <label class="text-xs font-semibold text-slate-300 flex items-center gap-2">
             <i class="fa-solid fa-note-sticky text-amber-400"></i> After-Sales Calling Note
@@ -289,10 +273,8 @@
             <i class="fa-solid fa-floppy-disk"></i> Save Note
           </button>
         </div>
-
       </div>
 
-      <!-- Modal Footer -->
       <div class="p-4 bg-slate-900/90 border-t border-slate-700 flex justify-between items-center gap-2">
         <button onclick="closeCustomerModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-medium transition">
           Close
@@ -306,11 +288,10 @@
           </a>
         </div>
       </div>
-
     </div>
   </div>
 
-  <!-- Add New Order Modal -->
+  <!-- Add New Order Modal (Clean Multi-Item Form) -->
   <div id="addOrderModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
       <div class="p-4 bg-slate-900 border-b border-slate-700 flex justify-between items-center">
@@ -395,72 +376,6 @@
       </form>
     </div>
   </div>
-  
-    <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
-      <div class="p-4 bg-slate-900 border-b border-slate-700 flex justify-between items-center">
-        <h3 class="text-sm font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-circle-plus text-emerald-400"></i> Naya Sales Record Jodein
-        </h3>
-        <button onclick="closeAddOrderModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <form onsubmit="handleNewOrderSubmit(event)" class="p-5 space-y-3.5 text-xs">
-        <!-- Yeh block Add Order Form ke andar replace/add karein -->
-<div class="grid grid-cols-2 gap-2">
-  <div>
-    <label class="block text-slate-300 font-medium mb-1">Select Product *</label>
-    <select id="newCustProduct" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
-      <option value="KHU-001">White Phenyl Raw Material</option>
-      <option value="KHU-002">Colour Phenyl (Rose)</option
-      <option value="KHU-003">Black Phenyl Raw Material</option>
-      <option value="KHU-004">Toilet Cleaner Raw Material</option>
-      <option value="KHU-005">R1 - Bathroom Cleaner</option>
-      <option value="KHU-006">Floor Cleaner (Lemon Flavor)</option>
-      <option value="KHU-007">Floor Cleaner (Rose Flavor)</option>
-      <option value="KHU-008">Hand Wash (Rose) Concentrate</option>
-      <option value="KHU-009">Hand Wash (Dettol Type)</option>
-      <option value="KHU-010">Dishwash Raw Material</option>
-      <option value="KHU-011">Fabric Wash Concentrate</option>
-      <option value="KHU-012">Glass Cleaner Raw Material</option>
-      <option value="KHU-013">Car Wash Shampoo Raw Material</option>
-      <option value="KHU-014">Room Freshener (Rose)</option>
-      <option value="KHU-015">Room Freshener (Lavender)</option>
-    </select>
-  </div>
-  <div>
-    <label class="block text-slate-300 font-medium mb-1">Quantity (KG) *</label>
-    <input type="number" id="newCustQty" step="any" min="0" required placeholder="e.g. 25" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono">
-  </div>
-</div>
-
-        <div>
-          <label class="block text-slate-300 font-medium mb-1">Customer Name *</label>
-          <input type="text" id="newCustName" required placeholder="e.g. Ramesh Sharma" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
-        </div>
-        <div>
-          <label class="block text-slate-300 font-medium mb-1">Mobile / Phone Number *</label>
-          <input type="text" id="newCustPhone" required placeholder="e.g. 9876543210" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-slate-300 font-medium mb-1">Order Amount (₹) *</label>
-            <input type="number" id="newCustAmount" required placeholder="e.g. 3500" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
-          </div>
-          <div>
-            <label class="block text-slate-300 font-medium mb-1">Order Date *</label>
-            <input type="date" id="newCustDate" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
-          </div>
-        </div>
-        <div>
-          <label class="block text-slate-300 font-medium mb-1">Product Details / Remark</label>
-          <input type="text" id="newCustRemark" placeholder="e.g. 5L Compound + Car wash bottle" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
-        </div>
-        <div class="pt-2 flex justify-end gap-2">
-          <button type="button" onclick="closeAddOrderModal()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-slate-200">Cancel</button>
-          <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 font-semibold text-white rounded-lg">Save Record</button>
-        </div>
-      </form>
-    </div>
-  </div>
 
   <!-- Footer -->
   <footer class="bg-slate-900 border-t border-slate-800 text-center py-4 text-xs text-slate-500">
@@ -469,7 +384,44 @@
 
   <!-- Complete Application Logic & Embedded Real Data -->
   <script type="module">
-   
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { 
+      getFirestore, 
+      collection, 
+      addDoc, 
+      doc, 
+      updateDoc, 
+      increment, 
+      setDoc, 
+      onSnapshot 
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // 1. Customer Tracking DB (khushali-sales)
+    const salesConfig = {
+      apiKey: "AIzaSyCi6iBEUdcftB0-KMefq62V7Iv3N76r9P4",
+      authDomain: "khushali-sales.firebaseapp.com",
+      projectId: "khushali-sales",
+      storageBucket: "khushali-sales.firebasestorage.app",
+      messagingSenderId: "193538956954",
+      appId: "1:193538956954:web:94a256e7a4abbc2d9b0923",
+      measurementId: "G-N1PF33P8GG"
+    };
+    const salesApp = initializeApp(salesConfig, "salesApp");
+    const salesDb = getFirestore(salesApp);
+    const salesRef = collection(salesDb, "sales_orders");
+
+    // 2. Stock Inventory DB (khushali-a24f0)
+    const stockConfig = {
+      apiKey: "AIzaSyD3pPGlB37Njyp7IVnV2a0k4ArRNJFZ9JY",
+      authDomain: "khushali-a24f0.firebaseapp.com",
+      projectId: "khushali-a24f0",
+      storageBucket: "khushali-a24f0.firebasestorage.app",
+      messagingSenderId: "1072051479007",
+      appId: "1:1072051479007:web:47acc32a1cb85e7c4f246a"
+    };
+    const stockApp = initializeApp(stockConfig, "stockApp");
+    const stockDb = getFirestore(stockApp);
+
     // State Variables
     let customerMap = {};
     let currentFilter = 'all';
@@ -477,502 +429,8 @@
     let customerNotes = {};
     let monthlyChart = null;
 
-    // Normalize and Process Data
-    function processAllData() {
-      customerMap = {};
-
-      rawSalesDatabase.forEach(item => {
-        // Clean phone number
-        const cleanPhone = (item.phone || '').replace(/[^0-9]/g, '');
-        const cleanName = (item.name || 'Unknown').trim();
-        const key = cleanPhone.length >= 8 ? cleanPhone : cleanName.toLowerCase();
-
-        if (!customerMap[key]) {
-          customerMap[key] = {
-            id: key,
-            name: cleanName,
-            phone: cleanPhone || 'Not available',
-            totalSpend: 0,
-            orderCount: 0,
-            orders: [],
-            orderDates: [],
-            hasLowTicketOrder: false
-          };
-        }
-
-        const amt = parseFloat(item.amount) || 0;
-        customerMap[key].totalSpend += amt;
-        customerMap[key].orderCount += 1;
-        if (amt < 1000) customerMap[key].hasLowTicketOrder = true;
-
-        const orderObj = {
-          date: item.date,
-          amount: amt,
-          remark: item.remark || 'Direct Order'
-        };
-        customerMap[key].orders.push(orderObj);
-        customerMap[key].orderDates.push(new Date(item.date));
-      });
-
-      // Compute metrics
-      const referenceToday = new Date(); // Current Date Context
-
-      Object.values(customerMap).forEach(c => {
-        c.orders.sort((a, b) => new Date(b.date) - new Date(a.date)); // Latest first
-        c.orderDates.sort((a, b) => a - b);
-        c.firstOrderDate = c.orderDates[0];
-        c.lastOrderDate = c.orderDates[c.orderDates.length - 1];
-        c.avgOrderValue = Math.round(c.totalSpend / c.orderCount);
-
-        const diffTime = Math.abs(referenceToday - c.lastOrderDate);
-        c.daysSinceLastOrder = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-        // Retention Status Flags
-        if (c.totalSpend >= 20000 || c.orderCount >= 4) {
-          c.tagType = 'vip';
-          c.tagLabel = 'VIP Regular';
-          c.tagClass = 'bg-purple-500/20 text-purple-300 border border-purple-500/30';
-        } else if (c.orderCount > 1 && c.daysSinceLastOrder <= 35) {
-          c.tagType = 'regular';
-          c.tagLabel = 'Active Regular';
-          c.tagClass = 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
-        } else if (c.daysSinceLastOrder > 45) {
-          c.tagType = 'churn_risk';
-          c.tagLabel = `No Repeat (${c.daysSinceLastOrder}d)`;
-          c.tagClass = 'bg-rose-500/20 text-rose-300 border border-rose-500/30';
-        } else if (c.avgOrderValue < 1000 || c.hasLowTicketOrder) {
-          c.tagType = 'low_ticket';
-          c.tagLabel = '< ₹1k Buyer';
-          c.tagClass = 'bg-amber-500/20 text-amber-300 border border-amber-500/30';
-        } else {
-          c.tagType = 'active';
-          c.tagLabel = 'Active (1 Order)';
-          c.tagClass = 'bg-blue-500/20 text-blue-300 border border-blue-500/30';
-        }
-      });
-
-      updateTopKPIs();
-      renderMonthlyChart();
-      applyFilterAndRender();
-    }
-
-    // Update KPI Cards & Counts
-    function updateTopKPIs() {
-      const customers = Object.values(customerMap);
-      const totalCust = customers.length;
-      const regularCust = customers.filter(c => c.orderCount > 1);
-      const churnRisk = customers.filter(c => c.daysSinceLastOrder > 45);
-      const lowTicket = customers.filter(c => c.avgOrderValue < 1000 || c.hasLowTicketOrder);
-      const vipCust = customers.filter(c => c.totalSpend >= 20000);
-      const oneTimeCust = customers.filter(c => c.orderCount === 1);
-
-      const totalRev = customers.reduce((sum, c) => sum + c.totalSpend, 0);
-      const totalOrders = rawSalesDatabase.length;
-      const repeatRate = totalCust > 0 ? Math.round((regularCust.length / totalCust) * 100) : 0;
-
-      document.getElementById('statTotalCustomers').innerText = totalCust;
-      document.getElementById('statRegularCustomers').innerText = regularCust.length;
-      document.getElementById('statRepeatRate').innerText = `(${repeatRate}% repeat rate)`;
-      document.getElementById('statNoRepeat').innerText = churnRisk.length;
-      document.getElementById('statLowTicket').innerText = lowTicket.length;
-      document.getElementById('statTotalRevenue').innerText = '₹' + totalRev.toLocaleString('en-IN');
-      document.getElementById('statTotalOrdersCount').innerText = `${totalOrders} total orders tracked`;
-
-      document.getElementById('statVipCount').innerText = vipCust.length + " VIPs";
-      document.getElementById('statUrgentFollowup').innerText = churnRisk.length + " Customers";
-      document.getElementById('statUpsellTarget').innerText = lowTicket.length + " Low Ticket";
-
-      // Filter Badge Counts
-      document.getElementById('count-all').innerText = totalCust;
-      document.getElementById('count-regular').innerText = regularCust.length;
-      document.getElementById('count-churn_risk').innerText = churnRisk.length;
-      document.getElementById('count-low_ticket').innerText = lowTicket.length;
-      document.getElementById('count-vip').innerText = vipCust.length;
-      document.getElementById('count-one_time').innerText = oneTimeCust.length;
-    }
-
-    // Chart.js Monthly Sales Breakdown
-    function renderMonthlyChart() {
-      const months = {
-        '2026-03': { name: 'March', amount: 0, orders: 0 },
-        '2026-04': { name: 'April', amount: 0, orders: 0 },
-        '2026-05': { name: 'May', amount: 0, orders: 0 },
-        '2026-06': { name: 'June', amount: 0, orders: 0 },
-        '2026-07': { name: 'July', amount: 0, orders: 0 },
-        '2026-08': { name: 'August', amount: 0, orders: 0 },
-        '2026-09': { name: 'September', amount: 0, orders: 0 }
-      };
-
-      rawSalesDatabase.forEach(item => {
-        const mKey = item.date.substring(0, 7);
-        if (months[mKey]) {
-          months[mKey].amount += item.amount;
-          months[mKey].orders += 1;
-        }
-      });
-
-      const labels = Object.values(months).map(m => m.name);
-      const revenueData = Object.values(months).map(m => m.amount);
-
-      const ctx = document.getElementById('monthlyChart').getContext('2d');
-      if (monthlyChart) monthlyChart.destroy();
-
-      monthlyChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Sales (₹)',
-            data: revenueData,
-            backgroundColor: [
-              'rgba(16, 185, 129, 0.7)',
-              'rgba(59, 130, 246, 0.7)',
-              'rgba(245, 158, 11, 0.7)',
-              'rgba(139, 92, 246, 0.7)',
-              'rgba(236, 72, 153, 0.7)',
-              'rgba(16, 185, 129, 0.9)',
-              'rgba(245, 158, 11, 0.9)'
-              
-            ],
-            borderColor: '#10b981',
-            borderRadius: 6
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: (ctx) => ` Sales: ₹${ctx.raw.toLocaleString('en-IN')}`
-              }
-            }
-          },
-          scales: {
-            x: {
-              grid: { display: false },
-              ticks: { color: '#94a3b8', font: { size: 10 } }
-            },
-            y: {
-              grid: { color: 'rgba(51, 65, 85, 0.5)' },
-              ticks: {
-                color: '#94a3b8',
-                font: { size: 10 },
-                callback: (val) => '₹' + (val >= 1000 ? (val/1000) + 'k' : val)
-              }
-            }
-          }
-        }
-      });
-    }
-
-    // Set Filter
-    function setFilter(type) {
-      currentFilter = type;
-      
-      const labels = {
-        all: 'Sabhi Customers',
-        regular: 'Regular Repeat Buyers (2+ Orders)',
-        churn_risk: 'Repeat Order Nahi Aaya (45+ Din se Inactive)',
-        low_ticket: 'Small Orders (< ₹1,000)',
-        vip: 'VIP High Value (> ₹20,000 Spend)',
-        one_time: '1-Time Only Buyers'
-      };
-      document.getElementById('currentFilterLabel').innerText = labels[type] || 'Filtered';
-
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.className = 'filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-slate-300 hover:bg-slate-700 transition';
-      });
-      const activeBtn = document.getElementById('btn-' + type);
-      if (activeBtn) {
-        activeBtn.className = 'filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg border bg-emerald-600 border-emerald-500 text-white transition';
-      }
-
-      applyFilterAndRender();
-    }
-
-    // Search Input Listener
-    document.getElementById('searchInput').addEventListener('input', applyFilterAndRender);
-
-    // Apply Filter and Render Table
-    function applyFilterAndRender() {
-      let list = Object.values(customerMap);
-      const query = document.getElementById('searchInput').value.trim().toLowerCase();
-
-      // Category Filters
-      if (currentFilter === 'regular') {
-        list = list.filter(c => c.orderCount > 1);
-      } else if (currentFilter === 'churn_risk') {
-        list = list.filter(c => c.daysSinceLastOrder > 45);
-      } else if (currentFilter === 'low_ticket') {
-        list = list.filter(c => c.avgOrderValue < 1000 || c.hasLowTicketOrder);
-      } else if (currentFilter === 'vip') {
-        list = list.filter(c => c.totalSpend >= 20000);
-      } else if (currentFilter === 'one_time') {
-        list = list.filter(c => c.orderCount === 1);
-      }
-
-      // Search Query
-      if (query) {
-        list = list.filter(c => 
-          c.name.toLowerCase().includes(query) || 
-          c.phone.includes(query) ||
-          c.orders.some(o => (o.remark || '').toLowerCase().includes(query) || o.date.includes(query))
-        );
-      }
-
-      // Sort by Total Spend or Last Order
-      list.sort((a, b) => b.totalSpend - a.totalSpend);
-
-      document.getElementById('showingCount').innerText = list.length;
-      const tbody = document.getElementById('customerTableBody');
-
-      if (list.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="8" class="p-8 text-center text-slate-400">
-              <i class="fa-regular fa-folder-open text-3xl mb-2 text-slate-600 block"></i>
-              Koi record match nahi hua. Search ya filter badal kar check karein.
-            </td>
-          </tr>`;
-        return;
-      }
-
-      tbody.innerHTML = list.map(c => {
-        const firstDate = c.firstOrderDate.toISOString().split('T')[0];
-        const lastDate = c.lastOrderDate.toISOString().split('T')[0];
-        const waMsg = encodeURIComponent(`Namaste ${c.name} ji! Khushali team ki taraf se follow-up call. Aapka pichhla order date ${lastDate} ko record hua tha. Kya aapko naye stock ya product requirements h?`);
-
-        return `
-          <tr class="hover:bg-slate-700/40 transition border-b border-slate-700/60">
-            <!-- Customer Details -->
-            <td class="py-3.5 px-4 cursor-pointer" onclick="openCustomerModal('${c.id}')">
-              <div class="font-bold text-white text-sm hover:text-emerald-400 transition flex items-center gap-1.5">
-                ${c.name}
-                ${c.orderCount > 1 ? '<i class="fa-solid fa-star text-amber-400 text-[10px]"></i>' : ''}
-              </div>
-              <div class="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
-                <i class="fa-solid fa-phone text-[10px] text-slate-500"></i> ${c.phone}
-              </div>
-            </td>
-
-            <!-- Total Orders Count -->
-            <td class="py-3.5 px-4 text-center cursor-pointer" onclick="openCustomerModal('${c.id}')">
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${c.orderCount > 1 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-slate-700 text-slate-300'}">
-                ${c.orderCount} Order${c.orderCount > 1 ? 's' : ''}
-              </span>
-            </td>
-
-            <!-- Total Amount (LTV) -->
-            <td class="py-3.5 px-4 font-bold text-slate-100 text-sm">
-              ₹${c.totalSpend.toLocaleString('en-IN')}
-            </td>
-
-            <!-- Avg Order -->
-            <td class="py-3.5 px-4 text-slate-300">
-              ₹${c.avgOrderValue.toLocaleString('en-IN')}
-            </td>
-
-            <!-- First Order -->
-            <td class="py-3.5 px-4 text-slate-400 text-xs">
-              ${firstDate}
-            </td>
-
-            <!-- Last Order -->
-            <td class="py-3.5 px-4">
-              <div class="text-xs text-slate-200 font-medium">${lastDate}</div>
-              <div class="text-[10px] text-slate-400">${c.daysSinceLastOrder} din pehle</div>
-            </td>
-
-            <!-- Status Tag -->
-            <td class="py-3.5 px-4">
-              <span class="text-[11px] font-semibold px-2.5 py-1 rounded-md ${c.tagClass}">
-                ${c.tagLabel}
-              </span>
-            </td>
-
-            <!-- Actions -->
-            <td class="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
-              <button onclick="openCustomerModal('${c.id}')" title="Timeline & Details Dekhein" class="p-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white transition">
-                <i class="fa-solid fa-eye text-xs"></i>
-              </button>
-              ${c.phone !== 'Not available' ? `
-                <a href="https://wa.me/91${c.phone}?text=${waMsg}" target="_blank" title="WhatsApp Message Bhejein" class="inline-block p-1.5 rounded-lg bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white transition border border-emerald-500/30">
-                  <i class="fa-brands fa-whatsapp text-xs"></i>
-                </a>
-                <a href="tel:+91${c.phone}" title="Call Lagayein" class="inline-block p-1.5 rounded-lg bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white transition border border-blue-500/30">
-                  <i class="fa-solid fa-phone text-xs"></i>
-                </a>
-              ` : ''}
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    // Customer Detail Modal
-    function openCustomerModal(customerId) {
-      const c = customerMap[customerId];
-      if (!c) return;
-      selectedCustomerKey = customerId;
-
-      document.getElementById('modalCustomerName').innerText = c.name;
-      document.getElementById('modalCustomerPhone').innerHTML = `<i class="fa-solid fa-phone text-[10px]"></i> +91 ${c.phone}`;
-      document.getElementById('modalTotalSpend').innerText = `₹${c.totalSpend.toLocaleString('en-IN')}`;
-      document.getElementById('modalOrderCount').innerText = `${c.orderCount} Times`;
-      document.getElementById('modalAvgOrder').innerText = `₹${c.avgOrderValue.toLocaleString('en-IN')}`;
-
-      // Badge
-      const badge = document.getElementById('modalCustomerBadge');
-      badge.className = `text-[10px] font-bold px-2 py-0.5 rounded-full ${c.tagClass}`;
-      badge.innerText = c.tagLabel;
-
-      // Timeline List
-      const timelineDiv = document.getElementById('modalOrderTimeline');
-      timelineDiv.innerHTML = c.orders.map((o, idx) => `
-        <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900/80 border border-slate-700/60 text-xs">
-          <div class="flex items-center gap-3">
-            <span class="w-6 h-6 rounded-full bg-slate-800 text-slate-400 font-bold flex items-center justify-center text-[10px]">#${c.orders.length - idx}</span>
-            <div>
-              <p class="font-bold text-slate-200">Date: ${o.date}</p>
-              <p class="text-[11px] text-slate-400">${o.remark || 'Regular Purchase'}</p>
-            </div>
-          </div>
-          <span class="font-extrabold text-emerald-400 text-sm">₹${o.amount.toLocaleString('en-IN')}</span>
-        </div>
-      `).join('');
-
-      // Notes
-      document.getElementById('modalCustomerNote').value = customerNotes[customerId] || '';
-
-      // Action Links
-      const waMsg = encodeURIComponent(`Namaste ${c.name} ji! Khushali sales team ki taraf se follow-up. Aapka last order amount ₹${c.orders[0]?.amount} tha. Agle order ki requirements bataiye.`);
-      document.getElementById('modalWhatsappBtn').href = `https://wa.me/91${c.phone}?text=${waMsg}`;
-      document.getElementById('modalCallBtn').href = `tel:+91${c.phone}`;
-
-      document.getElementById('customerModal').classList.remove('hidden');
-    }
-
-    function closeCustomerModal() {
-      document.getElementById('customerModal').classList.add('hidden');
-    }
-
-    function saveCustomerNote() {
-      if (!selectedCustomerKey) return;
-      const noteText = document.getElementById('modalCustomerNote').value.trim();
-      customerNotes[selectedCustomerKey] = noteText;
-      
-      const btn = event.target;
-      const original = btn.innerHTML;
-      btn.innerHTML = `<i class="fa-solid fa-check"></i> Saved!`;
-      setTimeout(() => btn.innerHTML = original, 1500);
-    }
-
-    // Add Order Modal Handlers
-    function openAddOrderModal() {
-      document.getElementById('newCustDate').value = new Date().toISOString().split('T')[0];
-      document.getElementById('addOrderModal').classList.remove('hidden');
-    }
-
-    function closeAddOrderModal() {
-      document.getElementById('addOrderModal').classList.add('hidden');
-    }
-
-    function handleNewOrderSubmit(e) {
-      e.preventDefault();
-      const name = document.getElementById('newCustName').value.trim();
-      const phone = document.getElementById('newCustPhone').value.trim();
-      const amount = parseFloat(document.getElementById('newCustAmount').value) || 0;
-      const date = document.getElementById('newCustDate').value;
-      const remark = document.getElementById('newCustRemark').value.trim() || 'New Manual Order';
-
-      rawSalesDatabase.unshift({
-        name: name,
-        phone: phone,
-        amount: amount,
-        date: date,
-        remark: remark
-      });
-
-      closeAddOrderModal();
-      processAllData();
-    }
-
-    // Export Table to CSV
-    window.exportToCSV = function() {
-  let csv = 'Customer Name,Phone Number,Total Orders,Total Spend (INR),Avg Order (INR),First Order Date,Last Order Date,Days Inactive,Status Tag\n';
-  
-  // customerMap ab dashboard ke saare live aur naye orders ko mila kar data banata hai
-  Object.values(customerMap).forEach(c => {
-    const firstDate = c.firstOrderDate ? c.firstOrderDate.toISOString().split('T')[0] : '';
-    const lastDate = c.lastOrderDate ? c.lastOrderDate.toISOString().split('T')[0] : '';
-    
-    const row = [
-      `"${c.name}"`,
-      `"${c.phone}"`,
-      c.orderCount,
-      c.totalSpend,
-      c.avgOrderValue,
-      firstDate,
-      lastDate,
-      c.daysSinceLastOrder,
-      `"${c.tagLabel}"`
-    ];
-    csv += row.join(',') + '\n';
-  });
-
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.setAttribute('href', url);
-  link.setAttribute('download', `Khushali_Customer_Tracking_${new Date().toISOString().split('T')[0]}.csv`);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
-
-
-    // Initialize on page load
-    window.onload = function() {
-      processAllData();
-    };
-    // --- ALL BUTTONS FIX ---
-window.setFilter = setFilter;
-window.openCustomerModal = openCustomerModal;
-window.closeCustomerModal = closeCustomerModal;
-window.saveCustomerNote = saveCustomerNote;
-window.openAddOrderModal = openAddOrderModal;
-window.closeAddOrderModal = closeAddOrderModal;
-window.exportToCSV = exportToCSV;
-window.processAllData = processAllData;
-  </script>
-  <!-- FIREBASE LIVE SYNC & DATA MERGE SCRIPT -->
-<!-- Ise file ke ekdum last me </body> se theek pehle paste karein -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-  // Yahan apni Firebase Config details dalein
-  const firebaseConfig = {
-  apiKey: "AIzaSyCi6iBEUdcftB0-KMefq62V7Iv3N76r9P4",
-  authDomain: "khushali-sales.firebaseapp.com",
-  projectId: "khushali-sales",
-  storageBucket: "khushali-sales.firebasestorage.app",
-  messagingSenderId: "193538956954",
-  appId: "1:193538956954:web:94a256e7a4abbc2d9b0923",
-  measurementId: "G-N1PF33P8GG"
-  };
-
-    const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const salesRef = collection(db, "sales_orders");
-
-  // 1. Aapka poora purana data yahan rahega (March se August wala)
-  const initialHardcodedData = [
-    // [Yahan aapka poora purana data paste rahega jo pehle se file me tha]
-    
-      // March 2026 (Sales report khushali.pdf)
+    // Hardcoded Database (March to August 2026)
+    const initialHardcodedData = [
       { name: "Vivek Varma", phone: "9875575483", date: "2026-03-01", amount: 700, remark: "Kit" },
       { name: "Pawan Prajapati", phone: "7722942236", date: "2026-03-03", amount: 999, remark: "Combo" },
       { name: "Alok Giri", phone: "9696060823", date: "2026-03-03", amount: 1161, remark: "Bf rf tc" },
@@ -1023,8 +481,6 @@ window.processAllData = processAllData;
       { name: "Kishan Meena", phone: "9680268448", date: "2026-04-05", amount: 1296, remark: "Tc+ hw+ Gc+ 4 bottle" },
       { name: "Ankit Jodhpur", phone: "7201919997", date: "2026-04-06", amount: 8500, remark: "Rf+cw+ gc" },
       { name: "Govind Mittal", phone: "7568814310", date: "2026-04-08", amount: 6224, remark: "Tc+ dishwash + gc" },
-
-      // April 2026 (Personal sells.pdf)
       { name: "Ayush Pandey", phone: "9749994907", date: "2026-04-09", amount: 3580, remark: "Order" },
       { name: "Shivam Shukla", phone: "7080610112", date: "2026-04-10", amount: 766, remark: "Order" },
       { name: "Nosad Ali", phone: "9064512171", date: "2026-04-10", amount: 2277, remark: "Order" },
@@ -1052,8 +508,6 @@ window.processAllData = processAllData;
       { name: "Samadhan Jadav", phone: "8766499600", date: "2026-04-29", amount: 247, remark: "Order" },
       { name: "Sinku Yadav", phone: "8368157946", date: "2026-04-29", amount: 6000, remark: "Order" },
       { name: "Ankit Prasad", phone: "8869002460", date: "2026-04-30", amount: 950, remark: "Order" },
-
-      // May 2026 (May 2026 sells Khushali.pdf)
       { name: "Prakash Chaudhary", phone: "8271035663", date: "2026-05-01", amount: 8024, remark: "Order" },
       { name: "Alok Goswami", phone: "9696060823", date: "2026-05-02", amount: 800, remark: "Order" },
       { name: "Devesh Sharma", phone: "9829001122", date: "2026-05-04", amount: 1240, remark: "Order" },
@@ -1093,8 +547,6 @@ window.processAllData = processAllData;
       { name: "Home Delight", phone: "9131957918", date: "2026-05-27", amount: 6150, remark: "Order" },
       { name: "Shivlal", phone: "9082095028", date: "2026-05-28", amount: 5850, remark: "Order" },
       { name: "Anuj", phone: "7055849524", date: "2026-05-28", amount: 6250, remark: "Order" },
-
-      // June 2026 (June khushali sells.pdf)
       { name: "Anuj Giri", phone: "9340447623", date: "2026-06-02", amount: 1630, remark: "#lokesh" },
       { name: "Arman Khokhar", phone: "9521650313", date: "2026-06-03", amount: 8645, remark: "#lokesh" },
       { name: "Gori Shankar", phone: "9549731982", date: "2026-06-04", amount: 1150, remark: "#lokesh" },
@@ -1146,8 +598,6 @@ window.processAllData = processAllData;
       { name: "Ankit Ji Sikar", phone: "8000385639", date: "2026-06-30", amount: 9882, remark: "#lokesh" },
       { name: "Sinku Yadav", phone: "8368157946", date: "2026-06-30", amount: 12145, remark: "#lokesh" },
       { name: "Tanishq", phone: "9967620655", date: "2026-06-30", amount: 20227, remark: "#lokesh" },
-
-      // July 2026 (July khushali sells .pdf)
       { name: "Rohit Pareek", phone: "7014133586", date: "2026-07-01", amount: 1500, remark: "Lokesh" },
       { name: "Rajendra Jhunjhunu", phone: "9587891097", date: "2026-07-02", amount: 3875, remark: "Lokesh" },
       { name: "Ashish Ji", phone: "9079271880", date: "2026-07-03", amount: 600, remark: "Lokesh" },
@@ -1210,8 +660,6 @@ window.processAllData = processAllData;
       { name: "Mohd Ashraf", phone: "9694639900", date: "2026-07-31", amount: 17500, remark: "Raj Niwai" },
       { name: "Soham", phone: "9322970402", date: "2026-07-31", amount: 800, remark: "Lokesh" },
       { name: "Jyoti Mare", phone: "7735772532", date: "2026-07-31", amount: 4469, remark: "Karan" },
-
-      // August 2026 (AUGUST KHUSHALI SELLS (1).pdf)
       { name: "Sunil Singh", phone: "9818678988", date: "2026-08-01", amount: 4278, remark: "Order" },
       { name: "Lalit Kumar", phone: "8077817340", date: "2026-08-03", amount: 1800, remark: "Order" },
       { name: "Jigar", phone: "6200028261", date: "2026-08-04", amount: 1415, remark: "Order" },
@@ -1270,41 +718,537 @@ window.processAllData = processAllData;
       { name: "Amit Das", phone: "7005055254", date: "2026-08-27", amount: 13159, remark: "Order" }
     ];
 
-  window.rawSalesDatabase = [...initialHardcodedData];
+    window.rawSalesDatabase = [...initialHardcodedData];
 
-  onSnapshot(salesRef, (snapshot) => {
-      let firebaseOrders = [];
-      snapshot.forEach((doc) => {
-        firebaseOrders.push({ id: doc.id, ...doc.data() });
+    // Data Processing Function
+    function processAllData() {
+      customerMap = {};
+
+      window.rawSalesDatabase.forEach(item => {
+        const cleanPhone = (item.phone || '').replace(/[^0-9]/g, '');
+        const cleanName = (item.name || 'Unknown').trim();
+        const key = cleanPhone.length >= 8 ? cleanPhone : cleanName.toLowerCase();
+
+        if (!customerMap[key]) {
+          customerMap[key] = {
+            id: key,
+            name: cleanName,
+            phone: cleanPhone || 'Not available',
+            totalSpend: 0,
+            orderCount: 0,
+            orders: [],
+            orderDates: [],
+            hasLowTicketOrder: false
+          };
+        }
+
+        const amt = parseFloat(item.amount) || 0;
+        customerMap[key].totalSpend += amt;
+        customerMap[key].orderCount += 1;
+        if (amt < 1000) customerMap[key].hasLowTicketOrder = true;
+
+        customerMap[key].orders.push({
+          date: item.date,
+          amount: amt,
+          remark: item.remark || 'Direct Order'
+        });
+        customerMap[key].orderDates.push(new Date(item.date));
       });
-      
-      window.rawSalesDatabase = [...initialHardcodedData, ...firebaseOrders];
-      
-      if (typeof processAllData === "function") {
-        processAllData();
-      }
-    });
 
-    // 4. Save New Order to Cloud
+      const referenceToday = new Date();
+
+      Object.values(customerMap).forEach(c => {
+        c.orders.sort((a, b) => new Date(b.date) - new Date(a.date));
+        c.orderDates.sort((a, b) => a - b);
+        c.firstOrderDate = c.orderDates[0];
+        c.lastOrderDate = c.orderDates[c.orderDates.length - 1];
+        c.avgOrderValue = Math.round(c.totalSpend / c.orderCount);
+
+        const diffTime = Math.abs(referenceToday - c.lastOrderDate);
+        c.daysSinceLastOrder = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+        if (c.totalSpend >= 20000 || c.orderCount >= 4) {
+          c.tagType = 'vip';
+          c.tagLabel = 'VIP Regular';
+          c.tagClass = 'bg-purple-500/20 text-purple-300 border border-purple-500/30';
+        } else if (c.orderCount > 1 && c.daysSinceLastOrder <= 35) {
+          c.tagType = 'regular';
+          c.tagLabel = 'Active Regular';
+          c.tagClass = 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+        } else if (c.daysSinceLastOrder > 45) {
+          c.tagType = 'churn_risk';
+          c.tagLabel = `No Repeat (${c.daysSinceLastOrder}d)`;
+          c.tagClass = 'bg-rose-500/20 text-rose-300 border border-rose-500/30';
+        } else if (c.avgOrderValue < 1000 || c.hasLowTicketOrder) {
+          c.tagType = 'low_ticket';
+          c.tagLabel = '< ₹1k Buyer';
+          c.tagClass = 'bg-amber-500/20 text-amber-300 border border-amber-500/30';
+        } else {
+          c.tagType = 'active';
+          c.tagLabel = 'Active (1 Order)';
+          c.tagClass = 'bg-blue-500/20 text-blue-300 border border-blue-500/30';
+        }
+      });
+
+      updateTopKPIs();
+      renderMonthlyChart();
+      applyFilterAndRender();
+    }
+
+    function updateTopKPIs() {
+      const customers = Object.values(customerMap);
+      const totalCust = customers.length;
+      const regularCust = customers.filter(c => c.orderCount > 1);
+      const churnRisk = customers.filter(c => c.daysSinceLastOrder > 45);
+      const lowTicket = customers.filter(c => c.avgOrderValue < 1000 || c.hasLowTicketOrder);
+      const vipCust = customers.filter(c => c.totalSpend >= 20000);
+      const oneTimeCust = customers.filter(c => c.orderCount === 1);
+
+      const totalRev = customers.reduce((sum, c) => sum + c.totalSpend, 0);
+      const totalOrders = window.rawSalesDatabase.length;
+      const repeatRate = totalCust > 0 ? Math.round((regularCust.length / totalCust) * 100) : 0;
+
+      document.getElementById('statTotalCustomers').innerText = totalCust;
+      document.getElementById('statRegularCustomers').innerText = regularCust.length;
+      document.getElementById('statRepeatRate').innerText = `(${repeatRate}% repeat rate)`;
+      document.getElementById('statNoRepeat').innerText = churnRisk.length;
+      document.getElementById('statLowTicket').innerText = lowTicket.length;
+      document.getElementById('statTotalRevenue').innerText = '₹' + totalRev.toLocaleString('en-IN');
+      document.getElementById('statTotalOrdersCount').innerText = `${totalOrders} total orders tracked`;
+
+      document.getElementById('statVipCount').innerText = vipCust.length + " VIPs";
+      document.getElementById('statUrgentFollowup').innerText = churnRisk.length + " Customers";
+      document.getElementById('statUpsellTarget').innerText = lowTicket.length + " Low Ticket";
+
+      document.getElementById('count-all').innerText = totalCust;
+      document.getElementById('count-regular').innerText = regularCust.length;
+      document.getElementById('count-churn_risk').innerText = churnRisk.length;
+      document.getElementById('count-low_ticket').innerText = lowTicket.length;
+      document.getElementById('count-vip').innerText = vipCust.length;
+      document.getElementById('count-one_time').innerText = oneTimeCust.length;
+    }
+
+    function renderMonthlyChart() {
+      const months = {
+        '2026-03': { name: 'March', amount: 0, orders: 0 },
+        '2026-04': { name: 'April', amount: 0, orders: 0 },
+        '2026-05': { name: 'May', amount: 0, orders: 0 },
+        '2026-06': { name: 'June', amount: 0, orders: 0 },
+        '2026-07': { name: 'July', amount: 0, orders: 0 },
+        '2026-08': { name: 'August', amount: 0, orders: 0 },
+        '2026-09': { name: 'September', amount: 0, orders: 0 }
+      };
+
+      window.rawSalesDatabase.forEach(item => {
+        const mKey = (item.date || '').substring(0, 7);
+        if (months[mKey]) {
+          months[mKey].amount += item.amount;
+          months[mKey].orders += 1;
+        }
+      });
+
+      const labels = Object.values(months).map(m => m.name);
+      const revenueData = Object.values(months).map(m => m.amount);
+
+      const ctx = document.getElementById('monthlyChart').getContext('2d');
+      if (monthlyChart) monthlyChart.destroy();
+
+      monthlyChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Sales (₹)',
+            data: revenueData,
+            backgroundColor: [
+              'rgba(16, 185, 129, 0.7)',
+              'rgba(59, 130, 246, 0.7)',
+              'rgba(245, 158, 11, 0.7)',
+              'rgba(139, 92, 246, 0.7)',
+              'rgba(236, 72, 153, 0.7)',
+              'rgba(16, 185, 129, 0.9)',
+              'rgba(14, 165, 233, 0.8)'
+            ],
+            borderColor: '#10b981',
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ` Sales: ₹${ctx.raw.toLocaleString('en-IN')}`
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { color: '#94a3b8', font: { size: 10 } }
+            },
+            y: {
+              grid: { color: 'rgba(51, 65, 85, 0.5)' },
+              ticks: {
+                color: '#94a3b8',
+                font: { size: 10 },
+                callback: (val) => '₹' + (val >= 1000 ? (val/1000) + 'k' : val)
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function setFilter(type) {
+      currentFilter = type;
+      const labels = {
+        all: 'Sabhi Customers',
+        regular: 'Regular Repeat Buyers (2+ Orders)',
+        churn_risk: 'Repeat Order Nahi Aaya (45+ Din se Inactive)',
+        low_ticket: 'Small Orders (< ₹1,000)',
+        vip: 'VIP High Value (> ₹20,000 Spend)',
+        one_time: '1-Time Only Buyers'
+      };
+      document.getElementById('currentFilterLabel').innerText = labels[type] || 'Filtered';
+
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.className = 'filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-slate-300 hover:bg-slate-700 transition';
+      });
+      const activeBtn = document.getElementById('btn-' + type);
+      if (activeBtn) {
+        activeBtn.className = 'filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg border bg-emerald-600 border-emerald-500 text-white transition';
+      }
+
+      applyFilterAndRender();
+    }
+
+    document.getElementById('searchInput').addEventListener('input', applyFilterAndRender);
+
+    function applyFilterAndRender() {
+      let list = Object.values(customerMap);
+      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+
+      if (currentFilter === 'regular') {
+        list = list.filter(c => c.orderCount > 1);
+      } else if (currentFilter === 'churn_risk') {
+        list = list.filter(c => c.daysSinceLastOrder > 45);
+      } else if (currentFilter === 'low_ticket') {
+        list = list.filter(c => c.avgOrderValue < 1000 || c.hasLowTicketOrder);
+      } else if (currentFilter === 'vip') {
+        list = list.filter(c => c.totalSpend >= 20000);
+      } else if (currentFilter === 'one_time') {
+        list = list.filter(c => c.orderCount === 1);
+      }
+
+      if (query) {
+        list = list.filter(c => 
+          c.name.toLowerCase().includes(query) || 
+          c.phone.includes(query) ||
+          c.orders.some(o => (o.remark || '').toLowerCase().includes(query) || o.date.includes(query))
+        );
+      }
+
+      list.sort((a, b) => b.totalSpend - a.totalSpend);
+
+      document.getElementById('showingCount').innerText = list.length;
+      const tbody = document.getElementById('customerTableBody');
+
+      if (list.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="p-8 text-center text-slate-400">
+              <i class="fa-regular fa-folder-open text-3xl mb-2 text-slate-600 block"></i>
+              Koi record match nahi hua. Search ya filter badal kar check karein.
+            </td>
+          </tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(c => {
+        const firstDate = c.firstOrderDate.toISOString().split('T')[0];
+        const lastDate = c.lastOrderDate.toISOString().split('T')[0];
+        const waMsg = encodeURIComponent(`Namaste ${c.name} ji! Khushali team ki taraf se follow-up call. Aapka pichhla order date ${lastDate} ko record hua tha. Kya aapko naye stock ya product requirements h?`);
+
+        return `
+          <tr class="hover:bg-slate-700/40 transition border-b border-slate-700/60">
+            <td class="py-3.5 px-4 cursor-pointer" onclick="openCustomerModal('${c.id}')">
+              <div class="font-bold text-white text-sm hover:text-emerald-400 transition flex items-center gap-1.5">
+                ${c.name}
+                ${c.orderCount > 1 ? '<i class="fa-solid fa-star text-amber-400 text-[10px]"></i>' : ''}
+              </div>
+              <div class="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
+                <i class="fa-solid fa-phone text-[10px] text-slate-500"></i> ${c.phone}
+              </div>
+            </td>
+            <td class="py-3.5 px-4 text-center cursor-pointer" onclick="openCustomerModal('${c.id}')">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${c.orderCount > 1 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-slate-700 text-slate-300'}">
+                ${c.orderCount} Order${c.orderCount > 1 ? 's' : ''}
+              </span>
+            </td>
+            <td class="py-3.5 px-4 font-bold text-slate-100 text-sm">
+              ₹${c.totalSpend.toLocaleString('en-IN')}
+            </td>
+            <td class="py-3.5 px-4 text-slate-300">
+              ₹${c.avgOrderValue.toLocaleString('en-IN')}
+            </td>
+            <td class="py-3.5 px-4 text-slate-400 text-xs">
+              ${firstDate}
+            </td>
+            <td class="py-3.5 px-4">
+              <div class="text-xs text-slate-200 font-medium">${lastDate}</div>
+              <div class="text-[10px] text-slate-400">${c.daysSinceLastOrder} din pehle</div>
+            </td>
+            <td class="py-3.5 px-4">
+              <span class="text-[11px] font-semibold px-2.5 py-1 rounded-md ${c.tagClass}">
+                ${c.tagLabel}
+              </span>
+            </td>
+            <td class="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
+              <button onclick="openCustomerModal('${c.id}')" title="Timeline Dekhein" class="p-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white transition">
+                <i class="fa-solid fa-eye text-xs"></i>
+              </button>
+              ${c.phone !== 'Not available' ? `
+                <a href="https://wa.me/91${c.phone}?text=${waMsg}" target="_blank" title="WhatsApp" class="inline-block p-1.5 rounded-lg bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white transition border border-emerald-500/30">
+                  <i class="fa-brands fa-whatsapp text-xs"></i>
+                </a>
+                <a href="tel:+91${c.phone}" title="Call" class="inline-block p-1.5 rounded-lg bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white transition border border-blue-500/30">
+                  <i class="fa-solid fa-phone text-xs"></i>
+                </a>
+              ` : ''}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openCustomerModal(customerId) {
+      const c = customerMap[customerId];
+      if (!c) return;
+      selectedCustomerKey = customerId;
+
+      document.getElementById('modalCustomerName').innerText = c.name;
+      document.getElementById('modalCustomerPhone').innerHTML = `<i class="fa-solid fa-phone text-[10px]"></i> +91 ${c.phone}`;
+      document.getElementById('modalTotalSpend').innerText = `₹${c.totalSpend.toLocaleString('en-IN')}`;
+      document.getElementById('modalOrderCount').innerText = `${c.orderCount} Times`;
+      document.getElementById('modalAvgOrder').innerText = `₹${c.avgOrderValue.toLocaleString('en-IN')}`;
+
+      const badge = document.getElementById('modalCustomerBadge');
+      badge.className = `text-[10px] font-bold px-2 py-0.5 rounded-full ${c.tagClass}`;
+      badge.innerText = c.tagLabel;
+
+      const timelineDiv = document.getElementById('modalOrderTimeline');
+      timelineDiv.innerHTML = c.orders.map((o, idx) => `
+        <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900/80 border border-slate-700/60 text-xs">
+          <div class="flex items-center gap-3">
+            <span class="w-6 h-6 rounded-full bg-slate-800 text-slate-400 font-bold flex items-center justify-center text-[10px]">#${c.orders.length - idx}</span>
+            <div>
+              <p class="font-bold text-slate-200">Date: ${o.date}</p>
+              <p class="text-[11px] text-slate-400">${o.remark || 'Regular Purchase'}</p>
+            </div>
+          </div>
+          <span class="font-extrabold text-emerald-400 text-sm">₹${o.amount.toLocaleString('en-IN')}</span>
+        </div>
+      `).join('');
+
+      document.getElementById('modalCustomerNote').value = customerNotes[customerId] || '';
+
+      const waMsg = encodeURIComponent(`Namaste ${c.name} ji! Khushali sales team ki taraf se follow-up. Agle order ki requirements bataiye.`);
+      document.getElementById('modalWhatsappBtn').href = `https://wa.me/91${c.phone}?text=${waMsg}`;
+      document.getElementById('modalCallBtn').href = `tel:+91${c.phone}`;
+
+      document.getElementById('customerModal').classList.remove('hidden');
+    }
+
+    function closeCustomerModal() {
+      document.getElementById('customerModal').classList.add('hidden');
+    }
+
+    function saveCustomerNote() {
+      if (!selectedCustomerKey) return;
+      const noteText = document.getElementById('modalCustomerNote').value.trim();
+      customerNotes[selectedCustomerKey] = noteText;
+      
+      const btn = event.target;
+      const original = btn.innerHTML;
+      btn.innerHTML = `<i class="fa-solid fa-check"></i> Saved!`;
+      setTimeout(() => btn.innerHTML = original, 1500);
+    }
+
+    function openAddOrderModal() {
+      document.getElementById('newCustDate').value = new Date().toISOString().split('T')[0];
+      document.getElementById('addOrderModal').classList.remove('hidden');
+    }
+
+    function closeAddOrderModal() {
+      document.getElementById('addOrderModal').classList.add('hidden');
+    }
+
+    // Dynamic Row Creator
+    window.addOrderItemRow = function() {
+      const container = document.getElementById('orderItemsContainer');
+      const div = document.createElement('div');
+      div.className = "order-item-row grid grid-cols-12 gap-2 bg-slate-900/90 p-2.5 rounded-xl border border-slate-700 items-center";
+      div.innerHTML = `
+        <div class="col-span-7">
+          <select class="prod-select w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500" required>
+            <option value="KHU-001">White Phenyl Raw Material</option>
+            <option value="KHU-002">Colour Phenyl (Rose)</option>
+            <option value="KHU-003">Black Phenyl Raw Material</option>
+            <option value="KHU-004">Toilet Cleaner Raw Material</option>
+            <option value="KHU-005">R1 - Bathroom Cleaner</option>
+            <option value="KHU-006">Floor Cleaner (Lemon Flavor)</option>
+            <option value="KHU-007">Floor Cleaner (Rose Flavor)</option>
+            <option value="KHU-008">Hand Wash (Rose) Concentrate</option>
+            <option value="KHU-009">Hand Wash (Dettol Type)</option>
+            <option value="KHU-010">Dishwash Raw Material</option>
+            <option value="KHU-011">Fabric Wash Concentrate</option>
+            <option value="KHU-012">Glass Cleaner Raw Material</option>
+            <option value="KHU-013">Car Wash Shampoo Raw Material</option>
+            <option value="KHU-014">Room Freshener (Rose)</option>
+            <option value="KHU-015">Room Freshener (Lavender)</option>
+          </select>
+        </div>
+        <div class="col-span-4">
+          <input type="number" step="any" min="0.01" required placeholder="Qty (kg)" class="prod-qty w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 font-mono focus:outline-none focus:border-emerald-500">
+        </div>
+        <div class="col-span-1 text-center">
+          <button type="button" onclick="this.closest('.order-item-row').remove()" class="text-rose-400 hover:text-rose-300 text-xs">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+      `;
+      container.appendChild(div);
+    };
+
+    // Form Submission: Saves Sales Order + Realtime Stock Deduction
     window.handleNewOrderSubmit = async function(e) {
       e.preventDefault();
+
+      const name = document.getElementById('newCustName').value.trim();
+      const phone = document.getElementById('newCustPhone').value.trim();
+      const amount = parseFloat(document.getElementById('newCustAmount').value) || 0;
+      const date = document.getElementById('newCustDate').value;
+      const userRemark = document.getElementById('newCustRemark')?.value.trim() || '';
+
+      const rows = document.querySelectorAll('.order-item-row');
+      const items = [];
+      const remarkParts = [];
+
+      rows.forEach(row => {
+        const select = row.querySelector('.prod-select');
+        const qtyInput = row.querySelector('.prod-qty');
+        const productId = select.value;
+        const productName = select.options[select.selectedIndex].text;
+        const qty = parseFloat(qtyInput.value) || 0;
+
+        if (qty > 0) {
+          items.push({ productId, productName, qty });
+          remarkParts.push(`${qty}kg ${productName}`);
+        }
+      });
+
+      if (items.length === 0) {
+        alert("Kripya kam se kam ek product aur quantity enter karein.");
+        return;
+      }
+
+      const combinedRemark = remarkParts.join(', ') + (userRemark ? ` | ${userRemark}` : '');
+
       try {
+        // 1. Sales DB me Save
         await addDoc(salesRef, {
-          name: document.formatInput ? '' : document.getElementById('newCustName').value.trim(),
-          phone: document.getElementById('newCustPhone').value.trim(),
-          amount: parseFloat(document.getElementById('newCustAmount').value) || 0,
-          date: document.getElementById('newCustDate').value,
-          remark: document.getElementById('newCustRemark').value.trim() || 'Direct Order',
+          name,
+          phone,
+          amount,
+          date,
+          remark: combinedRemark,
           createdAt: new Date().toISOString()
         });
+
+        // 2. Stock DB (khushali-a24f0) se Stock Minus
+        for (const item of items) {
+          const stockDocRef = doc(stockDb, "products", item.productId);
+          await updateDoc(stockDocRef, {
+            stockKg: increment(-item.qty)
+          });
+
+          // Ledger Entry Create
+          const txId = "TX-ORD-" + Date.now().toString().slice(-5) + "-" + Math.floor(Math.random() * 100);
+          await setDoc(doc(stockDb, "transactions", txId), {
+            id: txId,
+            date: new Date().toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' }),
+            type: 'DISPATCH',
+            productId: item.productId,
+            productName: item.productName,
+            qty: item.qty,
+            unit: 'kg',
+            refNumber: `ORD-${Date.now().toString().slice(-4)}`,
+            party: name || 'Customer Order',
+            notes: `Auto Order dispatch (${phone}) - ${item.qty}kg`,
+            amount: 0,
+            timestamp: Date.now()
+          });
+        }
+
         closeAddOrderModal();
-        document.querySelector('form').reset();
+        document.querySelector('#addOrderModal form').reset();
+
+        const container = document.getElementById('orderItemsContainer');
+        while (container.children.length > 1) {
+          container.removeChild(container.lastChild);
+        }
+
+        alert(`✅ Order save ho gaya aur ${items.length} product(s) ka stock turant deduct ho gaya!`);
       } catch (err) {
-        alert("Save failed: " + err.message);
+        console.error("Order error:", err);
+        alert("Error: " + err.message);
       }
     };
 
-    // 5. Global Buttons Link
+    window.exportToCSV = function() {
+      let csv = 'Customer Name,Phone Number,Total Orders,Total Spend (INR),Avg Order (INR),First Order Date,Last Order Date,Days Inactive,Status Tag\n';
+      Object.values(customerMap).forEach(c => {
+        const firstDate = c.firstOrderDate ? c.firstOrderDate.toISOString().split('T')[0] : '';
+        const lastDate = c.lastOrderDate ? c.lastOrderDate.toISOString().split('T')[0] : '';
+        const row = [
+          `"${c.name}"`,
+          `"${c.phone}"`,
+          c.orderCount,
+          c.totalSpend,
+          c.avgOrderValue,
+          firstDate,
+          lastDate,
+          c.daysSinceLastOrder,
+          `"${c.tagLabel}"`
+        ];
+        csv += row.join(',') + '\n';
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `Khushali_Customer_Tracking_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
+    // Live Snapshot Listener (Merges Hardcoded + Firebase realtime)
+    onSnapshot(salesRef, (snapshot) => {
+      let firebaseOrders = [];
+      snapshot.forEach((docSnap) => {
+        firebaseOrders.push({ id: docSnap.id, ...docSnap.data() });
+      });
+      
+      window.rawSalesDatabase = [...initialHardcodedData, ...firebaseOrders];
+      processAllData();
+    });
+
+    // Window Global Bindings
     window.setFilter = setFilter;
     window.openCustomerModal = openCustomerModal;
     window.closeCustomerModal = closeCustomerModal;
@@ -1313,198 +1257,10 @@ window.processAllData = processAllData;
     window.closeAddOrderModal = closeAddOrderModal;
     window.exportToCSV = exportToCSV;
     window.processAllData = processAllData;
-</script>
-  <!-- FIREBASE LIVE SYNC & DUAL STOCK DEDUCTION SCRIPT -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { 
-    getFirestore, 
-    collection, 
-    addDoc, 
-    doc, 
-    updateDoc, 
-    increment, 
-    setDoc, 
-    onSnapshot 
-  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  // 1. Sales Tracking Firebase (khushali-sales)
-  const salesConfig = {
-    apiKey: "AIzaSyCi6iBEUdcftB0-KMefq62V7Iv3N76r9P4",
-    authDomain: "khushali-sales.firebaseapp.com",
-    projectId: "khushali-sales",
-    storageBucket: "khushali-sales.firebasestorage.app",
-    messagingSenderId: "193538956954",
-    appId: "1:193538956954:web:94a256e7a4abbc2d9b0923",
-    measurementId: "G-N1PF33P8GG"
-  };
-  const salesApp = initializeApp(salesConfig, "salesApp");
-  const salesDb = getFirestore(salesApp);
-  const salesRef = collection(salesDb, "sales_orders");
-
-  // 2. Stock Inventory Firebase (khushali-a24f0)
-  const stockConfig = {
-    apiKey: "AIzaSyD3pPGlB37Njyp7IVnV2a0k4ArRNJFZ9JY",
-    authDomain: "khushali-a24f0.firebaseapp.com",
-    projectId: "khushali-a24f0",
-    storageBucket: "khushali-a24f0.firebasestorage.app",
-    messagingSenderId: "1072051479007",
-    appId: "1:1072051479007:web:47acc32a1cb85e7c4f246a"
-  };
-  const stockApp = initializeApp(stockConfig, "stockApp");
-  const stockDb = getFirestore(stockApp);
-
-  window.rawSalesDatabase = typeof initialHardcodedData !== 'undefined' ? [...initialHardcodedData] : [];
-
-  onSnapshot(salesRef, (snapshot) => {
-    let firebaseOrders = [];
-    snapshot.forEach((docSnap) => {
-      firebaseOrders.push({ id: docSnap.id, ...docSnap.data() });
-    });
-    
-    window.rawSalesDatabase = typeof initialHardcodedData !== 'undefined'
-      ? [...initialHardcodedData, ...firebaseOrders]
-      : firebaseOrders;
-      
-    if (typeof processAllData === "function") {
+    window.onload = function() {
       processAllData();
-    }
-  });
-
-  // Dynamic Row Creator
-  window.addOrderItemRow = function() {
-    const container = document.getElementById('orderItemsContainer');
-    const div = document.createElement('div');
-    div.className = "order-item-row grid grid-cols-12 gap-2 bg-slate-900/90 p-2.5 rounded-xl border border-slate-700 items-center";
-    div.innerHTML = `
-      <div class="col-span-7">
-        <select class="prod-select w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500" required>
-          <option value="KHU-001">White Phenyl Raw Material</option>
-          <option value="KHU-002">Colour Phenyl (Rose)</option>
-          <option value="KHU-003">Black Phenyl Raw Material</option>
-          <option value="KHU-004">Toilet Cleaner Raw Material</option>
-          <option value="KHU-005">R1 - Bathroom Cleaner</option>
-          <option value="KHU-006">Floor Cleaner (Lemon Flavor)</option>
-          <option value="KHU-007">Floor Cleaner (Rose Flavor)</option>
-          <option value="KHU-008">Hand Wash (Rose) Concentrate</option>
-          <option value="KHU-009">Hand Wash (Dettol Type)</option>
-          <option value="KHU-010">Dishwash Raw Material</option>
-          <option value="KHU-011">Fabric Wash Concentrate</option>
-          <option value="KHU-012">Glass Cleaner Raw Material</option>
-          <option value="KHU-013">Car Wash Shampoo Raw Material</option>
-          <option value="KHU-014">Room Freshener (Rose)</option>
-          <option value="KHU-015">Room Freshener (Lavender)</option>
-        </select>
-      </div>
-      <div class="col-span-4">
-        <input type="number" step="any" min="0.01" required placeholder="Qty (kg)" class="prod-qty w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 font-mono focus:outline-none focus:border-emerald-500">
-      </div>
-      <div class="col-span-1 text-center">
-        <button type="button" onclick="this.closest('.order-item-row').remove()" class="text-rose-400 hover:text-rose-300 text-xs">
-          <i class="fa-solid fa-trash"></i>
-        </button>
-      </div>
-    `;
-    container.appendChild(div);
-  };
-
-  // Dual Order Submission Handler
-  window.handleNewOrderSubmit = async function(e) {
-    e.preventDefault();
-
-    const name = document.getElementById('newCustName').value.trim();
-    const phone = document.getElementById('newCustPhone').value.trim();
-    const amount = parseFloat(document.getElementById('newCustAmount').value) || 0;
-    const date = document.getElementById('newCustDate').value;
-    const userRemark = document.getElementById('newCustRemark')?.value.trim() || '';
-
-    const rows = document.querySelectorAll('.order-item-row');
-    const items = [];
-    const remarkParts = [];
-
-    rows.forEach(row => {
-      const select = row.querySelector('.prod-select');
-      const qtyInput = row.querySelector('.prod-qty');
-      const productId = select.value;
-      const productName = select.options[select.selectedIndex].text;
-      const qty = parseFloat(qtyInput.value) || 0;
-
-      if (qty > 0) {
-        items.push({ productId, productName, qty });
-        remarkParts.push(`${qty}kg ${productName}`);
-      }
-    });
-
-    if (items.length === 0) {
-      alert("Kripya kam se kam ek product aur quantity enter karein.");
-      return;
-    }
-
-    const combinedRemark = remarkParts.join(', ') + (userRemark ? ` | ${userRemark}` : '');
-
-    try {
-      // 1. Sales database me record save karein
-      await addDoc(salesRef, {
-        name,
-        phone,
-        amount,
-        date,
-        remark: combinedRemark,
-        createdAt: new Date().toISOString()
-      });
-
-      // 2. Stock Database (khushali-a24f0) se direct stock minus karein
-      for (const item of items) {
-        const stockDocRef = doc(stockDb, "products", item.productId);
-        await updateDoc(stockDocRef, {
-          stockKg: increment(-item.qty)
-        });
-
-        // 3. Stock App ke Ledger me Dispatch entry create karein
-        const txId = "TX-ORD-" + Date.now().toString().slice(-5) + "-" + Math.floor(Math.random() * 100);
-        await setDoc(doc(stockDb, "transactions", txId), {
-          id: txId,
-          date: new Date().toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' }),
-          type: 'DISPATCH',
-          productId: item.productId,
-          productName: item.productName,
-          qty: item.qty,
-          unit: 'kg',
-          refNumber: `ORD-${Date.now().toString().slice(-4)}`,
-          party: name || 'Customer Order',
-          notes: `Order dispatch (${phone}) - ${item.qty}kg`,
-          amount: 0,
-          timestamp: Date.now()
-        });
-      }
-
-      closeAddOrderModal();
-      document.querySelector('#addOrderModal form').reset();
-
-      // Reset dynamic container rows to single default row
-      const container = document.getElementById('orderItemsContainer');
-      while (container.children.length > 1) {
-        container.removeChild(container.lastChild);
-      }
-
-      alert(`✅ Order save ho gaya aur ${items.length} product(s) ka stock deduct ho gaya!`);
-    } catch (err) {
-      console.error("Order processing error:", err);
-      alert("Error: " + err.message);
-    }
-  };
-
-  // Global bindings
-  window.setFilter = setFilter;
-  window.openCustomerModal = openCustomerModal;
-  window.closeCustomerModal = closeCustomerModal;
-  window.saveCustomerNote = saveCustomerNote;
-  window.openAddOrderModal = openAddOrderModal;
-  window.closeAddOrderModal = closeAddOrderModal;
-  window.exportToCSV = exportToCSV;
-  window.processAllData = processAllData;
-</script>
-
-
+    };
+  </script>
 </body>
 </html>
