@@ -222,6 +222,53 @@
       </div>
     </div>
 
+    <!-- ALL ORDERS MASTER VIEW SECTION WITH SORTING BUTTONS -->
+    <div class="bg-slate-800/90 rounded-2xl border border-slate-700/80 shadow-xl overflow-hidden mt-8">
+      <div class="p-4 border-b border-slate-700/80 flex flex-wrap justify-between items-center gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+            <i class="fa-solid fa-list-check"></i> All Orders & Master History
+          </span>
+          <span class="text-xs bg-slate-700 text-slate-200 px-2.5 py-0.5 rounded-full font-medium" id="totalMasterOrdersCount">0 Orders</span>
+        </div>
+        
+        <!-- Sorting Controls -->
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <span class="text-slate-400 font-medium">Sort By:</span>
+          <button onclick="sortMasterOrders('date-desc')" id="sort-date-desc" class="px-3 py-1.5 rounded-lg border border-slate-600 bg-slate-700 text-white font-semibold transition">
+            📅 Newest Date
+          </button>
+          <button onclick="sortMasterOrders('date-asc')" id="sort-date-asc" class="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 text-slate-300 hover:bg-slate-700 transition">
+            📅 Oldest Date
+          </button>
+          <button onclick="sortMasterOrders('amount-desc')" id="sort-amount-desc" class="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 text-slate-300 hover:bg-slate-700 transition">
+            💰 Highest Amount
+          </button>
+          <button onclick="sortMasterOrders('amount-asc')" id="sort-amount-asc" class="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 text-slate-300 hover:bg-slate-700 transition">
+            🪙 Lowest Amount
+          </button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto custom-scrollbar max-h-96">
+        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+          <thead class="bg-slate-900/70 text-slate-400 font-semibold border-b border-slate-700 uppercase text-[11px] tracking-wider sticky top-0 z-10">
+            <tr>
+              <th class="py-3 px-4">Order Date</th>
+              <th class="py-3 px-4">Customer Name</th>
+              <th class="py-3 px-4">Phone Number</th>
+              <th class="py-3 px-4">Order Details / Remarks</th>
+              <th class="py-3 px-4">Bill Amount</th>
+              <th class="py-3 px-4 text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody id="masterOrdersTableBody" class="divide-y divide-slate-700/60">
+            <!-- Rendered via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </main>
 
   <!-- Customer Detail & Order History Timeline Modal -->
@@ -258,7 +305,7 @@
 
         <div>
           <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i> Order Date Timeline (Har Order ki Details)
+            <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i> Order Date Timeline & Delete Option (Galti/Double Order Delete Karein)
           </h4>
           <div id="modalOrderTimeline" class="space-y-2"></div>
         </div>
@@ -312,7 +359,6 @@
           <input type="text" id="newCustPhone" required placeholder="e.g. 9876543210" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
         </div>
 
-        <!-- Dynamic Multiple Products Section -->
         <div class="space-y-2 pt-1 border-t border-slate-700/60">
           <div class="flex items-center justify-between">
             <label class="block text-slate-300 font-semibold text-xs">Ordered Products (Multiple Items) *</label>
@@ -322,7 +368,6 @@
           </div>
 
           <div id="orderItemsContainer" class="space-y-2 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
-            <!-- Default Row 1 -->
             <div class="order-item-row grid grid-cols-12 gap-2 bg-slate-900/90 p-2.5 rounded-xl border border-slate-700 items-center">
               <div class="col-span-7">
                 <select class="prod-select w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500" required>
@@ -391,6 +436,7 @@
       addDoc, 
       doc, 
       updateDoc, 
+      deleteDoc,
       increment, 
       setDoc, 
       onSnapshot 
@@ -428,297 +474,296 @@
     let selectedCustomerKey = null;
     let customerNotes = {};
     let monthlyChart = null;
+    let currentMasterSort = 'date-desc';
 
     // Hardcoded Database (March to August 2026)
     const initialHardcodedData = [
-      { name: "Vivek Varma", phone: "9875575483", date: "2026-03-01", amount: 700, remark: "Kit" },
-      { name: "Pawan Prajapati", phone: "7722942236", date: "2026-03-03", amount: 999, remark: "Combo" },
-      { name: "Alok Giri", phone: "9696060823", date: "2026-03-03", amount: 1161, remark: "Bf rf tc" },
-      { name: "Anjum Parveen", phone: "7296049038", date: "2026-03-03", amount: 9590, remark: "Combo+ 235 bottle" },
-      { name: "Deepak", phone: "9053375036", date: "2026-03-05", amount: 6999, remark: "Combo" },
-      { name: "Rishav", phone: "9304397465", date: "2026-03-06", amount: 6700, remark: "wpc to" },
-      { name: "Siddharth", phone: "7023855371", date: "2026-03-07", amount: 5190, remark: "tc wpc hw" },
-      { name: "Shaurya", phone: "6393552560", date: "2026-03-07", amount: 1280, remark: "tc" },
-      { name: "Rebecca", phone: "7898814388", date: "2026-03-07", amount: 6999, remark: "combo" },
-      { name: "Manjeet", phone: "9728908784", date: "2026-03-07", amount: 6999, remark: "combo" },
-      { name: "Bhupendra", phone: "8070033540", date: "2026-03-07", amount: 2600, remark: "tc and to bottle" },
-      { name: "Gajendra", phone: "6354951970", date: "2026-03-08", amount: 7300, remark: "tc wf dw btl" },
-      { name: "Abhishek", phone: "8000025532", date: "2026-03-11", amount: 3400, remark: "tc wpc" },
-      { name: "HirenBhai", phone: "9428448578", date: "2026-03-11", amount: 700, remark: "kit" },
-      { name: "Rashid", phone: "7738955191", date: "2026-03-11", amount: 843, remark: "gc" },
-      { name: "Krish Guleria", phone: "9805848578", date: "2026-03-11", amount: 2417, remark: "tc. gc" },
-      { name: "Dheeraj", phone: "8638140083", date: "2026-03-11", amount: 5862, remark: "tc hw btl" },
-      { name: "Abdul", phone: "8896902012", date: "2026-03-12", amount: 1060, remark: "gc" },
-      { name: "Sachin", phone: "8770950048", date: "2026-03-14", amount: 72000, remark: "btl compound" },
-      { name: "Nitin", phone: "8725977233", date: "2026-03-13", amount: 11250, remark: "wpc rpc" },
-      { name: "Kishan Meena", phone: "9680268448", date: "2026-03-08", amount: 2000, remark: "tc wpc" },
-      { name: "Surendra Singh", phone: "7678623337", date: "2026-03-05", amount: 16725, remark: "fw dw bp cw" },
-      { name: "Makbul", phone: "9531202143", date: "2026-03-11", amount: 1180, remark: "sample" },
-      { name: "Ashwajeet vilas kale", phone: "8177971351", date: "2026-03-15", amount: 3735, remark: "Tc dw. Wpc" },
-      { name: "Akash up etawa", phone: "7409722673", date: "2026-03-19", amount: 200, remark: "4 samples" },
-      { name: "Julee Rajput", phone: "8840814739", date: "2026-03-23", amount: 20207, remark: "btl hw dw" },
-      { name: "Prakash Chaudhary", phone: "8271035663", date: "2026-03-22", amount: 10384, remark: "tc hw rpc gc de" },
-      { name: "Alok Giri", phone: "9696060823", date: "2026-03-22", amount: 1655, remark: "gc bpc" },
-      { name: "Pramod Meena", phone: "8949803003", date: "2026-03-22", amount: 1050, remark: "wpc gc to" },
-      { name: "Paramveer", phone: "9079166767", date: "2026-03-21", amount: 2185, remark: "btl" },
-      { name: "Abhishek Sharma", phone: "8000025532", date: "2026-03-21", amount: 2085, remark: "Compound" },
-      { name: "Rishabh Jaiswal", phone: "7007735435", date: "2026-03-19", amount: 2035, remark: "Compound" },
-      { name: "Siddharth Kumar", phone: "7023855371", date: "2026-03-18", amount: 800, remark: "Wpc" },
-      { name: "Saurabh Goswami", phone: "8433198205", date: "2026-03-16", amount: 7000, remark: "combo" },
-      { name: "Ronak kachadiya", phone: "9016625198", date: "2026-03-14", amount: 700, remark: "kit" },
-      { name: "Rajveer", phone: "9352915568", date: "2026-03-24", amount: 4750, remark: "compound Jerry can" },
-      { name: "Ayush Singh", phone: "7388129361", date: "2026-03-19", amount: 800, remark: "car wash dishwash" },
-      { name: "Deepak Sharma", phone: "8761992494", date: "2026-03-26", amount: 17324, remark: "9 product of 5 Itrs" },
-      { name: "Mohd Rja", phone: "9057889562", date: "2026-03-27", amount: 1147, remark: "Phenyl bottle" },
-      { name: "Vivek Bharti", phone: "6395965007", date: "2026-03-27", amount: 1240, remark: "bc wpc rpc to" },
-      { name: "Durga Marble", phone: "8053563108", date: "2026-03-28", amount: 3311, remark: "bc rpc tc hw bottles" },
-      { name: "Shubham Tiwari", phone: "8234041488", date: "2026-03-28", amount: 1475, remark: "rpc" },
-      { name: "Sachin Sankhla", phone: "9588840550", date: "2026-03-29", amount: 1416, remark: "wpc" },
-      { name: "Ankit Prasad", phone: "8869002460", date: "2026-03-29", amount: 1012, remark: "tc btl" },
-      { name: "Saikhia Brothers", phone: "9870001122", date: "2026-04-01", amount: 10245, remark: "Hw rose + green apple" },
-      { name: "Manjeet", phone: "9728908784", date: "2026-04-01", amount: 18909, remark: "compound + bottle" },
-      { name: "Makbul", phone: "9531202143", date: "2026-04-01", amount: 700, remark: "Sample kit" },
-      { name: "Kishan Meena", phone: "9680268448", date: "2026-04-05", amount: 1296, remark: "Tc+ hw+ Gc+ 4 bottle" },
-      { name: "Ankit Jodhpur", phone: "7201919997", date: "2026-04-06", amount: 8500, remark: "Rf+cw+ gc" },
-      { name: "Govind Mittal", phone: "7568814310", date: "2026-04-08", amount: 6224, remark: "Tc+ dishwash + gc" },
-      { name: "Ayush Pandey", phone: "9749994907", date: "2026-04-09", amount: 3580, remark: "Order" },
-      { name: "Shivam Shukla", phone: "7080610112", date: "2026-04-10", amount: 766, remark: "Order" },
-      { name: "Nosad Ali", phone: "9064512171", date: "2026-04-10", amount: 2277, remark: "Order" },
-      { name: "Anuj", phone: "7055849524", date: "2026-04-10", amount: 4900, remark: "Order" },
-      { name: "Kuldeep Ji", phone: "9355510786", date: "2026-04-10", amount: 6200, remark: "Order" },
-      { name: "Mukesh Mahore", phone: "8770296769", date: "2026-04-11", amount: 10734, remark: "Order" },
-      { name: "Siddharth", phone: "7023855371", date: "2026-04-13", amount: 2300, remark: "Order" },
-      { name: "Julee Rajput", phone: "8840814739", date: "2026-04-14", amount: 950, remark: "Order" },
-      { name: "Tejveer Singh", phone: "8295299983", date: "2026-04-14", amount: 1514, remark: "Order" },
-      { name: "Rishav", phone: "9304397465", date: "2026-04-14", amount: 14300, remark: "Order" },
-      { name: "Ankit Jodhpur", phone: "7201919997", date: "2026-04-15", amount: 1800, remark: "Order" },
-      { name: "Neetu Kumar", phone: "7454861813", date: "2026-04-16", amount: 5369, remark: "Order" },
-      { name: "Surender Pushkar", phone: "9509848189", date: "2026-04-16", amount: 7400, remark: "Order" },
-      { name: "Waris Khan", phone: "9136806341", date: "2026-04-16", amount: 480, remark: "Order" },
-      { name: "Surendra Singh", phone: "7678623337", date: "2026-04-16", amount: 12300, remark: "Order Ratangarh" },
-      { name: "Anita Chaudhry", phone: "9414002233", date: "2026-04-17", amount: 7750, remark: "Order" },
-      { name: "Paramveer Singh", phone: "7073329256", date: "2026-04-17", amount: 1600, remark: "Order" },
-      { name: "Payal Ji", phone: "8780923930", date: "2026-04-19", amount: 5145, remark: "Order" },
-      { name: "Surendra Singh", phone: "7678623337", date: "2026-04-19", amount: 6000, remark: "Order Ratangarh" },
-      { name: "Anita Chaudhry", phone: "9414002233", date: "2026-04-19", amount: 6930, remark: "Order" },
-      { name: "Siddharth", phone: "7023855371", date: "2026-04-22", amount: 650, remark: "Order" },
-      { name: "Paramveer Singh", phone: "7073329256", date: "2026-04-22", amount: 2700, remark: "Order" },
-      { name: "Makbul", phone: "9531202143", date: "2026-04-25", amount: 5392, remark: "Order" },
-      { name: "Surender Pushkar", phone: "9509848189", date: "2026-04-25", amount: 9000, remark: "Order" },
-      { name: "Samadhan Jadav", phone: "8766499600", date: "2026-04-29", amount: 247, remark: "Order" },
-      { name: "Sinku Yadav", phone: "8368157946", date: "2026-04-29", amount: 6000, remark: "Order" },
-      { name: "Ankit Prasad", phone: "8869002460", date: "2026-04-30", amount: 950, remark: "Order" },
-      { name: "Prakash Chaudhary", phone: "8271035663", date: "2026-05-01", amount: 8024, remark: "Order" },
-      { name: "Alok Goswami", phone: "9696060823", date: "2026-05-02", amount: 800, remark: "Order" },
-      { name: "Devesh Sharma", phone: "9829001122", date: "2026-05-04", amount: 1240, remark: "Order" },
-      { name: "Ashwajeet vilas kale", phone: "8177971351", date: "2026-05-04", amount: 706, remark: "Order" },
-      { name: "Sahil", phone: "9910011223", date: "2026-05-04", amount: 4920, remark: "Order" },
-      { name: "Govind Mittal", phone: "7568814310", date: "2026-05-05", amount: 1400, remark: "Order" },
-      { name: "Mainhoon Co", phone: "7000624552", date: "2026-05-06", amount: 2743, remark: "Order" },
-      { name: "Devang Sharma", phone: "8890115868", date: "2026-05-06", amount: 1700, remark: "Order" },
-      { name: "Vishal Yadav", phone: "9891815856", date: "2026-05-08", amount: 12818, remark: "Order" },
-      { name: "Manjeet", phone: "9728908784", date: "2026-05-09", amount: 35400, remark: "Order" },
-      { name: "Paras Yadav", phone: "8077422763", date: "2026-05-11", amount: 1976, remark: "Order" },
-      { name: "Michael", phone: "7057387607", date: "2026-05-12", amount: 500, remark: "Maharashtra" },
-      { name: "Sunil Singh", phone: "8619427214", date: "2026-05-12", amount: 13000, remark: "Order" },
-      { name: "Kishan Meena", phone: "9680268448", date: "2026-05-13", amount: 360, remark: "Order" },
-      { name: "Govind Mittal", phone: "7568814310", date: "2026-05-13", amount: 5200, remark: "Order" },
-      { name: "Narsi Pawar", phone: "9610122373", date: "2026-05-13", amount: 21528, remark: "Order" },
-      { name: "Bijender Kumar", phone: "7891235846", date: "2026-05-14", amount: 300, remark: "Order" },
-      { name: "Prince Kumar", phone: "9337507237", date: "2026-05-14", amount: 1752, remark: "Order" },
-      { name: "Govind Mittal", phone: "7568814310", date: "2026-05-17", amount: 1120, remark: "Order" },
-      { name: "Durgesh", phone: "9561454132", date: "2026-05-17", amount: 1000, remark: "Order" },
-      { name: "Iram&Alhun", phone: "9752786442", date: "2026-05-18", amount: 2250, remark: "Order" },
-      { name: "Sinku Yadav", phone: "8368157946", date: "2026-05-18", amount: 920, remark: "Order" },
-      { name: "Paramveer Singh", phone: "7229823831", date: "2026-05-20", amount: 8775, remark: "Order" },
-      { name: "Surendra Singh", phone: "7678623337", date: "2026-05-20", amount: 6797, remark: "Order" },
-      { name: "Sinku Yadav", phone: "8368157946", date: "2026-05-22", amount: 3000, remark: "Order" },
-      { name: "Bijender Kumar", phone: "7891235846", date: "2026-05-22", amount: 6288, remark: "Order Jaipur" },
-      { name: "Baidyanath Guin", phone: "9339501830", date: "2026-05-22", amount: 5460, remark: "Order" },
-      { name: "Misbahul", phone: "8927900206", date: "2026-05-23", amount: 5300, remark: "Order" },
-      { name: "Julee Rajput", phone: "8840814739", date: "2026-05-24", amount: 3500, remark: "Order" },
-      { name: "Makbul", phone: "9531202143", date: "2026-05-23", amount: 4339, remark: "Order" },
-      { name: "Rishav", phone: "9304397465", date: "2026-05-24", amount: 5950, remark: "Order" },
-      { name: "Sunil Singh", phone: "8619427214", date: "2026-05-24", amount: 875, remark: "Order" },
-      { name: "Navya Punjab", phone: "9888635981", date: "2026-05-24", amount: 20715, remark: "Order" },
-      { name: "Vinay Kumar", phone: "7017004867", date: "2026-05-25", amount: 2000, remark: "Order" },
-      { name: "Shivlal", phone: "9082095028", date: "2026-05-25", amount: 8075, remark: "Order" },
-      { name: "Julee Rajput", phone: "8840814739", date: "2026-05-25", amount: 2800, remark: "Order" },
-      { name: "Home Delight", phone: "9131957918", date: "2026-05-27", amount: 6150, remark: "Order" },
-      { name: "Shivlal", phone: "9082095028", date: "2026-05-28", amount: 5850, remark: "Order" },
-      { name: "Anuj", phone: "7055849524", date: "2026-05-28", amount: 6250, remark: "Order" },
-      { name: "Anuj Giri", phone: "9340447623", date: "2026-06-02", amount: 1630, remark: "#lokesh" },
-      { name: "Arman Khokhar", phone: "9521650313", date: "2026-06-03", amount: 8645, remark: "#lokesh" },
-      { name: "Gori Shankar", phone: "9549731982", date: "2026-06-04", amount: 1150, remark: "#lokesh" },
-      { name: "Musamil Ansari", phone: "8459207446", date: "2026-06-05", amount: 4375, remark: "#lokesh" },
-      { name: "Suraj Chaudhary", phone: "7055022800", date: "2026-06-06", amount: 4200, remark: "#lokesh" },
-      { name: "Jaswant Rahmani", phone: "8102864740", date: "2026-06-07", amount: 245, remark: "#lokesh" },
-      { name: "Arman Khokhar", phone: "9521650313", date: "2026-06-08", amount: 4807, remark: "#lokesh" },
-      { name: "Navya Punjab", phone: "9888635981", date: "2026-06-09", amount: 7970, remark: "#lokesh" },
-      { name: "Harshit Yadav", phone: "7877818622", date: "2026-06-11", amount: 5550, remark: "#rohit" },
-      { name: "Mohd Samir", phone: "9021964028", date: "2026-06-12", amount: 992, remark: "#rohit" },
-      { name: "Nawazish Rana", phone: "9927579714", date: "2026-06-12", amount: 700, remark: "#rohit" },
-      { name: "Julee Rajput", phone: "8840814739", date: "2026-06-13", amount: 3200, remark: "#rohit" },
-      { name: "Vinish Bhatt", phone: "9068098008", date: "2026-06-14", amount: 8317, remark: "#lokesh" },
-      { name: "Vikas Patel", phone: "9691046230", date: "2026-06-15", amount: 8170, remark: "#lokesh" },
-      { name: "Iram&Alhun", phone: "9752786442", date: "2026-06-16", amount: 5875, remark: "#rohit" },
-      { name: "Julee Rajput", phone: "8840814739", date: "2026-06-17", amount: 6300, remark: "#lokesh" },
-      { name: "Himanshu Sharma", phone: "7229901116", date: "2026-06-18", amount: 965, remark: "#lokesh" },
-      { name: "Kishan Meena", phone: "9680268448", date: "2026-06-18", amount: 920, remark: "#rohit" },
-      { name: "Himanshu Sharma", phone: "7229901116", date: "2026-06-19", amount: 2055, remark: "#lokesh" },
-      { name: "Mohit Shalik Tula", phone: "8080544718", date: "2026-06-19", amount: 990, remark: "#rohit" },
-      { name: "Amar", phone: "9950266758", date: "2026-06-20", amount: 200, remark: "#lokesh" },
-      { name: "Paramveer Singh", phone: "7073329256", date: "2026-06-20", amount: 10719, remark: "#rohit" },
-      { name: "Prabhat Alok", phone: "8357828695", date: "2026-06-21", amount: 12181, remark: "#lokesh" },
-      { name: "Lakshit", phone: "9359976939", date: "2026-06-21", amount: 3377, remark: "#karan" },
-      { name: "Vikram Jana", phone: "9068695925", date: "2026-06-22", amount: 4350, remark: "#lokesh" },
-      { name: "Avishek Saw", phone: "7603083911", date: "2026-06-22", amount: 1000, remark: "#lokesh" },
-      { name: "Rajendra Jhunjhunu", phone: "9587891097", date: "2026-06-23", amount: 3675, remark: "#lokesh" },
-      { name: "Sunil Singh", phone: "8619427214", date: "2026-06-23", amount: 3875, remark: "#lokesh" },
-      { name: "Mohd Sharif Faruk", phone: "9021964028", date: "2026-06-24", amount: 1072, remark: "#lokesh" },
-      { name: "Sunny Saraswat", phone: "7357426556", date: "2026-06-24", amount: 1420, remark: "#lokesh" },
-      { name: "Ankit Prasad", phone: "8869002460", date: "2026-06-25", amount: 1925, remark: "#lokesh" },
-      { name: "Govind Mittal", phone: "7568814310", date: "2026-06-25", amount: 2050, remark: "#karan" },
-      { name: "Aftab Salman", phone: "9911866248", date: "2026-06-26", amount: 12500, remark: "#lokesh" },
-      { name: "Home Delight", phone: "9131957918", date: "2026-06-26", amount: 5350, remark: "#lokesh" },
-      { name: "Abhishek", phone: "9057667213", date: "2026-06-27", amount: 8100, remark: "#lokesh" },
-      { name: "Pinky Malik", phone: "8777240901", date: "2026-06-27", amount: 2050, remark: "#lokesh" },
-      { name: "Shivlal", phone: "9082095028", date: "2026-06-28", amount: 11105, remark: "#lokesh" },
-      { name: "Siddharth", phone: "7023855371", date: "2026-06-28", amount: 650, remark: "Order" },
-      { name: "Ibrahim Safi", phone: "9457638946", date: "2026-06-28", amount: 4085, remark: "Order" },
-      { name: "Arif G Chare", phone: "9967191155", date: "2026-06-29", amount: 700, remark: "#lokesh" },
-      { name: "Sujal Dalai", phone: "9937942307", date: "2026-06-29", amount: 700, remark: "#karan" },
-      { name: "Krish Guleria", phone: "9805848578", date: "2026-06-29", amount: 3075, remark: "#lokesh" },
-      { name: "Gori Shankar", phone: "9549731982", date: "2026-06-30", amount: 1725, remark: "Chandpole" },
-      { name: "Anmol Malhotra", phone: "7206911127", date: "2026-06-30", amount: 4900, remark: "#lokesh" },
-      { name: "Rahul Kothari", phone: "9901541888", date: "2026-06-30", amount: 650, remark: "#lokesh" },
-      { name: "Amar", phone: "9950266758", date: "2026-06-30", amount: 730, remark: "Alwar" },
-      { name: "Ritik Devra", phone: "8000741984", date: "2026-06-30", amount: 6150, remark: "#rohit" },
-      { name: "Arman Khokhar", phone: "9521650313", date: "2026-06-30", amount: 1750, remark: "#lokesh" },
-      { name: "Ankit Ji Sikar", phone: "8000385639", date: "2026-06-30", amount: 9882, remark: "#lokesh" },
-      { name: "Sinku Yadav", phone: "8368157946", date: "2026-06-30", amount: 12145, remark: "#lokesh" },
-      { name: "Tanishq", phone: "9967620655", date: "2026-06-30", amount: 20227, remark: "#lokesh" },
-      { name: "Rohit Pareek", phone: "7014133586", date: "2026-07-01", amount: 1500, remark: "Lokesh" },
-      { name: "Rajendra Jhunjhunu", phone: "9587891097", date: "2026-07-02", amount: 3875, remark: "Lokesh" },
-      { name: "Ashish Ji", phone: "9079271880", date: "2026-07-03", amount: 600, remark: "Lokesh" },
-      { name: "Home Delight", phone: "9131957918", date: "2026-07-04", amount: 4775, remark: "Lokesh" },
-      { name: "Gori Shankar", phone: "9549731982", date: "2026-07-05", amount: 450, remark: "Lokesh" },
-      { name: "Abhishek Ji", phone: "9770902976", date: "2026-07-06", amount: 7251, remark: "Lokesh" },
-      { name: "Rishav", phone: "9304397465", date: "2026-07-07", amount: 4900, remark: "Lokesh" },
-      { name: "Prakash Chaudhary", phone: "8271035663", date: "2026-07-08", amount: 21575, remark: "Karan" },
-      { name: "Sunny Saraswat", phone: "7357426556", date: "2026-07-09", amount: 1180, remark: "Lokesh" },
-      { name: "Julee Rajput", phone: "8840814739", date: "2026-07-10", amount: 10250, remark: "Lokesh" },
-      { name: "Nagaur Customer", phone: "8949865755", date: "2026-07-11", amount: 8000, remark: "Lokesh" },
-      { name: "Himanshu Ji Shyam", phone: "7737767636", date: "2026-07-12", amount: 750, remark: "Lokesh" },
-      { name: "Julee Rajput", phone: "8840814739", date: "2026-07-13", amount: 18500, remark: "Lokesh" },
-      { name: "Mohd Ashraf", phone: "9694639900", date: "2026-07-14", amount: 8312, remark: "Lokesh" },
-      { name: "Bijender Kumar", phone: "7891235846", date: "2026-07-15", amount: 12505, remark: "Lokesh" },
-      { name: "Nikhil Pandey", phone: "6351846425", date: "2026-07-16", amount: 3500, remark: "Lokesh" },
-      { name: "Alok Goswami", phone: "9696060823", date: "2026-07-16", amount: 2455, remark: "Lokesh" },
-      { name: "Anuj", phone: "7055849524", date: "2026-07-17", amount: 7490, remark: "Lokesh" },
-      { name: "Baidyanath Guin", phone: "9339501830", date: "2026-07-18", amount: 5175, remark: "Karan" },
-      { name: "Manpreet Singh", phone: "9855837997", date: "2026-07-19", amount: 599, remark: "Lokesh" },
-      { name: "Julee Rajput", phone: "8840814739", date: "2026-07-20", amount: 7875, remark: "Lokesh" },
-      { name: "Paramveer Singh", phone: "7073329256", date: "2026-07-21", amount: 3800, remark: "Lokesh" },
-      { name: "Kaif", phone: "9211816156", date: "2026-07-22", amount: 599, remark: "Lokesh" },
-      { name: "K Adil", phone: "8112455730", date: "2026-07-22", amount: 15700, remark: "Karan" },
-      { name: "Vikas Patel", phone: "9691046230", date: "2026-07-23", amount: 2950, remark: "Lokesh" },
-      { name: "Arman Khokhar", phone: "9521650313", date: "2026-07-23", amount: 875, remark: "Lokesh" },
-      { name: "Abhishek", phone: "9057667213", date: "2026-07-24", amount: 1120, remark: "Lokesh" },
-      { name: "Paras Yadav", phone: "8077422763", date: "2026-07-24", amount: 7075, remark: "Lokesh" },
-      { name: "Govind Mittal", phone: "7568814310", date: "2026-07-25", amount: 3000, remark: "Karan" },
-      { name: "Ambika", phone: "9368921433", date: "2026-07-25", amount: 9639, remark: "Lokesh" },
-      { name: "Julee Rajput", phone: "8840814739", date: "2026-07-26", amount: 2300, remark: "Lokesh" },
-      { name: "Saurabh Rai", phone: "9565513305", date: "2026-07-26", amount: 15200, remark: "Karan" },
-      { name: "Suraj Chaudhary", phone: "7055022800", date: "2026-07-26", amount: 9300, remark: "Lokesh" },
-      { name: "Shivam Singh Yadav", phone: "9773708713", date: "2026-07-27", amount: 12000, remark: "Lokesh" },
-      { name: "Syed Mumtaz", phone: "6398513308", date: "2026-07-27", amount: 2120, remark: "Lokesh" },
-      { name: "Gaurav Kumar", phone: "8006531374", date: "2026-07-28", amount: 4175, remark: "Lokesh" },
-      { name: "Sajid Raza", phone: "8356945504", date: "2026-07-29", amount: 27500, remark: "Lokesh Bihar" },
-      { name: "Julee Rajput", phone: "8840814739", date: "2026-07-29", amount: 35200, remark: "Lokesh" },
-      { name: "Jaswant Rahmani", phone: "8102864740", date: "2026-07-29", amount: 12375, remark: "Lokesh" },
-      { name: "Ashish Joshi", phone: "9079271880", date: "2026-07-29", amount: 8845, remark: "Lokesh" },
-      { name: "Sameer Didwana", phone: "9649640146", date: "2026-07-30", amount: 7000, remark: "Lokesh" },
-      { name: "Mo Zayad", phone: "9219411356", date: "2026-07-30", amount: 14000, remark: "Lokesh" },
-      { name: "Ankit Ji Sikar", phone: "8000385639", date: "2026-07-30", amount: 3450, remark: "Lokesh" },
-      { name: "Ayush Chauhan", phone: "9286226614", date: "2026-07-30", amount: 1325, remark: "Lokesh" },
-      { name: "Ibrahim Safi", phone: "9457638946", date: "2026-07-30", amount: 30615, remark: "Lokesh" },
-      { name: "Gori Shankar", phone: "9549731982", date: "2026-07-31", amount: 4435, remark: "Lokesh" },
-      { name: "Komal Pawar", phone: "7372969707", date: "2026-07-31", amount: 8436, remark: "Lokesh" },
-      { name: "Shaikh Lodinn", phone: "9850335475", date: "2026-07-31", amount: 1600, remark: "Lokesh" },
-      { name: "Jyoti Mare", phone: "7735772532", date: "2026-07-31", amount: 3450, remark: "Karan" },
-      { name: "Arman Khokhar", phone: "9521650313", date: "2026-07-31", amount: 2400, remark: "Lokesh" },
-      { name: "Nikhil Pandey", phone: "6351846425", date: "2026-07-31", amount: 2650, remark: "Lokesh" },
-      { name: "Julee Rajput", phone: "8840814739", date: "2026-07-31", amount: 15400, remark: "Lokesh" },
-      { name: "Ayush Chauhan", phone: "9286226614", date: "2026-07-31", amount: 875, remark: "Lokesh" },
-      { name: "Yagya Saini", phone: "7891258804", date: "2026-07-31", amount: 2484, remark: "Lokesh" },
-      { name: "Yagya Saini", phone: "7891258804", date: "2026-07-31", amount: 2080, remark: "Lokesh" },
-      { name: "Vikas Patel", phone: "9691046230", date: "2026-07-31", amount: 7075, remark: "Lokesh" },
-      { name: "Ankit Ji Sikar", phone: "8000385639", date: "2026-07-31", amount: 12000, remark: "Lokesh" },
-      { name: "Ritik Devra", phone: "8000741984", date: "2026-07-31", amount: 2700, remark: "Lokesh" },
-      { name: "Ayush Chauhan", phone: "9286226614", date: "2026-07-31", amount: 8350, remark: "Lokesh" },
-      { name: "Mohd Ashraf", phone: "9694639900", date: "2026-07-31", amount: 17500, remark: "Raj Niwai" },
-      { name: "Soham", phone: "9322970402", date: "2026-07-31", amount: 800, remark: "Lokesh" },
-      { name: "Jyoti Mare", phone: "7735772532", date: "2026-07-31", amount: 4469, remark: "Karan" },
-      { name: "Sunil Singh", phone: "9818678988", date: "2026-08-01", amount: 4278, remark: "Order" },
-      { name: "Lalit Kumar", phone: "8077817340", date: "2026-08-03", amount: 1800, remark: "Order" },
-      { name: "Jigar", phone: "6200028261", date: "2026-08-04", amount: 1415, remark: "Order" },
-      { name: "Roni SK", phone: "8741013416", date: "2026-08-05", amount: 1325, remark: "Order" },
-      { name: "Himanshu Jaipur", phone: "6378533889", date: "2026-08-05", amount: 880, remark: "Order" },
-      { name: "Rahul Kothari", phone: "9901541888", date: "2026-08-05", amount: 1950, remark: "Order" },
-      { name: "Yagya Saini", phone: "7891258804", date: "2026-08-06", amount: 4795, remark: "Order" },
-      { name: "Saurabh Rai", phone: "9565513305", date: "2026-08-06", amount: 5750, remark: "Order" },
-      { name: "Mahammad Sam", phone: "7760743880", date: "2026-08-06", amount: 120, remark: "Order" },
-      { name: "Nikhil Pandey", phone: "6351846425", date: "2026-08-06", amount: 2650, remark: "Order" },
-      { name: "Lokesh Kumar", phone: "7290007888", date: "2026-08-07", amount: 3275, remark: "Order" },
-      { name: "Gorav Chouhan", phone: "9870280555", date: "2026-08-07", amount: 54000, remark: "Order" },
-      { name: "Gorav Chouhan", phone: "9870280555", date: "2026-08-07", amount: 54175, remark: "Order" },
-      { name: "Tanishq", phone: "9967620655", date: "2026-08-08", amount: 5050, remark: "Mumbai" },
-      { name: "Souvik Karmakar", phone: "9091956367", date: "2026-08-08", amount: 1300, remark: "Order" },
-      { name: "Shivlal", phone: "9082095028", date: "2026-08-11", amount: 11460, remark: "Rajsamand" },
-      { name: "Ayush Chauhan", phone: "9286226614", date: "2026-08-11", amount: 2850, remark: "Mainpuri" },
-      { name: "Pooja Gurugram", phone: "9540855772", date: "2026-08-11", amount: 599, remark: "Order" },
-      { name: "Amit Das", phone: "7005055254", date: "2026-08-11", amount: 599, remark: "Order" },
-      { name: "Rajendra Jhunjhunu", phone: "9587891097", date: "2026-08-12", amount: 3975, remark: "Order" },
-      { name: "Ibrahim Safi", phone: "9457638946", date: "2026-08-12", amount: 3440, remark: "Order" },
-      { name: "Priyanshu Chaurasia", phone: "7879958386", date: "2026-08-13", amount: 2280, remark: "Order" },
-      { name: "Anmol Raj", phone: "7004059823", date: "2026-08-13", amount: 599, remark: "Order" },
-      { name: "Ibrahim Sheikh", phone: "7483950440", date: "2026-08-13", amount: 2700, remark: "Order" },
-      { name: "Md Nameer", phone: "7997904503", date: "2026-08-13", amount: 1179, remark: "Order" },
-      { name: "Sanju", phone: "7413080040", date: "2026-08-13", amount: 5450, remark: "Neem Ka Thana" },
-      { name: "Shivam Panwar", phone: "9977161020", date: "2026-08-14", amount: 1110, remark: "Order" },
-      { name: "Shams Raza", phone: "8170975211", date: "2026-08-14", amount: 2805, remark: "Order" },
-      { name: "Mayur Sonar", phone: "7796723194", date: "2026-08-14", amount: 5659, remark: "Order" },
-      { name: "Kaif", phone: "9211816156", date: "2026-08-14", amount: 101, remark: "Order" },
-      { name: "Vishal Yadav", phone: "9891815856", date: "2026-08-16", amount: 5650, remark: "Haryana" },
-      { name: "Paramveer Singh", phone: "7073329256", date: "2026-08-17", amount: 3180, remark: "Order" },
-      { name: "Sachin Sankhla", phone: "9588840550", date: "2026-08-17", amount: 1325, remark: "Order" },
-      { name: "Hitendra", phone: "9203182513", date: "2026-08-17", amount: 4284, remark: "Order" },
-      { name: "Abhishek Pandey", phone: "7011752789", date: "2026-08-17", amount: 6540, remark: "Order" },
-      { name: "Deepika", phone: "7742234109", date: "2026-08-17", amount: 599, remark: "Order" },
-      { name: "Michael", phone: "7057387607", date: "2026-08-17", amount: 10000, remark: "Order" },
-      { name: "Roshan", phone: "9861390557", date: "2026-08-17", amount: 6800, remark: "Order" },
-      { name: "Ankit Prasad", phone: "8869002460", date: "2026-08-17", amount: 900, remark: "Order" },
-      { name: "Amit", phone: "9878808321", date: "2026-08-18", amount: 14760, remark: "Order" },
-      { name: "Lokesh Himachal", phone: "9816081724", date: "2026-08-18", amount: 10415, remark: "Order" },
-      { name: "Pooja Gurugram", phone: "9540855772", date: "2026-08-18", amount: 6850, remark: "Order" },
-      { name: "Siddharth", phone: "7023855371", date: "2026-08-19", amount: 3125, remark: "Order" },
-      { name: "Adarsh Kumar", phone: "8340284172", date: "2026-08-19", amount: 2290, remark: "Order" },
-      { name: "Surendra Sikar", phone: "8619320352", date: "2026-08-19", amount: 12600, remark: "Order" },
-      { name: "Jai Agnihotri", phone: "9812901042", date: "2026-08-19", amount: 1550, remark: "Order" },
-      { name: "Sharvan Deb", phone: "9863104840", date: "2026-08-21", amount: 4800, remark: "Order" },
-      { name: "Julee Rajput", phone: "8840814739", date: "2026-08-24", amount: 5250, remark: "Order" },
-      { name: "Bijender Kumar", phone: "7891235846", date: "2026-08-24", amount: 19400, remark: "Order" },
-      { name: "Md Nameer", phone: "7997904503", date: "2026-08-24", amount: 1360, remark: "Order" },
-      { name: "Ansh Sisodiya", phone: "9238962073", date: "2026-08-25", amount: 11000, remark: "Order" },
-      { name: "Prakash Chaudhary", phone: "8271035663", date: "2026-08-25", amount: 8050, remark: "Order" },
-      { name: "Parveen Rohilla", phone: "8168699617", date: "2026-08-26", amount: 125, remark: "Order" },
-      { name: "Prem Gupta", phone: "8434898398", date: "2026-08-26", amount: 800, remark: "Order" },
-      { name: "Anmol Raj", phone: "7004059823", date: "2026-08-26", amount: 36135, remark: "Order" },
-      { name: "Amit Das", phone: "7005055254", date: "2026-08-27", amount: 13159, remark: "Order" }
+      { id: "hard-1", name: "Vivek Varma", phone: "9875575483", date: "2026-03-01", amount: 700, remark: "Kit" },
+      { id: "hard-2", name: "Pawan Prajapati", phone: "7722942236", date: "2026-03-03", amount: 999, remark: "Combo" },
+      { id: "hard-3", name: "Alok Giri", phone: "9696060823", date: "2026-03-03", amount: 1161, remark: "Bf rf tc" },
+      { id: "hard-4", name: "Anjum Parveen", phone: "7296049038", date: "2026-03-03", amount: 9590, remark: "Combo+ 235 bottle" },
+      { id: "hard-5", name: "Deepak", phone: "9053375036", date: "2026-03-05", amount: 6999, remark: "Combo" },
+      { id: "hard-6", name: "Rishav", phone: "9304397465", date: "2026-03-06", amount: 6700, remark: "wpc to" },
+      { id: "hard-7", name: "Siddharth", phone: "7023855371", date: "2026-03-07", amount: 5190, remark: "tc wpc hw" },
+      { id: "hard-8", name: "Shaurya", phone: "6393552560", date: "2026-03-07", amount: 1280, remark: "tc" },
+      { id: "hard-9", name: "Rebecca", phone: "7898814388", date: "2026-03-07", amount: 6999, remark: "combo" },
+      { id: "hard-10", name: "Manjeet", phone: "9728908784", date: "2026-03-07", amount: 6999, remark: "combo" },
+      { id: "hard-11", name: "Bhupendra", phone: "8070033540", date: "2026-03-07", amount: 2600, remark: "tc and to bottle" },
+      { id: "hard-12", name: "Gajendra", phone: "6354951970", date: "2026-03-08", amount: 7300, remark: "tc wf dw btl" },
+      { id: "hard-13", name: "Abhishek", phone: "8000025532", date: "2026-03-11", amount: 3400, remark: "tc wpc" },
+      { id: "hard-14", name: "HirenBhai", phone: "9428448578", date: "2026-03-11", amount: 700, remark: "kit" },
+      { id: "hard-15", name: "Rashid", phone: "7738955191", date: "2026-03-11", amount: 843, remark: "gc" },
+      { id: "hard-16", name: "Krish Guleria", phone: "9805848578", date: "2026-03-11", amount: 2417, remark: "tc. gc" },
+      { id: "hard-17", name: "Dheeraj", phone: "8638140083", date: "2026-03-11", amount: 5862, remark: "tc hw btl" },
+      { id: "hard-18", name: "Abdul", phone: "8896902012", date: "2026-03-12", amount: 1060, remark: "gc" },
+      { id: "hard-19", name: "Sachin", phone: "8770950048", date: "2026-03-14", amount: 72000, remark: "btl compound" },
+      { id: "hard-20", name: "Nitin", phone: "8725977233", date: "2026-03-13", amount: 11250, remark: "wpc rpc" },
+      { id: "hard-21", name: "Kishan Meena", phone: "9680268448", date: "2026-03-08", amount: 2000, remark: "tc wpc" },
+      { id: "hard-22", name: "Surendra Singh", phone: "7678623337", date: "2026-03-05", amount: 16725, remark: "fw dw bp cw" },
+      { id: "hard-23", name: "Makbul", phone: "9531202143", date: "2026-03-11", amount: 1180, remark: "sample" },
+      { id: "hard-24", name: "Ashwajeet vilas kale", phone: "8177971351", date: "2026-03-15", amount: 3735, remark: "Tc dw. Wpc" },
+      { id: "hard-25", name: "Akash up etawa", phone: "7409722673", date: "2026-03-19", amount: 200, remark: "4 samples" },
+      { id: "hard-26", name: "Julee Rajput", phone: "8840814739", date: "2026-03-23", amount: 20207, remark: "btl hw dw" },
+      { id: "hard-27", name: "Prakash Chaudhary", phone: "8271035663", date: "2026-03-22", amount: 10384, remark: "tc hw rpc gc de" },
+      { id: "hard-28", name: "Alok Giri", phone: "9696060823", date: "2026-03-22", amount: 1655, remark: "gc bpc" },
+      { id: "hard-29", name: "Pramod Meena", phone: "8949803003", date: "2026-03-22", amount: 1050, remark: "wpc gc to" },
+      { id: "hard-30", name: "Paramveer", phone: "9079166767", date: "2026-03-21", amount: 2185, remark: "btl" },
+      { id: "hard-31", name: "Abhishek Sharma", phone: "8000025532", date: "2026-03-21", amount: 2085, remark: "Compound" },
+      { id: "hard-32", name: "Rishabh Jaiswal", phone: "7007735435", date: "2026-03-19", amount: 2035, remark: "Compound" },
+      { id: "hard-33", name: "Siddharth Kumar", phone: "7023855371", date: "2026-03-18", amount: 800, remark: "Wpc" },
+      { id: "hard-34", name: "Saurabh Goswami", phone: "8433198205", date: "2026-03-16", amount: 7000, remark: "combo" },
+      { id: "hard-35", name: "Ronak kachadiya", phone: "9016625198", date: "2026-03-14", amount: 700, remark: "kit" },
+      { id: "hard-36", name: "Rajveer", phone: "9352915568", date: "2026-03-24", amount: 4750, remark: "compound Jerry can" },
+      { id: "hard-37", name: "Ayush Singh", phone: "7388129361", date: "2026-03-19", amount: 800, remark: "car wash dishwash" },
+      { id: "hard-38", name: "Deepak Sharma", phone: "8761992494", date: "2026-03-26", amount: 17324, remark: "9 product of 5 Itrs" },
+      { id: "hard-39", name: "Mohd Rja", phone: "9057889562", date: "2026-03-27", amount: 1147, remark: "Phenyl bottle" },
+      { id: "hard-40", name: "Vivek Bharti", phone: "6395965007", date: "2026-03-27", amount: 1240, remark: "bc wpc rpc to" },
+      { id: "hard-41", name: "Durga Marble", phone: "8053563108", date: "2026-03-28", amount: 3311, remark: "bc rpc tc hw bottles" },
+      { id: "hard-42", name: "Shubham Tiwari", phone: "8234041488", date: "2026-03-28", amount: 1475, remark: "rpc" },
+      { id: "hard-43", name: "Sachin Sankhla", phone: "9588840550", date: "2026-03-29", amount: 1416, remark: "wpc" },
+      { id: "hard-44", name: "Ankit Prasad", phone: "8869002460", date: "2026-03-29", amount: 1012, remark: "tc btl" },
+      { id: "hard-45", name: "Saikhia Brothers", phone: "9870001122", date: "2026-04-01", amount: 10245, remark: "Hw rose + green apple" },
+      { id: "hard-46", name: "Manjeet", phone: "9728908784", date: "2026-04-01", amount: 18909, remark: "compound + bottle" },
+      { id: "hard-47", name: "Makbul", phone: "9531202143", date: "2026-04-01", amount: 700, remark: "Sample kit" },
+      { id: "hard-48", name: "Kishan Meena", phone: "9680268448", date: "2026-04-05", amount: 1296, remark: "Tc+ hw+ Gc+ 4 bottle" },
+      { id: "hard-49", name: "Ankit Jodhpur", phone: "7201919997", date: "2026-04-06", amount: 8500, remark: "Rf+cw+ gc" },
+      { id: "hard-50", name: "Govind Mittal", phone: "7568814310", date: "2026-04-08", amount: 6224, remark: "Tc+ dishwash + gc" },
+      { id: "hard-51", name: "Ayush Pandey", phone: "9749994907", date: "2026-04-09", amount: 3580, remark: "Order" },
+      { id: "hard-52", name: "Shivam Shukla", phone: "7080610112", date: "2026-04-10", amount: 766, remark: "Order" },
+      { id: "hard-53", name: "Nosad Ali", phone: "9064512171", date: "2026-04-10", amount: 2277, remark: "Order" },
+      { id: "hard-54", name: "Anuj", phone: "7055849524", date: "2026-04-10", amount: 4900, remark: "Order" },
+      { id: "hard-55", name: "Kuldeep Ji", phone: "9355510786", date: "2026-04-10", amount: 6200, remark: "Order" },
+      { id: "hard-56", name: "Mukesh Mahore", phone: "8770296769", date: "2026-04-11", amount: 10734, remark: "Order" },
+      { id: "hard-57", name: "Siddharth", phone: "7023855371", date: "2026-04-13", amount: 2300, remark: "Order" },
+      { id: "hard-58", name: "Julee Rajput", phone: "8840814739", date: "2026-04-14", amount: 950, remark: "Order" },
+      { id: "hard-59", name: "Tejveer Singh", phone: "8295299983", date: "2026-04-14", amount: 1514, remark: "Order" },
+      { id: "hard-60", name: "Rishav", phone: "9304397465", date: "2026-04-14", amount: 14300, remark: "Order" },
+      { id: "hard-61", name: "Ankit Jodhpur", phone: "7201919997", date: "2026-04-15", amount: 1800, remark: "Order" },
+      { id: "hard-62", name: "Neetu Kumar", phone: "7454861813", date: "2026-04-16", amount: 5369, remark: "Order" },
+      { id: "hard-63", name: "Surender Pushkar", phone: "9509848189", date: "2026-04-16", amount: 7400, remark: "Order" },
+      { id: "hard-64", name: "Waris Khan", phone: "9136806341", date: "2026-04-16", amount: 480, remark: "Order" },
+      { id: "hard-65", name: "Surendra Singh", phone: "7678623337", date: "2026-04-16", amount: 12300, remark: "Order Ratangarh" },
+      { id: "hard-66", name: "Anita Chaudhry", phone: "9414002233", date: "2026-04-17", amount: 7750, remark: "Order" },
+      { id: "hard-67", name: "Paramveer Singh", phone: "7073329256", date: "2026-04-17", amount: 1600, remark: "Order" },
+      { id: "hard-68", name: "Payal Ji", phone: "8780923930", date: "2026-04-19", amount: 5145, remark: "Order" },
+      { id: "hard-69", name: "Surendra Singh", phone: "7678623337", date: "2026-04-19", amount: 6000, remark: "Order Ratangarh" },
+      { id: "hard-70", name: "Anita Chaudhry", phone: "9414002233", date: "2026-04-19", amount: 6930, remark: "Order" },
+      { id: "hard-71", name: "Siddharth", phone: "7023855371", date: "2026-04-22", amount: 650, remark: "Order" },
+      { id: "hard-72", name: "Paramveer Singh", phone: "7073329256", date: "2026-04-22", amount: 2700, remark: "Order" },
+      { id: "hard-73", name: "Makbul", phone: "9531202143", date: "2026-04-25", amount: 5392, remark: "Order" },
+      { id: "hard-74", name: "Surender Pushkar", phone: "9509848189", date: "2026-04-25", amount: 9000, remark: "Order" },
+      { id: "hard-75", name: "Samadhan Jadav", phone: "8766499600", date: "2026-04-29", amount: 247, remark: "Order" },
+      { id: "hard-76", name: "Sinku Yadav", phone: "8368157946", date: "2026-04-29", amount: 6000, remark: "Order" },
+      { id: "hard-77", name: "Ankit Prasad", phone: "8869002460", date: "2026-04-30", amount: 950, remark: "Order" },
+      { id: "hard-78", name: "Prakash Chaudhary", phone: "8271035663", date: "2026-05-01", amount: 8024, remark: "Order" },
+      { id: "hard-79", name: "Alok Goswami", phone: "9696060823", date: "2026-05-02", amount: 800, remark: "Order" },
+      { id: "hard-80", name: "Devesh Sharma", phone: "9829001122", date: "2026-05-04", amount: 1240, remark: "Order" },
+      { id: "hard-81", name: "Ashwajeet vilas kale", phone: "8177971351", date: "2026-05-04", amount: 706, remark: "Order" },
+      { id: "hard-82", name: "Sahil", phone: "9910011223", date: "2026-05-04", amount: 4920, remark: "Order" },
+      { id: "hard-83", name: "Govind Mittal", phone: "7568814310", date: "2026-05-05", amount: 1400, remark: "Order" },
+      { id: "hard-84", name: "Mainhoon Co", phone: "7000624552", date: "2026-05-06", amount: 2743, remark: "Order" },
+      { id: "hard-85", name: "Devang Sharma", phone: "8890115868", date: "2026-05-06", amount: 1700, remark: "Order" },
+      { id: "hard-86", name: "Vishal Yadav", phone: "9891815856", date: "2026-05-08", amount: 12818, remark: "Order" },
+      { id: "hard-87", name: "Manjeet", phone: "9728908784", date: "2026-05-09", amount: 35400, remark: "Order" },
+      { id: "hard-88", name: "Paras Yadav", phone: "8077422763", date: "2026-05-11", amount: 1976, remark: "Order" },
+      { id: "hard-89", name: "Michael", phone: "7057387607", date: "2026-05-12", amount: 500, remark: "Maharashtra" },
+      { id: "hard-90", name: "Sunil Singh", phone: "8619427214", date: "2026-05-12", amount: 13000, remark: "Order" },
+      { id: "hard-91", name: "Kishan Meena", phone: "9680268448", date: "2026-05-13", amount: 360, remark: "Order" },
+      { id: "hard-92", name: "Govind Mittal", phone: "7568814310", date: "2026-05-13", amount: 5200, remark: "Order" },
+      { id: "hard-93", name: "Narsi Pawar", phone: "9610122373", date: "2026-05-13", amount: 21528, remark: "Order" },
+      { id: "hard-94", name: "Bijender Kumar", phone: "7891235846", date: "2026-05-14", amount: 300, remark: "Order" },
+      { id: "hard-95", name: "Prince Kumar", phone: "9337507237", date: "2026-05-14", amount: 1752, remark: "Order" },
+      { id: "hard-96", name: "Govind Mittal", phone: "7568814310", date: "2026-05-17", amount: 1120, remark: "Order" },
+      { id: "hard-97", name: "Durgesh", phone: "9561454132", date: "2026-05-17", amount: 1000, remark: "Order" },
+      { id: "hard-98", name: "Iram&Alhun", phone: "9752786442", date: "2026-05-18", amount: 2250, remark: "Order" },
+      { id: "hard-99", name: "Sinku Yadav", phone: "8368157946", date: "2026-05-18", amount: 920, remark: "Order" },
+      { id: "hard-100", name: "Paramveer Singh", phone: "7229823831", date: "2026-05-20", amount: 8775, remark: "Order" },
+      { id: "hard-101", name: "Surendra Singh", phone: "7678623337", date: "2026-05-20", amount: 6797, remark: "Order" },
+      { id: "hard-102", name: "Sinku Yadav", phone: "8368157946", date: "2026-05-22", amount: 3000, remark: "Order" },
+      { id: "hard-103", name: "Bijender Kumar", phone: "7891235846", date: "2026-05-22", amount: 6288, remark: "Order Jaipur" },
+      { id: "hard-104", name: "Baidyanath Guin", phone: "9339501830", date: "2026-05-22", amount: 5460, remark: "Order" },
+      { id: "hard-105", name: "Misbahul", phone: "8927900206", date: "2026-05-23", amount: 5300, remark: "Order" },
+      { id: "hard-106", name: "Julee Rajput", phone: "8840814739", date: "2026-05-24", amount: 3500, remark: "Order" },
+      { id: "hard-107", name: "Makbul", phone: "9531202143", date: "2026-05-23", amount: 4339, remark: "Order" },
+      { id: "hard-108", name: "Rishav", phone: "9304397465", date: "2026-05-24", amount: 5950, remark: "Order" },
+      { id: "hard-109", name: "Sunil Singh", phone: "8619427214", date: "2026-05-24", amount: 875, remark: "Order" },
+      { id: "hard-110", name: "Navya Punjab", phone: "9888635981", date: "2026-05-24", amount: 20715, remark: "Order" },
+      { id: "hard-111", name: "Vinay Kumar", phone: "7017004867", date: "2026-05-25", amount: 2000, remark: "Order" },
+      { id: "hard-112", name: "Shivlal", phone: "9082095028", date: "2026-05-25", amount: 8075, remark: "Order" },
+      { id: "hard-113", name: "Julee Rajput", phone: "8840814739", date: "2026-05-25", amount: 2800, remark: "Order" },
+      { id: "hard-114", name: "Home Delight", phone: "9131957918", date: "2026-05-27", amount: 6150, remark: "Order" },
+      { id: "hard-115", name: "Shivlal", phone: "9082095028", date: "2026-05-28", amount: 5850, remark: "Order" },
+      { id: "hard-116", name: "Anuj", phone: "7055849524", date: "2026-05-28", amount: 6250, remark: "Order" },
+      { id: "hard-117", name: "Anuj Giri", phone: "9340447623", date: "2026-06-02", amount: 1630, remark: "#lokesh" },
+      { id: "hard-118", name: "Arman Khokhar", phone: "9521650313", date: "2026-06-03", amount: 8645, remark: "#lokesh" },
+      { id: "hard-119", name: "Gori Shankar", phone: "9549731982", date: "2026-06-04", amount: 1150, remark: "#lokesh" },
+      { id: "hard-120", name: "Musamil Ansari", phone: "8459207446", date: "2026-06-05", amount: 4375, remark: "#lokesh" },
+      { id: "hard-121", name: "Suraj Chaudhary", phone: "7055022800", date: "2026-06-06", amount: 4200, remark: "#lokesh" },
+      { id: "hard-122", name: "Jaswant Rahmani", phone: "8102864740", date: "2026-06-07", amount: 245, remark: "#lokesh" },
+      { id: "hard-123", name: "Arman Khokhar", phone: "9521650313", date: "2026-06-08", amount: 4807, remark: "#lokesh" },
+      { id: "hard-124", name: "Navya Punjab", phone: "9888635981", date: "2026-06-09", amount: 7970, remark: "#lokesh" },
+      { id: "hard-125", name: "Harshit Yadav", phone: "7877818622", date: "2026-06-11", amount: 5550, remark: "#rohit" },
+      { id: "hard-126", name: "Mohd Samir", phone: "9021964028", date: "2026-06-12", amount: 992, remark: "#rohit" },
+      { id: "hard-127", name: "Nawazish Rana", phone: "9927579714", date: "2026-06-12", amount: 700, remark: "#rohit" },
+      { id: "hard-128", name: "Julee Rajput", phone: "8840814739", date: "2026-06-13", amount: 3200, remark: "#rohit" },
+      { id: "hard-129", name: "Vinish Bhatt", phone: "9068098008", date: "2026-06-14", amount: 8317, remark: "#lokesh" },
+      { id: "hard-130", name: "Vikas Patel", phone: "9691046230", date: "2026-06-15", amount: 8170, remark: "#lokesh" },
+      { id: "hard-131", name: "Iram&Alhun", phone: "9752786442", date: "2026-06-16", amount: 5875, remark: "#rohit" },
+      { id: "hard-132", name: "Julee Rajput", phone: "8840814739", date: "2026-06-17", amount: 6300, remark: "#lokesh" },
+      { id: "hard-133", name: "Himanshu Sharma", phone: "7229901116", date: "2026-06-18", amount: 965, remark: "#lokesh" },
+      { id: "hard-134", name: "Kishan Meena", phone: "9680268448", date: "2026-06-18", amount: 920, remark: "#rohit" },
+      { id: "hard-135", name: "Himanshu Sharma", phone: "7229901116", date: "2026-06-19", amount: 2055, remark: "#lokesh" },
+      { id: "hard-136", name: "Mohit Shalik Tula", phone: "8080544718", date: "2026-06-19", amount: 990, remark: "#rohit" },
+      { id: "hard-137", name: "Amar", phone: "9950266758", date: "2026-06-20", amount: 200, remark: "#lokesh" },
+      { id: "hard-138", name: "Paramveer Singh", phone: "7073329256", date: "2026-06-20", amount: 10719, remark: "#rohit" },
+      { id: "hard-139", name: "Prabhat Alok", phone: "8357828695", date: "2026-06-21", amount: 12181, remark: "#lokesh" },
+      { id: "hard-140", name: "Lakshit", phone: "9359976939", date: "2026-06-21", amount: 3377, remark: "#karan" },
+      { id: "hard-141", name: "Vikram Jana", phone: "9068695925", date: "2026-06-22", amount: 4350, remark: "#lokesh" },
+      { id: "hard-142", name: "Avishek Saw", phone: "7603083911", date: "2026-06-22", amount: 1000, remark: "#lokesh" },
+      { id: "hard-143", name: "Rajendra Jhunjhunu", phone: "9587891097", date: "2026-06-23", amount: 3675, remark: "#lokesh" },
+      { id: "hard-144", name: "Sunil Singh", phone: "8619427214", date: "2026-06-23", amount: 3875, remark: "#lokesh" },
+      { id: "hard-145", name: "Mohd Sharif Faruk", phone: "9021964028", date: "2026-06-24", amount: 1072, remark: "#lokesh" },
+      { id: "hard-146", name: "Sunny Saraswat", phone: "7357426556", date: "2026-06-24", amount: 1420, remark: "#lokesh" },
+      { id: "hard-147", name: "Ankit Prasad", phone: "8869002460", date: "2026-06-25", amount: 1925, remark: "#lokesh" },
+      { id: "hard-148", name: "Govind Mittal", phone: "7568814310", date: "2026-06-25", amount: 2050, remark: "#karan" },
+      { id: "hard-149", name: "Aftab Salman", phone: "9911866248", date: "2026-06-26", amount: 12500, remark: "#lokesh" },
+      { id: "hard-150", name: "Home Delight", phone: "9131957918", date: "2026-06-26", amount: 5350, remark: "#lokesh" },
+      { id: "hard-151", name: "Abhishek", phone: "9057667213", date: "2026-06-27", amount: 8100, remark: "#lokesh" },
+      { id: "hard-152", name: "Pinky Malik", phone: "8777240901", date: "2026-06-27", amount: 2050, remark: "#lokesh" },
+      { id: "hard-153", name: "Shivlal", phone: "9082095028", date: "2026-06-28", amount: 11105, remark: "#lokesh" },
+      { id: "hard-154", name: "Siddharth", phone: "7023855371", date: "2026-06-28", amount: 650, remark: "Order" },
+      { id: "hard-155", name: "Ibrahim Safi", phone: "9457638946", date: "2026-06-28", amount: 4085, remark: "Order" },
+      { id: "hard-156", name: "Arif G Chare", phone: "9967191155", date: "2026-06-29", amount: 700, remark: "#lokesh" },
+      { id: "hard-157", name: "Sujal Dalai", phone: "9937942307", date: "2026-06-29", amount: 700, remark: "#karan" },
+      { id: "hard-158", name: "Krish Guleria", phone: "9805848578", date: "2026-06-29", amount: 3075, remark: "#lokesh" },
+      { id: "hard-159", name: "Gori Shankar", phone: "9549731982", date: "2026-06-30", amount: 1725, remark: "Chandpole" },
+      { id: "hard-160", name: "Anmol Malhotra", phone: "7206911127", date: "2026-06-30", amount: 4900, remark: "#lokesh" },
+      { id: "hard-161", name: "Rahul Kothari", phone: "9901541888", date: "2026-06-30", amount: 650, remark: "#lokesh" },
+      { id: "hard-162", name: "Amar", phone: "9950266758", date: "2026-06-30", amount: 730, remark: "Alwar" },
+      { id: "hard-163", name: "Ritik Devra", phone: "8000741984", date: "2026-06-30", amount: 6150, remark: "#rohit" },
+      { id: "hard-164", name: "Arman Khokhar", phone: "9521650313", date: "2026-06-30", amount: 1750, remark: "#lokesh" },
+      { id: "hard-165", name: "Ankit Ji Sikar", phone: "8000385639", date: "2026-06-30", amount: 9882, remark: "#lokesh" },
+      { id: "hard-166", name: "Sinku Yadav", phone: "8368157946", date: "2026-06-30", amount: 12145, remark: "#lokesh" },
+      { id: "hard-167", name: "Tanishq", phone: "9967620655", date: "2026-06-30", amount: 20227, remark: "#lokesh" },
+      { id: "hard-168", name: "Rohit Pareek", phone: "7014133586", date: "2026-07-01", amount: 1500, remark: "Lokesh" },
+      { id: "hard-169", name: "Rajendra Jhunjhunu", phone: "9587891097", date: "2026-07-02", amount: 3875, remark: "Lokesh" },
+      { id: "hard-170", name: "Ashish Ji", phone: "9079271880", date: "2026-07-03", amount: 600, remark: "Lokesh" },
+      { id: "hard-171", name: "Home Delight", phone: "9131957918", date: "2026-07-04", amount: 4775, remark: "Lokesh" },
+      { id: "hard-172", name: "Gori Shankar", phone: "9549731982", date: "2026-07-05", amount: 450, remark: "Lokesh" },
+      { id: "hard-173", name: "Abhishek Ji", phone: "9770902976", date: "2026-07-06", amount: 7251, remark: "Lokesh" },
+      { id: "hard-174", name: "Rishav", phone: "9304397465", date: "2026-07-07", amount: 4900, remark: "Lokesh" },
+      { id: "hard-175", name: "Prakash Chaudhary", phone: "8271035663", date: "2026-07-08", amount: 21575, remark: "Karan" },
+      { id: "hard-176", name: "Sunny Saraswat", phone: "7357426556", date: "2026-07-09", amount: 1180, remark: "Lokesh" },
+      { id: "hard-177", name: "Julee Rajput", phone: "8840814739", date: "2026-07-10", amount: 10250, remark: "Lokesh" },
+      { id: "hard-178", name: "Nagaur Customer", phone: "8949865755", date: "2026-07-11", amount: 8000, remark: "Lokesh" },
+      { id: "hard-179", name: "Himanshu Ji Shyam", phone: "7737767636", date: "2026-07-12", amount: 750, remark: "Lokesh" },
+      { id: "hard-180", name: "Julee Rajput", phone: "8840814739", date: "2026-07-13", amount: 18500, remark: "Lokesh" },
+      { id: "hard-181", name: "Mohd Ashraf", phone: "9694639900", date: "2026-07-14", amount: 8312, remark: "Lokesh" },
+      { id: "hard-182", name: "Bijender Kumar", phone: "7891235846", date: "2026-07-15", amount: 12505, remark: "Lokesh" },
+      { id: "hard-183", name: "Nikhil Pandey", phone: "6351846425", date: "2026-07-16", amount: 3500, remark: "Lokesh" },
+      { id: "hard-184", name: "Alok Goswami", phone: "9696060823", date: "2026-07-16", amount: 2455, remark: "Lokesh" },
+      { id: "hard-185", name: "Anuj", phone: "7055849524", date: "2026-07-17", amount: 7490, remark: "Lokesh" },
+      { id: "hard-186", name: "Baidyanath Guin", phone: "9339501830", date: "2026-07-18", amount: 5175, remark: "Karan" },
+      { id: "hard-187", name: "Manpreet Singh", phone: "9855837997", date: "2026-07-19", amount: 599, remark: "Lokesh" },
+      { id: "hard-188", name: "Julee Rajput", phone: "8840814739", date: "2026-07-20", amount: 7875, remark: "Lokesh" },
+      { id: "hard-189", name: "Paramveer Singh", phone: "7073329256", date: "2026-07-21", amount: 3800, remark: "Lokesh" },
+      { id: "hard-190", name: "Kaif", phone: "9211816156", date: "2026-07-22", amount: 599, remark: "Lokesh" },
+      { id: "hard-191", name: "K Adil", phone: "8112455730", date: "2026-07-22", amount: 15700, remark: "Karan" },
+      { id: "hard-192", name: "Vikas Patel", phone: "9691046230", date: "2026-07-23", amount: 2950, remark: "Lokesh" },
+      { id: "hard-193", name: "Arman Khokhar", phone: "9521650313", date: "2026-07-23", amount: 875, remark: "Lokesh" },
+      { id: "hard-194", name: "Abhishek", phone: "9057667213", date: "2026-07-24", amount: 1120, remark: "Lokesh" },
+      { id: "hard-195", name: "Paras Yadav", phone: "8077422763", date: "2026-07-24", amount: 7075, remark: "Lokesh" },
+      { id: "hard-196", name: "Govind Mittal", phone: "7568814310", date: "2026-07-25", amount: 3000, remark: "Karan" },
+      { id: "hard-197", name: "Ambika", phone: "9368921433", date: "2026-07-25", amount: 9639, remark: "Lokesh" },
+      { id: "hard-198", name: "Julee Rajput", phone: "8840814739", date: "2026-07-26", amount: 2300, remark: "Lokesh" },
+      { id: "hard-199", name: "Saurabh Rai", phone: "9565513305", date: "2026-07-26", amount: 15200, remark: "Karan" },
+      { id: "hard-200", name: "Suraj Chaudhary", phone: "7055022800", date: "2026-07-26", amount: 9300, remark: "Lokesh" },
+      { id: "hard-201", name: "Shivam Singh Yadav", phone: "9773708713", date: "2026-07-27", amount: 12000, remark: "Lokesh" },
+      { id: "hard-202", name: "Syed Mumtaz", phone: "6398513308", date: "2026-07-27", amount: 2120, remark: "Lokesh" },
+      { id: "hard-203", name: "Gaurav Kumar", phone: "8006531374", date: "2026-07-28", amount: 4175, remark: "Lokesh" },
+      { id: "hard-204", name: "Sajid Raza", phone: "8356945504", date: "2026-07-29", amount: 27500, remark: "Lokesh Bihar" },
+      { id: "hard-205", name: "Julee Rajput", phone: "8840814739", date: "2026-07-29", amount: 35200, remark: "Lokesh" },
+      { id: "hard-206", name: "Jaswant Rahmani", phone: "8102864740", date: "2026-07-29", amount: 12375, remark: "Lokesh" },
+      { id: "hard-207", name: "Ashish Joshi", phone: "9079271880", date: "2026-07-29", amount: 8845, remark: "Lokesh" },
+      { id: "hard-208", name: "Sameer Didwana", phone: "9649640146", date: "2026-07-30", amount: 7000, remark: "Lokesh" },
+      { id: "hard-209", name: "Mo Zayad", phone: "9219411356", date: "2026-07-30", amount: 14000, remark: "Lokesh" },
+      { id: "hard-210", name: "Ankit Ji Sikar", phone: "8000385639", date: "2026-07-30", amount: 3450, remark: "Lokesh" },
+      { id: "hard-211", name: "Ayush Chauhan", phone: "9286226614", date: "2026-07-30", amount: 1325, remark: "Lokesh" },
+      { id: "hard-212", name: "Ibrahim Safi", phone: "9457638946", date: "2026-07-30", amount: 30615, remark: "Lokesh" },
+      { id: "hard-213", name: "Gori Shankar", phone: "9549731982", date: "2026-07-31", amount: 4435, remark: "Lokesh" },
+      { id: "hard-214", name: "Komal Pawar", phone: "7372969707", date: "2026-07-31", amount: 8436, remark: "Lokesh" },
+      { id: "hard-215", name: "Shaikh Lodinn", phone: "9850335475", date: "2026-07-31", amount: 1600, remark: "Lokesh" },
+      { id: "hard-216", name: "Jyoti Mare", phone: "7735772532", date: "2026-07-31", amount: 3450, remark: "Karan" },
+      { id: "hard-217", name: "Arman Khokhar", phone: "9521650313", date: "2026-07-31", amount: 2400, remark: "Lokesh" },
+      { id: "hard-218", name: "Nikhil Pandey", phone: "6351846425", date: "2026-07-31", amount: 2650, remark: "Lokesh" },
+      { id: "hard-219", name: "Julee Rajput", phone: "8840814739", date: "2026-07-31", amount: 15400, remark: "Lokesh" },
+      { id: "hard-220", name: "Ayush Chauhan", phone: "9286226614", date: "2026-07-31", amount: 875, remark: "Lokesh" },
+      { id: "hard-221", name: "Yagya Saini", phone: "7891258804", date: "2026-07-31", amount: 2484, remark: "Lokesh" },
+      { id: "hard-222", name: "Yagya Saini", phone: "7891258804", date: "2026-07-31", amount: 2080, remark: "Lokesh" },
+      { id: "hard-223", name: "Vikas Patel", phone: "9691046230", date: "2026-07-31", amount: 7075, remark: "Lokesh" },
+      { id: "hard-224", name: "Ankit Ji Sikar", phone: "8000385639", date: "2026-07-31", amount: 12000, remark: "Lokesh" },
+      { id: "hard-225", name: "Ritik Devra", phone: "8000741984", date: "2026-07-31", amount: 2700, remark: "Lokesh" },
+      { id: "hard-226", name: "Ayush Chauhan", phone: "9286226614", date: "2026-07-31", amount: 8350, remark: "Lokesh" },
+      { id: "hard-227", name: "Mohd Ashraf", phone: "9694639900", date: "2026-07-31", amount: 17500, remark: "Raj Niwai" },
+      { id: "hard-228", name: "Soham", phone: "9322970402", date: "2026-07-31", amount: 800, remark: "Lokesh" },
+      { id: "hard-229", name: "Jyoti Mare", phone: "7735772532", date: "2026-07-31", amount: 4469, remark: "Karan" },
+      { id: "hard-230", name: "Sunil Singh", phone: "9818678988", date: "2026-08-01", amount: 4278, remark: "Order" },
+      { id: "hard-231", name: "Lalit Kumar", phone: "8077817340", date: "2026-08-03", amount: 1800, remark: "Order" },
+      { id: "hard-232", name: "Jigar", phone: "6200028261", date: "2026-08-04", amount: 1415, remark: "Order" },
+      { id: "hard-233", name: "Roni SK", phone: "8741013416", date: "2026-08-05", amount: 1325, remark: "Order" },
+      { id: "hard-234", name: "Himanshu Jaipur", phone: "6378533889", date: "2026-08-05", amount: 880, remark: "Order" },
+      { id: "hard-235", name: "Rahul Kothari", phone: "9901541888", date: "2026-08-05", amount: 1950, remark: "Order" },
+      { id: "hard-236", name: "Yagya Saini", phone: "7891258804", date: "2026-08-06", amount: 4795, remark: "Order" },
+      { id: "hard-237", name: "Saurabh Rai", phone: "9565513305", date: "2026-08-06", amount: 5750, remark: "Order" },
+      { id: "hard-238", name: "Mahammad Sam", phone: "7760743880", date: "2026-08-06", amount: 120, remark: "Order" },
+      { id: "hard-239", name: "Nikhil Pandey", phone: "6351846425", date: "2026-08-06", amount: 2650, remark: "Order" },
+      { id: "hard-240", name: "Lokesh Kumar", phone: "7290007888", date: "2026-08-07", amount: 3275, remark: "Order" },
+      { id: "hard-241", name: "Gorav Chouhan", phone: "9870280555", date: "2026-08-07", amount: 54000, remark: "Order" },
+      { id: "hard-242", name: "Gorav Chouhan", phone: "9870280555", date: "2026-08-07", amount: 54175, remark: "Order" },
+      { id: "hard-243", name: "Tanishq", phone: "9967620655", date: "2026-08-08", amount: 5050, remark: "Mumbai" },
+      { id: "hard-244", name: "Souvik Karmakar", phone: "9091956367", date: "2026-08-08", amount: 1300, remark: "Order" },
+      { id: "hard-245", name: "Shivlal", phone: "9082095028", date: "2026-08-11", amount: 11460, remark: "Rajsamand" },
+      { id: "hard-246", name: "Ayush Chauhan", phone: "9286226614", date: "2026-08-11", amount: 2850, remark: "Mainpuri" },
+      { id: "hard-247", name: "Pooja Gurugram", phone: "9540855772", date: "2026-08-11", amount: 599, remark: "Order" },
+      { id: "hard-248", name: "Amit Das", phone: "7005055254", date: "2026-08-11", amount: 599, remark: "Order" },
+      { id: "hard-249", name: "Rajendra Jhunjhunu", phone: "9587891097", date: "2026-08-12", amount: 3975, remark: "Order" },
+      { id: "hard-250", name: "Ibrahim Safi", phone: "9457638946", date: "2026-08-12", amount: 3440, remark: "Order" },
+      { id: "hard-251", name: "Priyanshu Chaurasia", phone: "7879958386", date: "2026-08-13", amount: 2280, remark: "Order" },
+      { id: "hard-252", name: "Anmol Raj", phone: "7004059823", date: "2026-08-13", amount: 599, remark: "Order" },
+      { id: "hard-253", name: "Ibrahim Sheikh", phone: "7483950440", date: "2026-08-13", amount: 2700, remark: "Order" },
+      { id: "hard-254", name: "Md Nameer", phone: "7997904503", date: "2026-08-13", amount: 1179, remark: "Order" },
+      { id: "hard-255", name: "Sanju", phone: "7413080040", date: "2026-08-13", amount: 5450, remark: "Neem Ka Thana" },
+      { id: "hard-256", name: "Shivam Panwar", phone: "9977161020", date: "2026-08-14", amount: 1110, remark: "Order" },
+      { id: "hard-257", name: "Shams Raza", phone: "8170975211", date: "2026-08-14", amount: 2805, remark: "Order" },
+      { id: "hard-258", name: "Mayur Sonar", phone: "7796723194", date: "2026-08-14", amount: 5659, remark: "Order" },
+      { id: "hard-259", name: "Kaif", phone: "9211816156", date: "2026-08-14", amount: 101, remark: "Order" },
+      { id: "hard-260", name: "Vishal Yadav", phone: "9891815856", date: "2026-08-16", amount: 5650, remark: "Haryana" },
+      { id: "hard-261", name: "Paramveer Singh", phone: "7073329256", date: "2026-08-17", amount: 3180, remark: "Order" },
+      { id: "hard-262", name: "Sachin Sankhla", phone: "9588840550", date: "2026-08-17", amount: 1325, remark: "Order" },
+      { id: "hard-263", name: "Hitendra", phone: "9203182513", date: "2026-08-17", amount: 4284, remark: "Order" },
+      { id: "hard-264", name: "Abhishek Pandey", phone: "7011752789", date: "2026-08-17", amount: 6540, remark: "Order" },
+      { id: "hard-265", name: "Deepika", phone: "7742234109", date: "2026-08-17", amount: 599, remark: "Order" },
+      { id: "hard-266", name: "Michael", phone: "7057387607", date: "2026-08-17", amount: 10000, remark: "Order" },
+      { id: "hard-267", name: "Roshan", phone: "9861390557", date: "2026-08-17", amount: 6800, remark: "Order" },
+      { id: "hard-268", name: "Ankit Prasad", phone: "8869002460", date: "2026-08-17", amount: 900, remark: "Order" },
+      { id: "hard-269", name: "Amit", phone: "9878808321", date: "2026-08-18", amount: 14760, remark: "Order" },
+      { id: "hard-270", name: "Lokesh Himachal", phone: "9816081724", date: "2026-08-18", amount: 10415, remark: "Order" },
+      { id: "hard-271", name: "Pooja Gurugram", phone: "9540855772", date: "2026-08-18", amount: 6850, remark: "Order" },
+      { id: "hard-272", name: "Siddharth", phone: "7023855371", date: "2026-08-19", amount: 3125, remark: "Order" },
+      { id: "hard-273", name: "Adarsh Kumar", phone: "8340284172", date: "2026-08-19", amount: 2290, remark: "Order" },
+      { id: "hard-274", name: "Surendra Sikar", phone: "8619320352", date: "2026-08-19", amount: 12600, remark: "Order" },
+      { id: "hard-275", name: "Jai Agnihotri", phone: "9812901042", date: "2026-08-19", amount: 1550, remark: "Order" },
+      { id: "hard-276", name: "Sharvan Deb", phone: "9863104840", date: "2026-08-21", amount: 4800, remark: "Order" },
+      { id: "hard-277", name: "Julee Rajput", phone: "8840814739", date: "2026-08-24", amount: 5250, remark: "Order" },
+      { id: "hard-278", name: "Bijender Kumar", phone: "7891235846", date: "2026-08-24", amount: 19400, remark: "Order" },
+      { id: "hard-279", name: "Md Nameer", phone: "7997904503", date: "2026-08-24", amount: 1360, remark: "Order" },
+      { id: "hard-280", name: "Ansh Sisodiya", phone: "9238962073", date: "2026-08-25", amount: 11000, remark: "Order" },
+      { id: "hard-281", name: "Prakash Chaudhary", phone: "8271035663", date: "2026-08-25", amount: 8050, remark: "Order" },
+      { id: "hard-282", name: "Parveen Rohilla", phone: "8168699617", date: "2026-08-26", amount: 1000, remark: "Order" },
+      { id: "hard-283", name: "Prem Gupta", phone: "8434898398", date: "2026-08-26", amount: 800, remark: "Order" },
+      { id: "hard-284", name: "Anmol Raj", phone: "7004059823", date: "2026-08-26", amount: 36135, remark: "Order" },
+      { id: "hard-285", name: "Amit Das", phone: "7005055254", date: "2026-08-27", amount: 13159, remark: "Order" }
     ];
-
-    window.rawSalesDatabase = [...initialHardcodedData];
 
     // Data Processing Function
     function processAllData() {
@@ -748,6 +793,7 @@
         if (amt < 1000) customerMap[key].hasLowTicketOrder = true;
 
         customerMap[key].orders.push({
+          docId: item.id || '',
           date: item.date,
           amount: amt,
           remark: item.remark || 'Direct Order'
@@ -793,6 +839,7 @@
       updateTopKPIs();
       renderMonthlyChart();
       applyFilterAndRender();
+      renderMasterOrdersTable();
     }
 
     function updateTopKPIs() {
@@ -1024,6 +1071,74 @@
       }).join('');
     }
 
+    // --- MASTER ORDERS TABLE & SORTING LOGIC ---
+    window.sortMasterOrders = function(sortType) {
+      currentMasterSort = sortType;
+      
+      // Update Button Styles
+      ['date-desc', 'date-asc', 'amount-desc', 'amount-asc'].forEach(st => {
+        const btn = document.getElementById(`sort-${st}`);
+        if(btn) {
+          if(st === sortType) {
+            btn.className = "px-3 py-1.5 rounded-lg border border-slate-600 bg-slate-700 text-white font-semibold transition";
+          } else {
+            btn.className = "px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 text-slate-300 hover:bg-slate-700 transition";
+          }
+        }
+      });
+      renderMasterOrdersTable();
+    };
+
+    function renderMasterOrdersTable() {
+      const tbody = document.getElementById('masterOrdersTableBody');
+      if(!tbody) return;
+
+      let ordersList = [...window.rawSalesDatabase];
+      document.getElementById('totalMasterOrdersCount').innerText = `${ordersList.length} Orders`;
+
+      // Sort logic
+      ordersList.sort((a, b) => {
+        const dateA = new Date(a.date || '2026-01-01');
+        const dateB = new Date(b.date || '2026-01-01');
+        const amtA = parseFloat(a.amount) || 0;
+        const amtB = parseFloat(b.amount) || 0;
+
+        if (currentMasterSort === 'date-desc') return dateB - dateA;
+        if (currentMasterSort === 'date-asc') return dateA - dateB;
+        if (currentMasterSort === 'amount-desc') return amtB - amtA;
+        if (currentMasterSort === 'amount-asc') return amtA - amtB;
+        return 0;
+      });
+
+      tbody.innerHTML = ordersList.map(ord => `
+        <tr class="hover:bg-slate-700/40 transition border-b border-slate-700/60">
+          <td class="py-3 px-4 text-slate-300 font-mono text-xs">${ord.date || 'N/A'}</td>
+          <td class="py-3 px-4 font-bold text-white">${ord.name || 'Unknown'}</td>
+          <td class="py-3 px-4 text-slate-400 font-mono text-xs">${ord.phone || 'N/A'}</td>
+          <td class="py-3 px-4 text-slate-300 text-xs">${ord.remark || 'Direct Order'}</td>
+          <td class="py-3 px-4 font-extrabold text-emerald-400">₹${(parseFloat(ord.amount) || 0).toLocaleString('en-IN')}</td>
+          <td class="py-3 px-4 text-right">
+            ${ord.id && !ord.id.startsWith('hard-') ? `
+              <button onclick="deleteCloudOrder('${ord.id}')" title="Order Delete Karein" class="p-1.5 rounded bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white transition border border-rose-500/30">
+                <i class="fa-solid fa-trash text-xs"></i>
+              </button>
+            ` : `<span class="text-[10px] text-slate-500 italic">Hardcoded</span>`}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Delete Individual Order Function
+    window.deleteCloudOrder = async function(docId) {
+      if(!confirm("Kya aap sach me is order ko delete karna chahte hain?")) return;
+      try {
+        await deleteDoc(doc(salesDb, "sales_orders", docId));
+        alert("✅ Order successfully delete ho gaya!");
+      } catch(err) {
+        alert("Delete error: " + err.message);
+      }
+    };
+
     function openCustomerModal(customerId) {
       const c = customerMap[customerId];
       if (!c) return;
@@ -1049,7 +1164,14 @@
               <p class="text-[11px] text-slate-400">${o.remark || 'Regular Purchase'}</p>
             </div>
           </div>
-          <span class="font-extrabold text-emerald-400 text-sm">₹${o.amount.toLocaleString('en-IN')}</span>
+          <div class="flex items-center gap-3">
+            <span class="font-extrabold text-emerald-400 text-sm">₹${o.amount.toLocaleString('en-IN')}</span>
+            ${o.docId && !o.docId.startsWith('hard-') ? `
+              <button onclick="deleteCloudOrder('${o.docId}')" title="Ye order delete karein" class="text-rose-400 hover:text-rose-300 p-1">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            ` : ''}
+          </div>
         </div>
       `).join('');
 
@@ -1158,7 +1280,6 @@
       const combinedRemark = remarkParts.join(', ') + (userRemark ? ` | ${userRemark}` : '');
 
       try {
-        // 1. Sales DB me Save
         await addDoc(salesRef, {
           name,
           phone,
@@ -1168,14 +1289,12 @@
           createdAt: new Date().toISOString()
         });
 
-        // 2. Stock DB (khushali-a24f0) se Stock Minus
         for (const item of items) {
           const stockDocRef = doc(stockDb, "products", item.productId);
           await updateDoc(stockDocRef, {
             stockKg: increment(-item.qty)
           });
 
-          // Ledger Entry Create
           const txId = "TX-ORD-" + Date.now().toString().slice(-5) + "-" + Math.floor(Math.random() * 100);
           await setDoc(doc(stockDb, "transactions", txId), {
             id: txId,
@@ -1244,7 +1363,10 @@
         firebaseOrders.push({ id: docSnap.id, ...docSnap.data() });
       });
       
-      window.rawSalesDatabase = [...initialHardcodedData, ...firebaseOrders];
+      window.rawSalesDatabase = [
+        ...initialHardcodedData.map(h => ({ ...h })),
+        ...firebaseOrders
+      ];
       processAllData();
     });
 
@@ -1257,6 +1379,8 @@
     window.closeAddOrderModal = closeAddOrderModal;
     window.exportToCSV = exportToCSV;
     window.processAllData = processAllData;
+    window.sortMasterOrders = sortMasterOrders;
+    window.deleteCloudOrder = deleteCloudOrder;
 
     window.onload = function() {
       processAllData();
