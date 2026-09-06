@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Khushali Sells - After-Sales Customer Tracking Dashboard</title>
+  <title>Khushali Sells - After-Sales Customer Tracking & Points Dashboard</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome Icons -->
@@ -41,9 +41,9 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">Khushali Sales</h1>
-            <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[11px] font-bold px-2 py-0.5 rounded-full">After-Sales Portal</span>
+            <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[11px] font-bold px-2 py-0.5 rounded-full">Points & Retention Portal</span>
           </div>
-          <p class="text-xs text-slate-400">1 March se September 2026 Customer Retention & Order Tracking</p>
+          <p class="text-xs text-slate-400">1 March se September 2026 Customer Tracking & Cashback System</p>
         </div>
       </div>
 
@@ -63,6 +63,8 @@
 
     <!-- KPI Metric Cards Grid -->
     <div class="grid grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4">
+      
+      <!-- Total Customers -->
       <div onclick="setFilter('all')" class="cursor-pointer bg-slate-800/80 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/60 shadow-lg transition-all hover:scale-[1.02]">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-slate-400">Total Customers</span>
@@ -74,6 +76,7 @@
         </p>
       </div>
 
+      <!-- Regular / Repeat Customers -->
       <div onclick="setFilter('regular')" class="cursor-pointer bg-slate-800/80 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/60 shadow-lg transition-all hover:scale-[1.02]">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-emerald-400">Regular / Repeat</span>
@@ -86,6 +89,7 @@
         <p class="text-[11px] text-slate-400 mt-1">2 ya 2 se zyada orders</p>
       </div>
 
+      <!-- Churn Risk / Repeat Nahi Aaya -->
       <div onclick="setFilter('churn_risk')" class="cursor-pointer bg-slate-800/80 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/60 shadow-lg transition-all hover:scale-[1.02]">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-rose-400">Repeat Nahi Aaya</span>
@@ -95,6 +99,7 @@
         <p class="text-[11px] text-rose-300/80 mt-1">45+ din se inactive (Call list)</p>
       </div>
 
+      <!-- Small Orders < 1000 Rs -->
       <div onclick="setFilter('low_ticket')" class="cursor-pointer bg-slate-800/80 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/60 shadow-lg transition-all hover:scale-[1.02]">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-amber-400">Orders &lt; ₹1,000</span>
@@ -104,6 +109,7 @@
         <p class="text-[11px] text-slate-400 mt-1">Small ticket / Sample buyers</p>
       </div>
 
+      <!-- Total Gross Revenue -->
       <div class="col-span-2 lg:col-span-1 bg-gradient-to-br from-emerald-900/40 to-slate-800 p-4 rounded-2xl border border-emerald-500/30 shadow-lg">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-emerald-300">Total Recorded Sales</span>
@@ -149,8 +155,8 @@
           </div>
         </div>
         <div class="mt-3 pt-3 border-t border-slate-700/60 flex items-center justify-between text-[11px] text-slate-400">
-          <span>Target Response Rate</span>
-          <span class="text-emerald-400 font-semibold">Priority 100% Calls</span>
+          <span>Cashback System</span>
+          <span class="text-emerald-400 font-semibold">1% Value (60 Days Expiry)</span>
         </div>
       </div>
     </div>
@@ -216,17 +222,17 @@
       </div>
     </div>
 
-    <!-- LOYALTY POINTS SYSTEM TABLE -->
+    <!-- CASHBACK POINTS LEDGER TABLE (Dedicated Table for Points & 7-Day Followup Prompts) -->
     <div class="bg-slate-800/90 rounded-2xl border border-slate-700/80 shadow-xl overflow-hidden mt-8">
       <div class="p-4 border-b border-slate-700/80 flex flex-wrap justify-between items-center gap-4">
         <div class="flex items-center gap-2">
-          <span class="text-xs font-bold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
-            <i class="fa-solid fa-coins"></i> Client Loyalty Cashback Points (7 Sept Onwards)
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+            <i class="fa-solid fa-coins"></i> Customer Cashback Points Ledger (1 Point = ₹1)
           </span>
-          <span class="text-xs bg-slate-700 text-slate-200 px-2.5 py-0.5 rounded-full font-medium" id="totalPointsClientsCount">0 Clients</span>
+          <span class="text-xs bg-emerald-950 text-emerald-300 border border-emerald-800 px-2.5 py-0.5 rounded-full font-medium" id="totalPointsCount">0 Active Points</span>
         </div>
         <div class="text-xs text-slate-400">
-          Rate: 1% of Order Value = Points (1 Point = ₹1, Valid for 60 Days)[span_5](start_span)[span_5](end_span)
+          * 7 din ya usse jyada inactive clients ke liye WhatsApp Reminder prompt yahan dikhega.
         </div>
       </div>
 
@@ -236,13 +242,13 @@
             <tr>
               <th class="py-3 px-4">Customer Name</th>
               <th class="py-3 px-4">Phone Number</th>
-              <th class="py-3 px-4">Total Earned Points</th>
-              <th class="py-3 px-4">Total Redeemed</th>
-              <th class="py-3 px-4 font-bold text-teal-300">Active Balance Points</th>
-              <th class="py-3 px-4">Expiry Status (60 Days)</th>
+              <th class="py-3 px-4 text-center">Available Cashback Points</th>
+              <th class="py-3 px-4">Points Expiry Date (60 Days)</th>
+              <th class="py-3 px-4">7-Day WhatsApp Reminder Status</th>
+              <th class="py-3 px-4 text-right">Action</th>
             </tr>
           </thead>
-          <tbody id="loyaltyPointsTableBody" class="divide-y divide-slate-700/60">
+          <tbody id="pointsLedgerTableBody" class="divide-y divide-slate-700/60">
             <!-- Rendered via JS -->
           </tbody>
         </table>
@@ -296,7 +302,7 @@
 
   </main>
 
-  <!-- Customer Detail Modal -->
+  <!-- Customer Detail & Order History Timeline Modal -->
   <div id="customerModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
       <div class="p-5 bg-slate-900/80 border-b border-slate-700 flex justify-between items-center">
@@ -323,8 +329,8 @@
             <p id="modalOrderCount" class="text-base font-bold text-white mt-0.5">0</p>
           </div>
           <div>
-            <span class="text-[10px] uppercase font-semibold text-slate-400">Avg. Order Value</span>
-            <p id="modalAvgOrder" class="text-base font-bold text-blue-400 mt-0.5">₹0</p>
+            <span class="text-[10px] uppercase font-semibold text-slate-400">Cashback Points</span>
+            <p id="modalPointsVal" class="text-base font-bold text-amber-400 mt-0.5">0 pts</p>
           </div>
         </div>
 
@@ -363,7 +369,7 @@
     </div>
   </div>
 
-  <!-- Add New Order Modal (Multi-Item + Other Products + Loyalty Points Redemption) -->
+  <!-- Add New Order Modal (With Other Products/Samples & Points Redemption) -->
   <div id="addOrderModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
       <div class="p-4 bg-slate-900 border-b border-slate-700 flex justify-between items-center">
@@ -380,35 +386,24 @@
         </div>
         
         <div>
-          <label class="block text-slate-300 font-medium mb-1">Mobile / Phone Number * (Points Check karne ke liye)</label>
-          <input type="text" id="newCustPhone" oninput="checkCustomerLoyaltyPoints(this.value)" required placeholder="e.g. 9876543210" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+          <label class="block text-slate-300 font-medium mb-1">Mobile / Phone Number *</label>
+          <input type="text" id="newCustPhone" onblur="checkCustomerPoints(this.value)" required placeholder="e.g. 9876543210 (Points check honge)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+          <p id="availablePointsNotice" class="text-[11px] text-amber-400 mt-1 hidden"></p>
         </div>
 
-        <!-- Loyalty Points Redemption Alert Box -->
-        <div id="loyaltyRedeemBox" class="hidden bg-teal-950/60 border border-teal-700 p-3 rounded-xl space-y-2">
-          <div class="flex justify-between items-center">
-            <span class="text-teal-300 font-bold"><i class="fa-solid fa-coins"></i> Available Active Points: <span id="availablePointsDisplay">0</span></span>
-            <span class="text-[10px] text-teal-400 font-mono">(1 Point = ₹1)[span_6](start_span)[span_6](end_span)</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <input type="checkbox" id="redeemPointsCheck" onchange="togglePointsRedemption()" class="w-4 h-4 rounded bg-slate-900 border-slate-700 text-teal-600 focus:ring-teal-500">
-            <label for="redeemPointsCheck" class="text-teal-200 font-medium cursor-pointer">Use available points as cashback discount in this order?</label>
-          </div>
-        </div>
-
-        <!-- Standard Inventory Items -->
+        <!-- Dynamic Multiple Products Section (Includes Raw Materials + Other/Samples) -->
         <div class="space-y-2 pt-1 border-t border-slate-700/60">
           <div class="flex items-center justify-between">
-            <label class="block text-slate-300 font-semibold text-xs">Ordered Inventory Products *</label>
+            <label class="block text-slate-300 font-semibold text-xs">Ordered Products & Other/Samples *</label>
             <button type="button" onclick="addOrderItemRow()" class="text-xs text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-1 bg-emerald-950/60 px-2 py-1 rounded border border-emerald-800">
               <i class="fa-solid fa-plus"></i> + Item Jodein
             </button>
           </div>
 
-          <div id="orderItemsContainer" class="space-y-2 max-h-36 overflow-y-auto pr-1 custom-scrollbar">
+          <div id="orderItemsContainer" class="space-y-2 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
             <div class="order-item-row grid grid-cols-12 gap-2 bg-slate-900/90 p-2.5 rounded-xl border border-slate-700 items-center">
               <div class="col-span-7">
-                <select class="prod-select w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500" required>
+                <select class="prod-select w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500" onchange="toggleCustomProduct(this)" required>
                   <option value="KHU-001">White Phenyl Raw Material</option>
                   <option value="KHU-002">Colour Phenyl (Rose)</option>
                   <option value="KHU-003">Black Phenyl Raw Material</option>
@@ -424,39 +419,36 @@
                   <option value="KHU-013">Car Wash Shampoo Raw Material</option>
                   <option value="KHU-014">Room Freshener (Rose)</option>
                   <option value="KHU-015">Room Freshener (Lavender)</option>
+                  <option value="OTHER_CUSTOM" class="text-amber-300 font-bold">✨ Other Product / Sample (Manual Enter)</option>
                 </select>
+                <!-- Hidden Custom Product Input Box -->
+                <input type="text" placeholder="Custom product name (e.g. Sample bottle)" class="custom-prod-name w-full bg-slate-950 border border-amber-500 rounded-lg p-1.5 text-xs text-amber-200 mt-1 hidden">
               </div>
               <div class="col-span-4">
-                <input type="number" step="any" min="0.01" required placeholder="Qty (kg)" class="prod-qty w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 font-mono focus:outline-none focus:border-emerald-500">
+                <input type="number" step="any" min="0.01" required placeholder="Qty / Pcs" class="prod-qty w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 font-mono focus:outline-none focus:border-emerald-500">
               </div>
               <div class="col-span-1 text-center"></div>
             </div>
           </div>
         </div>
 
-        <!-- Other / Extra Products Section (Samples etc.) -->
-        <div class="space-y-2 pt-2 border-t border-slate-700/60">
-          <div class="flex items-center justify-between">
-            <label class="block text-amber-400 font-semibold text-xs"><i class="fa-solid fa-box-open"></i> Other Products / Samples (Extra Items)</label>
-            <button type="button" onclick="addOtherProductRow()" class="text-xs text-amber-400 hover:text-amber-300 font-bold flex items-center gap-1 bg-amber-950/60 px-2 py-1 rounded border border-amber-800">
-              <i class="fa-solid fa-plus"></i> + Other Item
-            </button>
-          </div>
-
-          <div id="otherProductsContainer" class="space-y-2 max-h-32 overflow-y-auto pr-1 custom-scrollbar">
-            <!-- Dynamically added rows will appear here -->
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-700/60">
+        <div class="grid grid-cols-2 gap-2 pt-1">
           <div>
             <label class="block text-slate-300 font-medium mb-1">Total Bill Amount (₹) *</label>
-            <input type="number" id="newCustAmount" required placeholder="e.g. 3500" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-bold text-emerald-400 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+            <input type="number" id="newCustAmount" required placeholder="e.g. 3500" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
           </div>
           <div>
             <label class="block text-slate-300 font-medium mb-1">Order Date *</label>
             <input type="date" id="newCustDate" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
           </div>
+        </div>
+
+        <!-- Points Redemption Checkbox -->
+        <div id="redemptionBox" class="bg-slate-900/90 p-3 rounded-xl border border-amber-500/40 hidden">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="redeemPointsCheck" onchange="togglePointsRedemption()" class="w-4 h-4 rounded border-slate-700 text-emerald-600 focus:ring-emerald-500">
+            <span class="text-amber-300 font-semibold text-xs" id="redeemLabelText">Client ke available points minus karein?</span>
+          </label>
         </div>
 
         <div>
@@ -467,7 +459,7 @@
         <div class="pt-2 flex justify-end gap-2 border-t border-slate-700/60">
           <button type="button" onclick="closeAddOrderModal()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-slate-200">Cancel</button>
           <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 font-semibold text-white rounded-lg flex items-center gap-1.5 shadow-md shadow-emerald-600/30">
-            <span>Save Order & Award Points</span>
+            <span>Save Order & Update Points</span>
           </button>
         </div>
       </form>
@@ -476,7 +468,7 @@
 
   <!-- Footer -->
   <footer class="bg-slate-900 border-t border-slate-800 text-center py-4 text-xs text-slate-500">
-    Khushali Sales Retention System • Designed for After-Sales Team Follow-up & Repeat Analytics
+    Khushali Sales Retention System • Designed with Cashback Points & WhatsApp Prompts
   </footer>
 
   <!-- Complete Application Logic & Embedded Real Data -->
@@ -522,12 +514,12 @@
 
     // State Variables
     let customerMap = {};
+    let customerPointsMap = {}; // Tracks cashback points & expiry
     let currentFilter = 'all';
     let selectedCustomerKey = null;
     let customerNotes = {};
     let monthlyChart = null;
     let currentMasterSort = 'date-desc';
-    let currentClientPointsMap = {}; // Tracks active points per customer phone
 
     // Hardcoded Database (March to August 2026)
     const initialHardcodedData = [
@@ -818,12 +810,11 @@
       { id: "hard-285", name: "Amit Das", phone: "7005055254", date: "2026-08-27", amount: 13159, remark: "Order" }
     ];
 
-    // Data Processing Function
+    // Data Processing Function (Calculates Cashback Points: 1% of Order Value, Expiry 60 Days from 7 Sept onwards)
     function processAllData() {
       customerMap = {};
-      currentClientPointsMap = {};
-
-      const pointsLaunchDate = new Date('2026-09-07');
+      customerPointsMap = {};
+      const pointsEffectiveDate = new Date('2026-09-07');
 
       window.rawSalesDatabase.forEach(item => {
         const cleanPhone = (item.phone || '').replace(/[^0-9]/g, '');
@@ -848,49 +839,31 @@
         customerMap[key].orderCount += 1;
         if (amt < 1000) customerMap[key].hasLowTicketOrder = true;
 
+        const orderDateObj = new Date(item.date || '2026-03-01');
         customerMap[key].orders.push({
           docId: item.id || '',
           date: item.date,
           amount: amt,
           remark: item.remark || 'Direct Order'
         });
-        customerMap[key].orderDates.push(new Date(item.date));
+        customerMap[key].orderDates.push(orderDateObj);
 
-        // --- LOYALTY POINTS SYSTEM (7 Sept 2026 Onwards) ---[span_7](start_span)[span_7](end_span)
-        if (cleanPhone.length >= 8) {
-          if (!currentClientPointsMap[cleanPhone]) {
-            currentClientPointsMap[cleanPhone] = {
-              name: cleanName,
-              phone: cleanPhone,
-              earned: 0,
-              redeemed: 0,
-              activePoints: 0,
-              details: []
-            };
-          }
+        // Cashback Points Calculation (1% value from Sept 7 onwards, valid for 60 days)
+        if (!customerPointsMap[key]) {
+          customerPointsMap[key] = { name: cleanName, phone: cleanPhone, points: 0, lastOrderDate: orderDateObj, expiryDate: null };
+        }
 
-          const orderDateObj = new Date(item.date || '2026-01-01');
-          // Implement from 7 Sept 2026[span_8](start_span)[span_8](end_span)
-          if (orderDateObj >= pointsLaunchDate) {
-            const earnedPts = Math.round(amt * 0.01); // 1% of order value[span_9](start_span)[span_9](end_span)
-            const expiryDateObj = new Date(orderDateObj);
-            expiryDateObj.setDate(expiryDateObj.getDate() + 60); // 60 days validity[span_10](start_span)[span_10](end_span)
+        if (orderDateObj >= pointsEffectiveDate) {
+          const earnedPts = Math.floor(amt * 0.01); // 1% points
+          customerPointsMap[key].points += earnedPts;
+          
+          const expiry = new Date(orderDateObj);
+          expiry.setDate(expiry.getDate() + 60); // 60 days expiry
+          customerPointsMap[key].expiryDate = expiry;
+        }
 
-            const isExpired = new Date() > expiryDateObj;
-
-            currentClientPointsMap[cleanPhone].earned += earnedPts;
-            if (!isExpired) {
-              currentClientPointsMap[cleanPhone].activePoints += earnedPts;
-            }
-
-            currentClientPointsMap[cleanPhone].details.push({
-              date: item.date,
-              amount: amt,
-              earned: earnedPts,
-              expiry: expiryDateObj.toISOString().split('T')[0],
-              expired: isExpired
-            });
-          }
+        if (orderDateObj > customerPointsMap[key].lastOrderDate) {
+          customerPointsMap[key].lastOrderDate = orderDateObj;
         }
       });
 
@@ -933,7 +906,7 @@
       renderMonthlyChart();
       applyFilterAndRender();
       renderMasterOrdersTable();
-      renderLoyaltyPointsTable();
+      renderPointsLedgerTable();
     }
 
     function updateTopKPIs() {
@@ -943,7 +916,6 @@
       const churnRisk = customers.filter(c => c.daysSinceLastOrder > 45);
       const lowTicket = customers.filter(c => c.avgOrderValue < 1000 || c.hasLowTicketOrder);
       const vipCust = customers.filter(c => c.totalSpend >= 20000);
-      const oneTimeCust = customers.filter(c => c.orderCount === 1);
 
       const totalRev = customers.reduce((sum, c) => sum + c.totalSpend, 0);
       const totalOrders = window.rawSalesDatabase.length;
@@ -966,7 +938,7 @@
       document.getElementById('count-churn_risk').innerText = churnRisk.length;
       document.getElementById('count-low_ticket').innerText = lowTicket.length;
       document.getElementById('count-vip').innerText = vipCust.length;
-      document.getElementById('count-one_time').innerText = oneTimeCust.length;
+      document.getElementById('count-one_time').innerText = customers.filter(c => c.orderCount === 1).length;
     }
 
     function renderMonthlyChart() {
@@ -1165,65 +1137,88 @@
       }).join('');
     }
 
-    // --- LOYALTY POINTS TABLE RENDERER ---
-    function renderLoyaltyPointsTable() {
-      const tbody = document.getElementById('loyaltyPointsTableBody');
-      if (!tbody) return;
+    // --- POINTS LEDGER TABLE & 7-DAY WHATSAPP PROMPT LOGIC ---
+    function renderPointsLedgerTable() {
+      const tbody = document.getElementById('pointsLedgerTableBody');
+      if(!tbody) return;
 
-      const pointsArr = Object.values(currentClientPointsMap);
-      document.getElementById('totalPointsClientsCount').innerText = `${pointsArr.length} Clients`;
+      const pointsArr = Object.values(customerPointsMap);
+      document.getElementById('totalPointsCount').innerText = `${pointsArr.reduce((s, p) => s + p.points, 0)} Active Pts`;
 
-      if (pointsArr.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">7 September 2026 ke baad ka koi points data uplabdh nahi hai[span_11](start_span)[span_11](end_span).</td></tr>`;
-        return;
-      }
+      tbody.innerHTML = pointsArr.map(p => {
+        const expiryStr = p.expiryDate ? p.expiryDate.toISOString().split('T')[0] : 'N/A';
+        const lastOrderDaysAgo = Math.floor(Math.abs(new Date() - p.lastOrderDate) / (1000 * 60 * 60 * 24));
+        const isEligibleForReminder = lastOrderDaysAgo >= 7;
 
-      tbody.innerHTML = pointsArr.map(p => `
-        <tr class="hover:bg-slate-700/40 transition border-b border-slate-700/60">
-          <td class="py-3 px-4 font-bold text-white">${p.name}</td>
-          <td class="py-3 px-4 text-slate-300 font-mono text-xs">${p.phone}</td>
-          <td class="py-3 px-4 text-emerald-400 font-bold">${p.earned} Pts</td>
-          <td class="py-3 px-4 text-rose-400 font-semibold">${p.redeemed} Pts</td>
-          <td class="py-3 px-4 font-black text-teal-300 text-sm">${p.activePoints} Pts (₹${p.activePoints})[span_12](start_span)[span_12](end_span)</td>
-          <td class="py-3 px-4 text-slate-400 text-xs">
-            ${p.details.length > 0 ? `Valid for 60 days from order[span_13](start_span)[span_13](end_span)` : 'N/A'}
-          </td>
-        </tr>
-      `).join('');
+        const waReminderMsg = encodeURIComponent(`Namaste ${p.name} ji! Khushali Sales se reminder. Aapke account me ₹${p.points} cashback points available hain jo ki ${expiryStr} ko expire hone wale hain. Apne raw materials / samples restock karne ke liye points redeem karein!`);
+
+        return `
+          <tr class="hover:bg-slate-700/40 transition border-b border-slate-700/60">
+            <td class="py-3 px-4 font-bold text-white">${p.name}</td>
+            <td class="py-3 px-4 text-slate-400 font-mono text-xs">${p.phone || 'N/A'}</td>
+            <td class="py-3 px-4 text-center font-extrabold text-amber-400 text-sm">⭐ ${p.points} Pts (₹${p.points})</td>
+            <td class="py-3 px-4 text-slate-300 font-mono text-xs">${expiryStr}</td>
+            <td class="py-3 px-4">
+              ${isEligibleForReminder ? `
+                <span class="inline-flex items-center gap-1 bg-rose-500/20 text-rose-300 border border-rose-500/30 px-2 py-0.5 rounded text-[11px] font-bold">
+                  <i class="fa-solid fa-bell"></i> 7+ Days Inactive (${lastOrderDaysAgo}d)
+                </span>
+              ` : `
+                <span class="bg-slate-700 text-slate-300 px-2 py-0.5 rounded text-[11px]">Active (${lastOrderDaysAgo}d ago)</span>
+              `}
+            </td>
+            <td class="py-3 px-4 text-right">
+              ${p.phone && p.phone !== 'Not available' ? `
+                <a href="https://wa.me/91${p.phone}?text=${waReminderMsg}" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold inline-flex items-center gap-1.5 shadow transition">
+                  <i class="fa-brands fa-whatsapp"></i> WhatsApp Reminder
+                </a>
+              ` : '<span class="text-xs text-slate-500">No Phone</span>'}
+            </td>
+          </tr>
+        `;
+      }).join('');
     }
 
-    // --- CHECK LOYALTY POINTS ON PHONE INPUT ---
-    window.checkCustomerLoyaltyPoints = function(phoneVal) {
-      const clean = phoneVal.replace(/[^0-9]/g, '');
-      const redeemBox = document.getElementById('loyaltyRedeemBox');
-      const ptsDisplay = document.getElementById('availablePointsDisplay');
-      
-      if (clean.length >= 8 && currentClientPointsMap[clean] && currentClientPointsMap[clean].activePoints > 0) {
-        ptsDisplay.innerText = currentClientPointsMap[clean].activePoints;
-        redeemBox.classList.remove('hidden');
+    // Check Customer Points on typing phone number in Add Order Modal
+    window.checkCustomerPoints = function(phoneNum) {
+      const clean = phoneNum.replace(/[^0-9]/g, '');
+      const notice = document.getElementById('availablePointsNotice');
+      const redeemBox = document.getElementById('redemptionBox');
+      const redeemLabel = document.getElementById('redeemLabelText');
+
+      if(clean.length >= 8 && customerPointsMap[clean]) {
+        const pts = customerPointsMap[clean].points;
+        if(pts > 0) {
+          notice.innerText = `💡 Is client ke paas ₹${pts} ke cashback points available hain!`;
+          notice.classList.remove('hidden');
+          redeemBox.classList.remove('hidden');
+          redeemLabel.innerText = `Client ke available ₹${pts} points order amount se minus karein?`;
+        } else {
+          notice.classList.add('hidden');
+          redeemBox.classList.add('hidden');
+        }
       } else {
+        notice.classList.add('hidden');
         redeemBox.classList.add('hidden');
-        document.getElementById('redeemPointsCheck').checked = false;
       }
     };
 
     window.togglePointsRedemption = function() {
-      const check = document.getElementById('redeemPointsCheck');
-      const amountInput = document.getElementById('newCustAmount');
-      const phoneInput = document.getElementById('newCustPhone');
-      const cleanPhone = phoneInput.value.replace(/[^0-9]/g, '');
-
-      if (!currentClientPointsMap[cleanPhone]) return;
-      const pts = currentClientPointsMap[cleanPhone].activePoints;
-
-      let currentVal = parseFloat(amountInput.value) || 0;
-      if (check.checked && pts > 0) {
-        // Deduct points from bill amount as cashback discount[span_14](start_span)[span_14](end_span)
-        amountInput.dataset.originalAmt = currentVal;
-        const discounted = Math.max(0, currentVal - pts);
-        amountInput.value = discounted;
-      } else if (amountInput.dataset.originalAmt) {
-        amountInput.value = amountInput.dataset.originalAmt;
+      const isChecked = document.getElementById('redeemPointsCheck').checked;
+      const phone = document.getElementById('newCustPhone').value.replace(/[^0-9]/g, '');
+      const amtInput = document.getElementById('newCustAmount');
+      
+      if(isChecked && customerPointsMap[phone]) {
+        const pts = customerPointsMap[phone].points;
+        const currentAmt = parseFloat(amtInput.value) || 0;
+        if(currentAmt > pts) {
+          amtInput.dataset.originalAmt = currentAmt;
+          amtInput.value = currentAmt - pts;
+        }
+      } else {
+        if(amtInput.dataset.originalAmt) {
+          amtInput.value = amtInput.dataset.originalAmt;
+        }
       }
     };
 
@@ -1301,6 +1296,9 @@
       document.getElementById('modalTotalSpend').innerText = `₹${c.totalSpend.toLocaleString('en-IN')}`;
       document.getElementById('modalOrderCount').innerText = `${c.orderCount} Times`;
       document.getElementById('modalAvgOrder').innerText = `₹${c.avgOrderValue.toLocaleString('en-IN')}`;
+      
+      const ptsObj = customerPointsMap[c.phone.replace(/[^0-9]/g, '')];
+      document.getElementById('modalPointsVal').innerText = ptsObj ? `${ptsObj.points} pts` : '0 pts';
 
       const badge = document.getElementById('modalCustomerBadge');
       badge.className = `text-[10px] font-bold px-2 py-0.5 rounded-full ${c.tagClass}`;
@@ -1360,14 +1358,27 @@
       document.getElementById('addOrderModal').classList.add('hidden');
     }
 
-    // Dynamic Inventory Row Creator
+    // Toggle Custom Product Input when 'Other Product' is selected
+    window.toggleCustomProduct = function(selectEl) {
+      const row = selectEl.closest('.order-item-row');
+      const customInput = row.querySelector('.custom-prod-name');
+      if (selectEl.value === 'OTHER_CUSTOM') {
+        customInput.classList.remove('hidden');
+        customInput.required = true;
+      } else {
+        customInput.classList.add('hidden');
+        customInput.required = false;
+      }
+    };
+
+    // Dynamic Row Creator
     window.addOrderItemRow = function() {
       const container = document.getElementById('orderItemsContainer');
       const div = document.createElement('div');
       div.className = "order-item-row grid grid-cols-12 gap-2 bg-slate-900/90 p-2.5 rounded-xl border border-slate-700 items-center";
       div.innerHTML = `
         <div class="col-span-7">
-          <select class="prod-select w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500" required>
+          <select class="prod-select w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500" onchange="toggleCustomProduct(this)" required>
             <option value="KHU-001">White Phenyl Raw Material</option>
             <option value="KHU-002">Colour Phenyl (Rose)</option>
             <option value="KHU-003">Black Phenyl Raw Material</option>
@@ -1383,34 +1394,15 @@
             <option value="KHU-013">Car Wash Shampoo Raw Material</option>
             <option value="KHU-014">Room Freshener (Rose)</option>
             <option value="KHU-015">Room Freshener (Lavender)</option>
+            <option value="OTHER_CUSTOM" class="text-amber-300 font-bold">✨ Other Product / Sample (Manual Enter)</option>
           </select>
+          <input type="text" placeholder="Custom product name (e.g. Sample bottle)" class="custom-prod-name w-full bg-slate-950 border border-amber-500 rounded-lg p-1.5 text-xs text-amber-200 mt-1 hidden">
         </div>
         <div class="col-span-4">
-          <input type="number" step="any" min="0.01" required placeholder="Qty (kg)" class="prod-qty w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 font-mono focus:outline-none focus:border-emerald-500">
+          <input type="number" step="any" min="0.01" required placeholder="Qty / Pcs" class="prod-qty w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 font-mono focus:outline-none focus:border-emerald-500">
         </div>
         <div class="col-span-1 text-center">
           <button type="button" onclick="this.closest('.order-item-row').remove()" class="text-rose-400 hover:text-rose-300 text-xs">
-            <i class="fa-solid fa-trash"></i>
-          </button>
-        </div>
-      `;
-      container.appendChild(div);
-    };
-
-    // Dynamic Other/Sample Product Row Creator
-    window.addOtherProductRow = function() {
-      const container = document.getElementById('otherProductsContainer');
-      const div = document.createElement('div');
-      div.className = "other-item-row grid grid-cols-12 gap-2 bg-slate-900/90 p-2.5 rounded-xl border border-amber-800/60 items-center";
-      div.innerHTML = `
-        <div class="col-span-7">
-          <input type="text" placeholder="Other Product / Sample Name" class="other-name w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 focus:outline-none focus:border-amber-500" required>
-        </div>
-        <div class="col-span-4">
-          <input type="number" step="any" min="1" required placeholder="Amount (₹)" class="other-amt w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 font-mono focus:outline-none focus:border-amber-500">
-        </div>
-        <div class="col-span-1 text-center">
-          <button type="button" onclick="this.closest('.other-item-row').remove()" class="text-rose-400 hover:text-rose-300 text-xs">
             <i class="fa-solid fa-trash"></i>
           </button>
         </div>
@@ -1428,7 +1420,6 @@
       const date = document.getElementById('newCustDate').value;
       const userRemark = document.getElementById('newCustRemark')?.value.trim() || '';
 
-      // Standard items
       const rows = document.querySelectorAll('.order-item-row');
       const items = [];
       const remarkParts = [];
@@ -1436,31 +1427,25 @@
       rows.forEach(row => {
         const select = row.querySelector('.prod-select');
         const qtyInput = row.querySelector('.prod-qty');
-        const productId = select.value;
-        const productName = select.options[select.selectedIndex].text;
+        const customInput = row.querySelector('.custom-prod-name');
+        
+        let productId = select.value;
+        let productName = select.options[select.selectedIndex].text;
         const qty = parseFloat(qtyInput.value) || 0;
+
+        if (productId === 'OTHER_CUSTOM') {
+          productName = customInput.value.trim() || 'Custom Sample/Product';
+          productId = 'KHU-CUSTOM-' + Math.floor(Math.random() * 1000);
+        }
 
         if (qty > 0) {
           items.push({ productId, productName, qty });
-          remarkParts.push(`${qty}kg ${productName}`);
+          remarkParts.push(`${qty}x ${productName}`);
         }
       });
 
-      // Other / Sample items
-      const otherRows = document.querySelectorAll('.other-item-row');
-      otherRows.forEach(row => {
-        const nameInput = row.querySelector('.other-name');
-        const amtInput = row.querySelector('.other-amt');
-        const oName = nameInput.value.trim();
-        const oAmt = parseFloat(amtInput.value) || 0;
-
-        if (oName && oAmt > 0) {
-          remarkParts.push(`[Sample/Other: ${oName} @ ₹${oAmt}]`);
-        }
-      });
-
-      if (items.length === 0 && otherRows.length === 0) {
-        alert("Kripya kam se kam ek inventory item ya other product enter karein.");
+      if (items.length === 0) {
+        alert("Kripya kam se kam ek product aur quantity enter karein.");
         return;
       }
 
@@ -1476,42 +1461,43 @@
           createdAt: new Date().toISOString()
         });
 
-        // Deduct Inventory Stock
+        // Deduct stock only for standard inventory items
         for (const item of items) {
-          const stockDocRef = doc(stockDb, "products", item.productId);
-          await updateDoc(stockDocRef, {
-            stockKg: increment(-item.qty)
-          });
+          if (!item.productId.startsWith('KHU-CUSTOM-')) {
+            const stockDocRef = doc(stockDb, "products", item.productId);
+            await updateDoc(stockDocRef, {
+              stockKg: increment(-item.qty)
+            });
 
-          const txId = "TX-ORD-" + Date.now().toString().slice(-5) + "-" + Math.floor(Math.random() * 100);
-          await setDoc(doc(stockDb, "transactions", txId), {
-            id: txId,
-            date: new Date().toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' }),
-            type: 'DISPATCH',
-            productId: item.productId,
-            productName: item.productName,
-            qty: item.qty,
-            unit: 'kg',
-            refNumber: `ORD-${Date.now().toString().slice(-4)}`,
-            party: name || 'Customer Order',
-            notes: `Auto Order dispatch (${phone}) - ${item.qty}kg`,
-            amount: 0,
-            timestamp: Date.now()
-          });
+            const txId = "TX-ORD-" + Date.now().toString().slice(-5) + "-" + Math.floor(Math.random() * 100);
+            await setDoc(doc(stockDb, "transactions", txId), {
+              id: txId,
+              date: new Date().toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' }),
+              type: 'DISPATCH',
+              productId: item.productId,
+              productName: item.productName,
+              qty: item.qty,
+              unit: 'unit/kg',
+              refNumber: `ORD-${Date.now().toString().slice(-4)}`,
+              party: name || 'Customer Order',
+              notes: `Auto Order dispatch (${phone}) - ${item.qty}`,
+              amount: 0,
+              timestamp: Date.now()
+            });
+          }
         }
 
         closeAddOrderModal();
         document.querySelector('#addOrderModal form').reset();
+        document.getElementById('redemptionBox').classList.add('hidden');
+        document.getElementById('availablePointsNotice').classList.add('hidden');
 
-        // Reset containers
         const container = document.getElementById('orderItemsContainer');
-        while (container.children.length > 1) container.removeChild(container.lastChild);
+        while (container.children.length > 1) {
+          container.removeChild(container.lastChild);
+        }
 
-        const otherContainer = document.getElementById('otherProductsContainer');
-        otherContainer.innerHTML = '';
-        document.getElementById('loyaltyRedeemBox').classList.add('hidden');
-
-        alert(`✅ Order save ho gaya, stock deduct ho gaya aur 1% cashback points credit ho gaye[span_15](start_span)[span_15](end_span)!`);
+        alert(`✅ Order successfully save ho gaya aur 1% cashback points update ho gaye!`);
       } catch (err) {
         console.error("Order error:", err);
         alert("Error: " + err.message);
@@ -1572,9 +1558,9 @@
     window.processAllData = processAllData;
     window.sortMasterOrders = sortMasterOrders;
     window.deleteCloudOrder = deleteCloudOrder;
-    window.addOtherProductRow = addOtherProductRow;
-    window.checkCustomerLoyaltyPoints = checkCustomerLoyaltyPoints;
+    window.checkCustomerPoints = checkCustomerPoints;
     window.togglePointsRedemption = togglePointsRedemption;
+    window.toggleCustomProduct = toggleCustomProduct;
 
     window.onload = function() {
       processAllData();
