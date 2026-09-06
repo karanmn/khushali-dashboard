@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Khushali Sells - Tabbed Dashboard & Cashback System</title>
+  <title>Khushali Sells - Secure Portal & Cashback System</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome Icons -->
@@ -31,6 +31,26 @@
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500 selection:text-white">
 
+  <!-- PASSWORD PROTECT GATEWAY MODAL (PIN: 7568) -->
+  <div id="authLockModal" class="fixed inset-0 bg-slate-950 z-50 flex items-center justify-center p-4">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-sm p-6 shadow-2xl text-center space-y-4">
+      <div class="w-14 h-14 bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-lg">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <div>
+        <h2 class="text-lg font-bold text-white">Khushali Sales Portal</h2>
+        <p class="text-xs text-slate-400 mt-1">Access karne ke liye 4-digit PIN enter karein</p>
+      </div>
+      <form onsubmit="handleAuthLogin(event)" class="space-y-3">
+        <input type="password" id="authPinInput" required maxlength="6" placeholder="Enter PIN (e.g. 7568)" class="w-full bg-slate-900 border border-slate-700 text-center text-lg tracking-widest text-emerald-400 p-3 rounded-xl focus:outline-none focus:border-emerald-500">
+        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-emerald-600/30">
+          Unlock Dashboard
+        </button>
+        <p id="authErrorMsg" class="text-xs text-rose-400 hidden">Galat PIN! Kripya dobara try karein.</p>
+      </form>
+    </div>
+  </div>
+
   <!-- Top Navigation Bar -->
   <header class="bg-slate-800/90 backdrop-blur-md border-b border-slate-700/80 sticky top-0 z-30 shadow-xl">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap justify-between items-center gap-4">
@@ -41,7 +61,7 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">Khushali Sales</h1>
-            <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[11px] font-bold px-2 py-0.5 rounded-full">Tabbed Portal</span>
+            <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[11px] font-bold px-2 py-0.5 rounded-full">Secure Portal</span>
           </div>
           <p class="text-xs text-slate-400">Customer Retention, Points Ledger & Master Orders</p>
         </div>
@@ -298,6 +318,28 @@
     </div>
 
   </main>
+
+  <!-- SUCCESS WHATSAPP THANKYOU MODAL (Triggered on New Order Save) -->
+  <div id="whatsappThankyouModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-md p-6 shadow-2xl text-center space-y-4">
+      <div class="w-14 h-14 bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-lg">
+        <i class="fa-brands fa-whatsapp"></i>
+      </div>
+      <div>
+        <h3 class="text-base font-bold text-white">Order Successfully Dispatched!</h3>
+        <p class="text-xs text-slate-300 mt-1">Client ko WhatsApp par thank you aur cashback points message bhejne ke liye niche click karein:</p>
+      </div>
+      <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 text-left text-xs font-mono text-slate-300 max-h-36 overflow-y-auto" id="whatsappMessageBoxPreview">
+        <!-- Preview inserted dynamically -->
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button onclick="document.getElementById('whatsappThankyouModal').classList.add('hidden')" class="flex-1 px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-xl text-xs font-medium">Skip / Close</button>
+        <a id="sendWhatsappBtn" href="#" target="_blank" class="flex-1 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow">
+          <i class="fa-brands fa-whatsapp text-sm"></i> Send WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
 
   <!-- Customer Detail Modal -->
   <div id="customerModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -787,6 +829,20 @@
       { id: "hard-284", name: "Anmol Raj", phone: "7004059823", date: "2026-08-26", amount: 36135, remark: "Order" },
       { id: "hard-285", name: "Amit Das", phone: "7005055254", date: "2026-08-27", amount: 13159, remark: "Order" }
     ];
+
+    // Password Login Handler (PIN: 7568)
+    window.handleAuthLogin = function(e) {
+      e.preventDefault();
+      const pin = document.getElementById('authPinInput').value.trim();
+      if(pin === '7568') {
+        document.getElementById('authLockModal').classList.add('hidden');
+        sessionStorage.setItem('khushaliAuth', 'true');
+      } else {
+        const err = document.getElementById('authErrorMsg');
+        err.classList.remove('hidden');
+        setTimeout(() => err.classList.add('hidden'), 2500);
+      }
+    };
 
     function processAllData() {
       customerMap = {};
@@ -1471,7 +1527,16 @@
           container.removeChild(container.lastChild);
         }
 
-        alert(`✅ Order successfully save ho gaya aur 1% cashback points update ho gaye!`);
+        // Calculate earned points for WhatsApp popup (1% of order amount)
+        const earnedPoints = Math.floor(amount * 0.01);
+        const expiryDateStr = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+        const thankyouText = `Namaste ${name} ji! 🙏\n\nAapka Khushali Sales se order successfully dispatch ho gaya hai! 📦\n\n🎉 Aapke is order par ₹${earnedPoints} cashback points (1% value) add ho chuke hain.\n⏳ Ye points agle 60 dino tak valid hain (${expiryDateStr} tak) aur aap apne next order par isse redeem kar sakte hain.\n\nThank you for choosing Khushali Sales! ✨`;
+
+        document.getElementById('whatsappMessageBoxPreview').innerText = thankyouText;
+        document.getElementById('sendWhatsappBtn').href = `https://wa.me/91${phone}?text=${encodeURIComponent(thankyouText)}`;
+        document.getElementById('whatsappThankyouModal').classList.remove('hidden');
+
       } catch (err) {
         console.error("Order error:", err);
         alert("Error: " + err.message);
@@ -1537,6 +1602,7 @@
     window.switchTab = switchTab;
     window.addOrderItemRow = addOrderItemRow;
     window.handleNewOrderSubmit = handleNewOrderSubmit;
+    window.handleAuthLogin = handleAuthLogin;
 
     window.onload = function() {
       processAllData();
