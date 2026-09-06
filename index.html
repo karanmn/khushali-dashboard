@@ -226,7 +226,7 @@
       </div>
     </div>
 
-    <!-- TAB 2: CASHBACK POINTS LEDGER VIEW (Only clients with points > 0) -->
+    <!-- TAB 2: CASHBACK POINTS LEDGER VIEW -->
     <div id="tab-content-points" class="space-y-6 hidden">
       <div class="bg-slate-800/90 rounded-2xl border border-slate-700/80 shadow-xl overflow-hidden">
         <div class="p-4 border-b border-slate-700/80 flex flex-wrap justify-between items-center gap-4">
@@ -885,6 +885,23 @@
       renderPointsLedgerTable();
     }
 
+    // --- TAB SWITCHING FUNCTION ---
+    function switchTab(tabName) {
+      ['customers', 'points', 'master'].forEach(t => {
+        const content = document.getElementById(`tab-content-${t}`);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if(content && btn) {
+          if(t === tabName) {
+            content.classList.remove('hidden');
+            btn.className = "tab-btn px-4 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 text-white transition flex items-center gap-2 shadow";
+          } else {
+            content.classList.add('hidden');
+            btn.className = "tab-btn px-4 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-2 border border-slate-700";
+          }
+        }
+      });
+    }
+
     function updateTopKPIs() {
       const customers = Object.values(customerMap);
       const totalCust = customers.length;
@@ -1099,12 +1116,10 @@
       }).join('');
     }
 
-    // --- POINTS LEDGER TABLE (Only showing clients with points > 0) ---
     function renderPointsLedgerTable() {
       const tbody = document.getElementById('pointsLedgerTableBody');
       if(!tbody) return;
 
-      // Filter to only include clients with points > 0
       const pointsArr = Object.values(customerPointsMap).filter(p => p.points > 0);
       document.getElementById('totalPointsCount').innerText = `${pointsArr.reduce((s, p) => s + p.points, 0)} Active Pts`;
 
@@ -1147,7 +1162,7 @@
       }).join('');
     }
 
-    window.checkCustomerPoints = function(phoneNum) {
+    function checkCustomerPoints(phoneNum) {
       const clean = phoneNum.replace(/[^0-9]/g, '');
       const notice = document.getElementById('availablePointsNotice');
       const redeemBox = document.getElementById('redemptionBox');
@@ -1168,9 +1183,9 @@
         notice.classList.add('hidden');
         redeemBox.classList.add('hidden');
       }
-    };
+    }
 
-    window.togglePointsRedemption = function() {
+    function togglePointsRedemption() {
       const isChecked = document.getElementById('redeemPointsCheck').checked;
       const phone = document.getElementById('newCustPhone').value.replace(/[^0-9]/g, '');
       const amtInput = document.getElementById('newCustAmount');
@@ -1187,9 +1202,9 @@
           amtInput.value = amtInput.dataset.originalAmt;
         }
       }
-    };
+    }
 
-    window.sortMasterOrders = function(sortType) {
+    function sortMasterOrders(sortType) {
       currentMasterSort = sortType;
       ['date-desc', 'date-asc', 'amount-desc', 'amount-asc'].forEach(st => {
         const btn = document.getElementById(`sort-${st}`);
@@ -1202,14 +1217,15 @@
         }
       });
       renderMasterOrdersTable();
-    };
+    }
 
     function renderMasterOrdersTable() {
       const tbody = document.getElementById('masterOrdersTableBody');
       if(!tbody) return;
 
       let ordersList = [...window.rawSalesDatabase];
-      document.getElementById('totalMasterOrdersCount').innerText = `${ordersList.length} Orders`;
+      const countEl = document.getElementById('totalMasterOrdersCount');
+      if(countEl) countEl.innerText = `${ordersList.length} Orders`;
 
       ordersList.sort((a, b) => {
         const dateA = new Date(a.date || '2026-01-01');
@@ -1242,7 +1258,7 @@
       `).join('');
     }
 
-    window.deleteCloudOrder = async function(docId) {
+    async function deleteCloudOrder(docId) {
       if(!confirm("Kya aap sach me is order ko delete karna chahte hain?")) return;
       try {
         await deleteDoc(doc(salesDb, "sales_orders", docId));
@@ -1250,7 +1266,7 @@
       } catch(err) {
         alert("Delete error: " + err.message);
       }
-    };
+    }
 
     function openCustomerModal(customerId) {
       const c = customerMap[customerId];
@@ -1322,7 +1338,7 @@
       document.getElementById('addOrderModal').classList.add('hidden');
     }
 
-    window.toggleCustomProduct = function(selectEl) {
+    function toggleCustomProduct(selectEl) {
       const row = selectEl.closest('.order-item-row');
       const customInput = row.querySelector('.custom-prod-name');
       if (selectEl.value === 'OTHER_CUSTOM') {
@@ -1332,9 +1348,9 @@
         customInput.classList.add('hidden');
         customInput.required = false;
       }
-    };
+    }
 
-    window.addOrderItemRow = function() {
+    function addOrderItemRow() {
       const container = document.getElementById('orderItemsContainer');
       const div = document.createElement('div');
       div.className = "order-item-row grid grid-cols-12 gap-2 bg-slate-900/90 p-2.5 rounded-xl border border-slate-700 items-center";
@@ -1368,9 +1384,9 @@
         </div>
       `;
       container.appendChild(div);
-    };
+    }
 
-    window.handleNewOrderSubmit = async function(e) {
+    async function handleNewOrderSubmit(e) {
       e.preventDefault();
 
       const name = document.getElementById('newCustName').value.trim();
@@ -1460,9 +1476,9 @@
         console.error("Order error:", err);
         alert("Error: " + err.message);
       }
-    };
+    }
 
-    window.exportToCSV = function() {
+    function exportToCSV() {
       let csv = 'Customer Name,Phone Number,Total Orders,Total Spend (INR),Avg Order (INR),First Order Date,Last Order Date,Days Inactive,Status Tag\n';
       Object.values(customerMap).forEach(c => {
         const firstDate = c.firstOrderDate ? c.firstOrderDate.toISOString().split('T')[0] : '';
@@ -1489,7 +1505,7 @@
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    };
+    }
 
     onSnapshot(salesRef, (snapshot) => {
       let firebaseOrders = [];
@@ -1504,6 +1520,7 @@
       processAllData();
     });
 
+    // Explicit Global Window Bindings for all interactive functions
     window.setFilter = setFilter;
     window.openCustomerModal = openCustomerModal;
     window.closeCustomerModal = closeCustomerModal;
@@ -1518,6 +1535,8 @@
     window.togglePointsRedemption = togglePointsRedemption;
     window.toggleCustomProduct = toggleCustomProduct;
     window.switchTab = switchTab;
+    window.addOrderItemRow = addOrderItemRow;
+    window.handleNewOrderSubmit = handleNewOrderSubmit;
 
     window.onload = function() {
       processAllData();
