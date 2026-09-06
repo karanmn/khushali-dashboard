@@ -57,7 +57,7 @@
       </div>
     </div>
 
-    <!-- TAB SWITCHING MENU (Upar ke Side Menu Buttons) -->
+    <!-- TAB SWITCHING MENU -->
     <div class="bg-slate-900/80 border-t border-slate-700/60 px-4 sm:px-6 lg:px-8 py-2 flex items-center gap-2 overflow-x-auto custom-scrollbar">
       <span class="text-xs text-slate-400 font-bold uppercase tracking-wider mr-2"><i class="fa-solid fa-bars"></i> Views:</span>
       <button onclick="switchTab('customers')" id="tab-btn-customers" class="tab-btn px-4 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 text-white transition flex items-center gap-2 shadow">
@@ -77,7 +77,6 @@
 
     <!-- TAB 1: CUSTOMER DASHBOARD VIEW -->
     <div id="tab-content-customers" class="space-y-6">
-      <!-- KPI Metric Cards Grid -->
       <div class="grid grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4">
         <div onclick="setFilter('all')" class="cursor-pointer bg-slate-800/80 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/60 shadow-lg transition-all hover:scale-[1.02]">
           <div class="flex items-center justify-between">
@@ -128,7 +127,6 @@
         </div>
       </div>
 
-      <!-- Monthly Trend & Category Distribution -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div class="bg-slate-800/60 p-4 rounded-2xl border border-slate-700/60 lg:col-span-2">
           <div class="flex items-center justify-between mb-3">
@@ -163,12 +161,11 @@
           </div>
           <div class="mt-3 pt-3 border-t border-slate-700/60 flex items-center justify-between text-[11px] text-slate-400">
             <span>Cashback System</span>
-            <span class="text-emerald-400 font-semibold">1% Value (60 Days)</span>
+            <span class="text-emerald-400 font-semibold">1% Value (7 Sept onwards)</span>
           </div>
         </div>
       </div>
 
-      <!-- Filters & Search Toolbar -->
       <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/80 shadow-md flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-3">
         <div class="relative w-full lg:w-96">
           <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
@@ -198,7 +195,6 @@
         </div>
       </div>
 
-      <!-- Customer Table & List -->
       <div class="bg-slate-800/90 rounded-2xl border border-slate-700/80 shadow-xl overflow-hidden">
         <div class="p-4 border-b border-slate-700/80 flex flex-wrap justify-between items-center gap-2">
           <div class="flex items-center gap-2">
@@ -230,13 +226,13 @@
       </div>
     </div>
 
-    <!-- TAB 2: CASHBACK POINTS LEDGER VIEW -->
+    <!-- TAB 2: CASHBACK POINTS LEDGER VIEW (Only clients with points > 0) -->
     <div id="tab-content-points" class="space-y-6 hidden">
       <div class="bg-slate-800/90 rounded-2xl border border-slate-700/80 shadow-xl overflow-hidden">
         <div class="p-4 border-b border-slate-700/80 flex flex-wrap justify-between items-center gap-4">
           <div class="flex items-center gap-2">
             <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-              <i class="fa-solid fa-coins"></i> Customer Cashback Points Ledger (1 Point = ₹1)
+              <i class="fa-solid fa-coins"></i> Active Cashback Points Ledger (Points > 0)
             </span>
             <span class="text-xs bg-emerald-950 text-emerald-300 border border-emerald-800 px-2.5 py-0.5 rounded-full font-medium" id="totalPointsCount">0 Active Pts</span>
           </div>
@@ -303,7 +299,7 @@
 
   </main>
 
-  <!-- Customer Detail & Order History Timeline Modal -->
+  <!-- Customer Detail Modal -->
   <div id="customerModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
       <div class="p-5 bg-slate-900/80 border-b border-slate-700 flex justify-between items-center">
@@ -889,23 +885,6 @@
       renderPointsLedgerTable();
     }
 
-    // --- TAB SWITCHING FUNCTION ---
-    window.switchTab = function(tabName) {
-      ['customers', 'points', 'master'].forEach(t => {
-        const content = document.getElementById(`tab-content-${t}`);
-        const btn = document.getElementById(`tab-btn-${t}`);
-        if(content && btn) {
-          if(t === tabName) {
-            content.classList.remove('hidden');
-            btn.className = "tab-btn px-4 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 text-white transition flex items-center gap-2 shadow";
-          } else {
-            content.classList.add('hidden');
-            btn.className = "tab-btn px-4 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-2 border border-slate-700";
-          }
-        }
-      });
-    };
-
     function updateTopKPIs() {
       const customers = Object.values(customerMap);
       const totalCust = customers.length;
@@ -1120,12 +1099,19 @@
       }).join('');
     }
 
+    // --- POINTS LEDGER TABLE (Only showing clients with points > 0) ---
     function renderPointsLedgerTable() {
       const tbody = document.getElementById('pointsLedgerTableBody');
       if(!tbody) return;
 
-      const pointsArr = Object.values(customerPointsMap);
+      // Filter to only include clients with points > 0
+      const pointsArr = Object.values(customerPointsMap).filter(p => p.points > 0);
       document.getElementById('totalPointsCount').innerText = `${pointsArr.reduce((s, p) => s + p.points, 0)} Active Pts`;
+
+      if(pointsArr.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400">7 September ke baad se abhi tak kisi ke paas active cashback points nahi hain.</td></tr>`;
+        return;
+      }
 
       tbody.innerHTML = pointsArr.map(p => {
         const expiryStr = p.expiryDate ? p.expiryDate.toISOString().split('T')[0] : 'N/A';
