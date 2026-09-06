@@ -63,8 +63,6 @@
 
     <!-- KPI Metric Cards Grid -->
     <div class="grid grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4">
-      
-      <!-- Total Customers -->
       <div onclick="setFilter('all')" class="cursor-pointer bg-slate-800/80 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/60 shadow-lg transition-all hover:scale-[1.02]">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-slate-400">Total Customers</span>
@@ -76,7 +74,6 @@
         </p>
       </div>
 
-      <!-- Regular / Repeat Customers -->
       <div onclick="setFilter('regular')" class="cursor-pointer bg-slate-800/80 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/60 shadow-lg transition-all hover:scale-[1.02]">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-emerald-400">Regular / Repeat</span>
@@ -89,7 +86,6 @@
         <p class="text-[11px] text-slate-400 mt-1">2 ya 2 se zyada orders</p>
       </div>
 
-      <!-- Churn Risk / Repeat Nahi Aaya -->
       <div onclick="setFilter('churn_risk')" class="cursor-pointer bg-slate-800/80 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/60 shadow-lg transition-all hover:scale-[1.02]">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-rose-400">Repeat Nahi Aaya</span>
@@ -99,7 +95,6 @@
         <p class="text-[11px] text-rose-300/80 mt-1">45+ din se inactive (Call list)</p>
       </div>
 
-      <!-- Small Orders < 1000 Rs -->
       <div onclick="setFilter('low_ticket')" class="cursor-pointer bg-slate-800/80 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/60 shadow-lg transition-all hover:scale-[1.02]">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-amber-400">Orders &lt; ₹1,000</span>
@@ -109,7 +104,6 @@
         <p class="text-[11px] text-slate-400 mt-1">Small ticket / Sample buyers</p>
       </div>
 
-      <!-- Total Gross Revenue -->
       <div class="col-span-2 lg:col-span-1 bg-gradient-to-br from-emerald-900/40 to-slate-800 p-4 rounded-2xl border border-emerald-500/30 shadow-lg">
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-emerald-300">Total Recorded Sales</span>
@@ -222,6 +216,39 @@
       </div>
     </div>
 
+    <!-- LOYALTY POINTS SYSTEM TABLE -->
+    <div class="bg-slate-800/90 rounded-2xl border border-slate-700/80 shadow-xl overflow-hidden mt-8">
+      <div class="p-4 border-b border-slate-700/80 flex flex-wrap justify-between items-center gap-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
+            <i class="fa-solid fa-coins"></i> Client Loyalty Cashback Points (7 Sept Onwards)
+          </span>
+          <span class="text-xs bg-slate-700 text-slate-200 px-2.5 py-0.5 rounded-full font-medium" id="totalPointsClientsCount">0 Clients</span>
+        </div>
+        <div class="text-xs text-slate-400">
+          Rate: 1% of Order Value = Points (1 Point = ₹1, Valid for 60 Days)[span_5](start_span)[span_5](end_span)
+        </div>
+      </div>
+
+      <div class="overflow-x-auto custom-scrollbar max-h-96">
+        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+          <thead class="bg-slate-900/70 text-slate-400 font-semibold border-b border-slate-700 uppercase text-[11px] tracking-wider sticky top-0 z-10">
+            <tr>
+              <th class="py-3 px-4">Customer Name</th>
+              <th class="py-3 px-4">Phone Number</th>
+              <th class="py-3 px-4">Total Earned Points</th>
+              <th class="py-3 px-4">Total Redeemed</th>
+              <th class="py-3 px-4 font-bold text-teal-300">Active Balance Points</th>
+              <th class="py-3 px-4">Expiry Status (60 Days)</th>
+            </tr>
+          </thead>
+          <tbody id="loyaltyPointsTableBody" class="divide-y divide-slate-700/60">
+            <!-- Rendered via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- ALL ORDERS MASTER VIEW SECTION WITH SORTING BUTTONS -->
     <div class="bg-slate-800/90 rounded-2xl border border-slate-700/80 shadow-xl overflow-hidden mt-8">
       <div class="p-4 border-b border-slate-700/80 flex flex-wrap justify-between items-center gap-4">
@@ -262,16 +289,14 @@
               <th class="py-3 px-4 text-right">Action</th>
             </tr>
           </thead>
-          <tbody id="masterOrdersTableBody" class="divide-y divide-slate-700/60">
-            <!-- Rendered via JS -->
-          </tbody>
+          <tbody id="masterOrdersTableBody" class="divide-y divide-slate-700/60"></tbody>
         </table>
       </div>
     </div>
 
   </main>
 
-  <!-- Customer Detail & Order History Timeline Modal -->
+  <!-- Customer Detail Modal -->
   <div id="customerModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
       <div class="p-5 bg-slate-900/80 border-b border-slate-700 flex justify-between items-center">
@@ -305,7 +330,7 @@
 
         <div>
           <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i> Order Date Timeline & Delete Option (Galti/Double Order Delete Karein)
+            <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i> Order Date Timeline & Delete Option
           </h4>
           <div id="modalOrderTimeline" class="space-y-2"></div>
         </div>
@@ -314,7 +339,7 @@
           <label class="text-xs font-semibold text-slate-300 flex items-center gap-2">
             <i class="fa-solid fa-note-sticky text-amber-400"></i> After-Sales Calling Note
           </label>
-          <textarea id="modalCustomerNote" rows="2" placeholder="e.g. 15 August ko call kiya, 5L combo ke liye agree kiya, next week order karenge..."
+          <textarea id="modalCustomerNote" rows="2" placeholder="e.g. 15 August ko call kiya, 5L combo ke liye agree kiya..."
             class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500"></textarea>
           <button onclick="saveCustomerNote()" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1.5 rounded-md font-medium transition">
             <i class="fa-solid fa-floppy-disk"></i> Save Note
@@ -338,7 +363,7 @@
     </div>
   </div>
 
-  <!-- Add New Order Modal (Clean Multi-Item Form) -->
+  <!-- Add New Order Modal (Multi-Item + Other Products + Loyalty Points Redemption) -->
   <div id="addOrderModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
       <div class="p-4 bg-slate-900 border-b border-slate-700 flex justify-between items-center">
@@ -355,19 +380,32 @@
         </div>
         
         <div>
-          <label class="block text-slate-300 font-medium mb-1">Mobile / Phone Number *</label>
-          <input type="text" id="newCustPhone" required placeholder="e.g. 9876543210" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+          <label class="block text-slate-300 font-medium mb-1">Mobile / Phone Number * (Points Check karne ke liye)</label>
+          <input type="text" id="newCustPhone" oninput="checkCustomerLoyaltyPoints(this.value)" required placeholder="e.g. 9876543210" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
         </div>
 
+        <!-- Loyalty Points Redemption Alert Box -->
+        <div id="loyaltyRedeemBox" class="hidden bg-teal-950/60 border border-teal-700 p-3 rounded-xl space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-teal-300 font-bold"><i class="fa-solid fa-coins"></i> Available Active Points: <span id="availablePointsDisplay">0</span></span>
+            <span class="text-[10px] text-teal-400 font-mono">(1 Point = ₹1)[span_6](start_span)[span_6](end_span)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="checkbox" id="redeemPointsCheck" onchange="togglePointsRedemption()" class="w-4 h-4 rounded bg-slate-900 border-slate-700 text-teal-600 focus:ring-teal-500">
+            <label for="redeemPointsCheck" class="text-teal-200 font-medium cursor-pointer">Use available points as cashback discount in this order?</label>
+          </div>
+        </div>
+
+        <!-- Standard Inventory Items -->
         <div class="space-y-2 pt-1 border-t border-slate-700/60">
           <div class="flex items-center justify-between">
-            <label class="block text-slate-300 font-semibold text-xs">Ordered Products (Multiple Items) *</label>
+            <label class="block text-slate-300 font-semibold text-xs">Ordered Inventory Products *</label>
             <button type="button" onclick="addOrderItemRow()" class="text-xs text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-1 bg-emerald-950/60 px-2 py-1 rounded border border-emerald-800">
               <i class="fa-solid fa-plus"></i> + Item Jodein
             </button>
           </div>
 
-          <div id="orderItemsContainer" class="space-y-2 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
+          <div id="orderItemsContainer" class="space-y-2 max-h-36 overflow-y-auto pr-1 custom-scrollbar">
             <div class="order-item-row grid grid-cols-12 gap-2 bg-slate-900/90 p-2.5 rounded-xl border border-slate-700 items-center">
               <div class="col-span-7">
                 <select class="prod-select w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500" required>
@@ -396,10 +434,24 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-2 pt-1">
+        <!-- Other / Extra Products Section (Samples etc.) -->
+        <div class="space-y-2 pt-2 border-t border-slate-700/60">
+          <div class="flex items-center justify-between">
+            <label class="block text-amber-400 font-semibold text-xs"><i class="fa-solid fa-box-open"></i> Other Products / Samples (Extra Items)</label>
+            <button type="button" onclick="addOtherProductRow()" class="text-xs text-amber-400 hover:text-amber-300 font-bold flex items-center gap-1 bg-amber-950/60 px-2 py-1 rounded border border-amber-800">
+              <i class="fa-solid fa-plus"></i> + Other Item
+            </button>
+          </div>
+
+          <div id="otherProductsContainer" class="space-y-2 max-h-32 overflow-y-auto pr-1 custom-scrollbar">
+            <!-- Dynamically added rows will appear here -->
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-700/60">
           <div>
             <label class="block text-slate-300 font-medium mb-1">Total Bill Amount (₹) *</label>
-            <input type="number" id="newCustAmount" required placeholder="e.g. 3500" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+            <input type="number" id="newCustAmount" required placeholder="e.g. 3500" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-bold text-emerald-400 focus:outline-none focus:ring-1 focus:ring-emerald-500">
           </div>
           <div>
             <label class="block text-slate-300 font-medium mb-1">Order Date *</label>
@@ -409,13 +461,13 @@
 
         <div>
           <label class="block text-slate-300 font-medium mb-1">Notes / Extra Remarks (Optional)</label>
-          <input type="text" id="newCustRemark" placeholder="e.g. Can packaging verified, urgent dispatch" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+          <input type="text" id="newCustRemark" placeholder="e.g. Can packaging verified, sample added" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 focus:outline-none focus:ring-1 focus:ring-emerald-500">
         </div>
 
         <div class="pt-2 flex justify-end gap-2 border-t border-slate-700/60">
           <button type="button" onclick="closeAddOrderModal()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-slate-200">Cancel</button>
           <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 font-semibold text-white rounded-lg flex items-center gap-1.5 shadow-md shadow-emerald-600/30">
-            <span>Save & Deduct Stock</span>
+            <span>Save Order & Award Points</span>
           </button>
         </div>
       </form>
@@ -475,6 +527,7 @@
     let customerNotes = {};
     let monthlyChart = null;
     let currentMasterSort = 'date-desc';
+    let currentClientPointsMap = {}; // Tracks active points per customer phone
 
     // Hardcoded Database (March to August 2026)
     const initialHardcodedData = [
@@ -768,6 +821,9 @@
     // Data Processing Function
     function processAllData() {
       customerMap = {};
+      currentClientPointsMap = {};
+
+      const pointsLaunchDate = new Date('2026-09-07');
 
       window.rawSalesDatabase.forEach(item => {
         const cleanPhone = (item.phone || '').replace(/[^0-9]/g, '');
@@ -799,6 +855,43 @@
           remark: item.remark || 'Direct Order'
         });
         customerMap[key].orderDates.push(new Date(item.date));
+
+        // --- LOYALTY POINTS SYSTEM (7 Sept 2026 Onwards) ---[span_7](start_span)[span_7](end_span)
+        if (cleanPhone.length >= 8) {
+          if (!currentClientPointsMap[cleanPhone]) {
+            currentClientPointsMap[cleanPhone] = {
+              name: cleanName,
+              phone: cleanPhone,
+              earned: 0,
+              redeemed: 0,
+              activePoints: 0,
+              details: []
+            };
+          }
+
+          const orderDateObj = new Date(item.date || '2026-01-01');
+          // Implement from 7 Sept 2026[span_8](start_span)[span_8](end_span)
+          if (orderDateObj >= pointsLaunchDate) {
+            const earnedPts = Math.round(amt * 0.01); // 1% of order value[span_9](start_span)[span_9](end_span)
+            const expiryDateObj = new Date(orderDateObj);
+            expiryDateObj.setDate(expiryDateObj.getDate() + 60); // 60 days validity[span_10](start_span)[span_10](end_span)
+
+            const isExpired = new Date() > expiryDateObj;
+
+            currentClientPointsMap[cleanPhone].earned += earnedPts;
+            if (!isExpired) {
+              currentClientPointsMap[cleanPhone].activePoints += earnedPts;
+            }
+
+            currentClientPointsMap[cleanPhone].details.push({
+              date: item.date,
+              amount: amt,
+              earned: earnedPts,
+              expiry: expiryDateObj.toISOString().split('T')[0],
+              expired: isExpired
+            });
+          }
+        }
       });
 
       const referenceToday = new Date();
@@ -840,6 +933,7 @@
       renderMonthlyChart();
       applyFilterAndRender();
       renderMasterOrdersTable();
+      renderLoyaltyPointsTable();
     }
 
     function updateTopKPIs() {
@@ -1071,11 +1165,71 @@
       }).join('');
     }
 
+    // --- LOYALTY POINTS TABLE RENDERER ---
+    function renderLoyaltyPointsTable() {
+      const tbody = document.getElementById('loyaltyPointsTableBody');
+      if (!tbody) return;
+
+      const pointsArr = Object.values(currentClientPointsMap);
+      document.getElementById('totalPointsClientsCount').innerText = `${pointsArr.length} Clients`;
+
+      if (pointsArr.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">7 September 2026 ke baad ka koi points data uplabdh nahi hai[span_11](start_span)[span_11](end_span).</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = pointsArr.map(p => `
+        <tr class="hover:bg-slate-700/40 transition border-b border-slate-700/60">
+          <td class="py-3 px-4 font-bold text-white">${p.name}</td>
+          <td class="py-3 px-4 text-slate-300 font-mono text-xs">${p.phone}</td>
+          <td class="py-3 px-4 text-emerald-400 font-bold">${p.earned} Pts</td>
+          <td class="py-3 px-4 text-rose-400 font-semibold">${p.redeemed} Pts</td>
+          <td class="py-3 px-4 font-black text-teal-300 text-sm">${p.activePoints} Pts (₹${p.activePoints})[span_12](start_span)[span_12](end_span)</td>
+          <td class="py-3 px-4 text-slate-400 text-xs">
+            ${p.details.length > 0 ? `Valid for 60 days from order[span_13](start_span)[span_13](end_span)` : 'N/A'}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // --- CHECK LOYALTY POINTS ON PHONE INPUT ---
+    window.checkCustomerLoyaltyPoints = function(phoneVal) {
+      const clean = phoneVal.replace(/[^0-9]/g, '');
+      const redeemBox = document.getElementById('loyaltyRedeemBox');
+      const ptsDisplay = document.getElementById('availablePointsDisplay');
+      
+      if (clean.length >= 8 && currentClientPointsMap[clean] && currentClientPointsMap[clean].activePoints > 0) {
+        ptsDisplay.innerText = currentClientPointsMap[clean].activePoints;
+        redeemBox.classList.remove('hidden');
+      } else {
+        redeemBox.classList.add('hidden');
+        document.getElementById('redeemPointsCheck').checked = false;
+      }
+    };
+
+    window.togglePointsRedemption = function() {
+      const check = document.getElementById('redeemPointsCheck');
+      const amountInput = document.getElementById('newCustAmount');
+      const phoneInput = document.getElementById('newCustPhone');
+      const cleanPhone = phoneInput.value.replace(/[^0-9]/g, '');
+
+      if (!currentClientPointsMap[cleanPhone]) return;
+      const pts = currentClientPointsMap[cleanPhone].activePoints;
+
+      let currentVal = parseFloat(amountInput.value) || 0;
+      if (check.checked && pts > 0) {
+        // Deduct points from bill amount as cashback discount[span_14](start_span)[span_14](end_span)
+        amountInput.dataset.originalAmt = currentVal;
+        const discounted = Math.max(0, currentVal - pts);
+        amountInput.value = discounted;
+      } else if (amountInput.dataset.originalAmt) {
+        amountInput.value = amountInput.dataset.originalAmt;
+      }
+    };
+
     // --- MASTER ORDERS TABLE & SORTING LOGIC ---
     window.sortMasterOrders = function(sortType) {
       currentMasterSort = sortType;
-      
-      // Update Button Styles
       ['date-desc', 'date-asc', 'amount-desc', 'amount-asc'].forEach(st => {
         const btn = document.getElementById(`sort-${st}`);
         if(btn) {
@@ -1096,7 +1250,6 @@
       let ordersList = [...window.rawSalesDatabase];
       document.getElementById('totalMasterOrdersCount').innerText = `${ordersList.length} Orders`;
 
-      // Sort logic
       ordersList.sort((a, b) => {
         const dateA = new Date(a.date || '2026-01-01');
         const dateB = new Date(b.date || '2026-01-01');
@@ -1128,7 +1281,6 @@
       `).join('');
     }
 
-    // Delete Individual Order Function
     window.deleteCloudOrder = async function(docId) {
       if(!confirm("Kya aap sach me is order ko delete karna chahte hain?")) return;
       try {
@@ -1208,7 +1360,7 @@
       document.getElementById('addOrderModal').classList.add('hidden');
     }
 
-    // Dynamic Row Creator
+    // Dynamic Inventory Row Creator
     window.addOrderItemRow = function() {
       const container = document.getElementById('orderItemsContainer');
       const div = document.createElement('div');
@@ -1245,7 +1397,28 @@
       container.appendChild(div);
     };
 
-    // Form Submission: Saves Sales Order + Realtime Stock Deduction
+    // Dynamic Other/Sample Product Row Creator
+    window.addOtherProductRow = function() {
+      const container = document.getElementById('otherProductsContainer');
+      const div = document.createElement('div');
+      div.className = "other-item-row grid grid-cols-12 gap-2 bg-slate-900/90 p-2.5 rounded-xl border border-amber-800/60 items-center";
+      div.innerHTML = `
+        <div class="col-span-7">
+          <input type="text" placeholder="Other Product / Sample Name" class="other-name w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 focus:outline-none focus:border-amber-500" required>
+        </div>
+        <div class="col-span-4">
+          <input type="number" step="any" min="1" required placeholder="Amount (₹)" class="other-amt w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 font-mono focus:outline-none focus:border-amber-500">
+        </div>
+        <div class="col-span-1 text-center">
+          <button type="button" onclick="this.closest('.other-item-row').remove()" class="text-rose-400 hover:text-rose-300 text-xs">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+      `;
+      container.appendChild(div);
+    };
+
+    // Form Submission: Saves Sales Order + Realtime Stock Deduction + Points
     window.handleNewOrderSubmit = async function(e) {
       e.preventDefault();
 
@@ -1255,6 +1428,7 @@
       const date = document.getElementById('newCustDate').value;
       const userRemark = document.getElementById('newCustRemark')?.value.trim() || '';
 
+      // Standard items
       const rows = document.querySelectorAll('.order-item-row');
       const items = [];
       const remarkParts = [];
@@ -1272,8 +1446,21 @@
         }
       });
 
-      if (items.length === 0) {
-        alert("Kripya kam se kam ek product aur quantity enter karein.");
+      // Other / Sample items
+      const otherRows = document.querySelectorAll('.other-item-row');
+      otherRows.forEach(row => {
+        const nameInput = row.querySelector('.other-name');
+        const amtInput = row.querySelector('.other-amt');
+        const oName = nameInput.value.trim();
+        const oAmt = parseFloat(amtInput.value) || 0;
+
+        if (oName && oAmt > 0) {
+          remarkParts.push(`[Sample/Other: ${oName} @ ₹${oAmt}]`);
+        }
+      });
+
+      if (items.length === 0 && otherRows.length === 0) {
+        alert("Kripya kam se kam ek inventory item ya other product enter karein.");
         return;
       }
 
@@ -1289,6 +1476,7 @@
           createdAt: new Date().toISOString()
         });
 
+        // Deduct Inventory Stock
         for (const item of items) {
           const stockDocRef = doc(stockDb, "products", item.productId);
           await updateDoc(stockDocRef, {
@@ -1315,12 +1503,15 @@
         closeAddOrderModal();
         document.querySelector('#addOrderModal form').reset();
 
+        // Reset containers
         const container = document.getElementById('orderItemsContainer');
-        while (container.children.length > 1) {
-          container.removeChild(container.lastChild);
-        }
+        while (container.children.length > 1) container.removeChild(container.lastChild);
 
-        alert(`✅ Order save ho gaya aur ${items.length} product(s) ka stock turant deduct ho gaya!`);
+        const otherContainer = document.getElementById('otherProductsContainer');
+        otherContainer.innerHTML = '';
+        document.getElementById('loyaltyRedeemBox').classList.add('hidden');
+
+        alert(`✅ Order save ho gaya, stock deduct ho gaya aur 1% cashback points credit ho gaye[span_15](start_span)[span_15](end_span)!`);
       } catch (err) {
         console.error("Order error:", err);
         alert("Error: " + err.message);
@@ -1381,6 +1572,9 @@
     window.processAllData = processAllData;
     window.sortMasterOrders = sortMasterOrders;
     window.deleteCloudOrder = deleteCloudOrder;
+    window.addOtherProductRow = addOtherProductRow;
+    window.checkCustomerLoyaltyPoints = checkCustomerLoyaltyPoints;
+    window.togglePointsRedemption = togglePointsRedemption;
 
     window.onload = function() {
       processAllData();
