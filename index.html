@@ -1189,7 +1189,7 @@
         const lastOrderDaysAgo = Math.floor(Math.abs(new Date() - p.lastOrderDate) / (1000 * 60 * 60 * 24));
         const isEligibleForReminder = lastOrderDaysAgo >= 7;
 
-        const waReminderMsg = encodeURIComponent(`Namaste ${p.name} ji! Khushali Sales se reminder. Aapke account me ₹${p.points} cashback points available hain jo ki ${expiryStr} ko expire hone wale hain. Apne raw materials / samples restock karne ke liye points redeem karein!`);
+        const waReminderMsg = encodeURIComponent(`Namaste ${p.name} ji! Khushali Chemicals se reminder. Aapke account me ₹${p.points} cashback points available hain jo ki ${expiryStr} ko expire hone wale hain. Apne raw materials / samples restock karne ke liye points redeem karein!`);
 
         return `
           <tr class="hover:bg-slate-700/40 transition border-b border-slate-700/60">
@@ -1365,7 +1365,7 @@
 
       document.getElementById('modalCustomerNote').value = customerNotes[customerId] || '';
 
-      const waMsg = encodeURIComponent(`Namaste ${c.name} ji! Khushali sales team ki taraf se follow-up. Agle order ki requirements bataiye.`);
+      const waMsg = encodeURIComponent(`Namaste ${c.name} ji! Khushali Chemicals team ki taraf se reminder. Agle order ki requirements bataiye.`);
       document.getElementById('modalWhatsappBtn').href = `https://wa.me/91${c.phone}?text=${waMsg}`;
       document.getElementById('modalCallBtn').href = `tel:+91${c.phone}`;
 
@@ -1531,7 +1531,7 @@
         const earnedPoints = Math.floor(amount * 0.01);
         const expiryDateStr = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
-        const thankyouText = `Namaste ${name} ji! 🙏\n\nAapka Khushali Sales se order successfully dispatch ho gaya hai! 📦\n\n🎉 Aapke is order par ₹${earnedPoints} cashback points (1% value) add ho chuke hain.\n⏳ Ye points agle 60 dino tak valid hain (${expiryDateStr} tak) aur aap apne next order par isse redeem kar sakte hain.\n\nThank you for choosing Khushali Sales! ✨`;
+        const thankyouText = `Namaste ${name} ji! 🙏\n\nAapka Khushali Chemicals se order successfully dispatch ho gaya hai! 📦\n\n🎉 Aapke is order par ₹${earnedPoints} cashback points (1% value) add ho chuke hain.\n⏳ Ye points agle 60 dino tak valid hain (${expiryDateStr} tak) aur aap apne next order par isse redeem kar sakte hain.\n\nThank you for choosing Khushali Chemicals! ✨`;
 
         document.getElementById('whatsappMessageBoxPreview').innerText = thankyouText;
         document.getElementById('sendWhatsappBtn').href = `https://wa.me/91${phone}?text=${encodeURIComponent(thankyouText)}`;
