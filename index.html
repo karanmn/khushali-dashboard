@@ -151,7 +151,7 @@
         <div class="bg-slate-800/60 p-4 rounded-2xl border border-slate-700/60 lg:col-span-2">
           <div class="flex items-center justify-between mb-3">
             <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-              <i class="fa-solid fa-chart-simple text-emerald-400"></i> Mahina-Vaar Sales (March - September 2026)
+              <i class="fa-solid fa-chart-simple text-emerald-400"></i> Mahina-Vaar Sales (March - October 2026)
             </h4>
           </div>
           <div class="h-44 w-full">
@@ -329,9 +329,7 @@
         <h3 class="text-base font-bold text-white">Order Successfully Dispatched!</h3>
         <p class="text-xs text-slate-300 mt-1">Client ko WhatsApp par thank you aur cashback points message bhejne ke liye niche click karein:</p>
       </div>
-      <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 text-left text-xs font-mono text-slate-300 max-h-36 overflow-y-auto" id="whatsappMessageBoxPreview">
-        <!-- Preview inserted dynamically -->
-      </div>
+      <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 text-left text-xs font-mono text-slate-300 max-h-36 overflow-y-auto" id="whatsappMessageBoxPreview"></div>
       <div class="flex gap-2 pt-2">
         <button onclick="document.getElementById('whatsappThankyouModal').classList.add('hidden')" class="flex-1 px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-xl text-xs font-medium">Skip / Close</button>
         <a id="sendWhatsappBtn" href="#" target="_blank" class="flex-1 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow">
@@ -399,7 +397,7 @@
     </div>
   </div>
 
-  <!-- Add New Order Modal -->
+  <!-- Add New Order Modal (With Customer Search Auto-Suggest) -->
   <div id="addOrderModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
       <div class="p-4 bg-slate-900 border-b border-slate-700 flex justify-between items-center">
@@ -410,9 +408,12 @@
       </div>
       
       <form onsubmit="handleNewOrderSubmit(event)" class="p-5 space-y-3.5 text-xs">
-        <div>
+        <div class="relative">
           <label class="block text-slate-300 font-medium mb-1">Customer Name *</label>
-          <input type="text" id="newCustName" required placeholder="e.g. Ramesh Sharma" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100">
+          <input type="text" id="newCustName" oninput="handleCustomerNameInput(this.value)" required autocomplete="off" placeholder="e.g. Ramesh Sharma (Naam type karein)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100">
+          
+          <!-- Auto-Suggest Dropdown List -->
+          <div id="customerSuggestions" class="absolute left-0 right-0 top-16 bg-slate-950 border border-slate-700 rounded-xl shadow-2xl max-h-40 overflow-y-auto z-20 hidden custom-scrollbar"></div>
         </div>
         
         <div>
@@ -990,6 +991,7 @@
       document.getElementById('count-one_time').innerText = customers.filter(c => c.orderCount === 1).length;
     }
 
+    // --- MONTHLY CHART WITH OCTOBER COLUMN ---
     function renderMonthlyChart() {
       const months = {
         '2026-03': { name: 'March', amount: 0, orders: 0 },
@@ -998,7 +1000,8 @@
         '2026-06': { name: 'June', amount: 0, orders: 0 },
         '2026-07': { name: 'July', amount: 0, orders: 0 },
         '2026-08': { name: 'August', amount: 0, orders: 0 },
-        '2026-09': { name: 'September', amount: 0, orders: 0 }
+        '2026-09': { name: 'September', amount: 0, orders: 0 },
+        '2026-10': { name: 'October', amount: 0, orders: 0 }
       };
 
       window.rawSalesDatabase.forEach(item => {
@@ -1029,7 +1032,8 @@
               'rgba(139, 92, 246, 0.7)',
               'rgba(236, 72, 153, 0.7)',
               'rgba(16, 185, 129, 0.9)',
-              'rgba(14, 165, 233, 0.8)'
+              'rgba(14, 165, 233, 0.8)',
+              'rgba(245, 158, 11, 0.9)'
             ],
             borderColor: '#10b981',
             borderRadius: 6
@@ -1217,6 +1221,43 @@
         `;
       }).join('');
     }
+
+    // --- CUSTOMER AUTO-SUGGEST / SEARCH DROPDOWN LOGIC ---
+    window.handleCustomerNameInput = function(val) {
+      const dropdown = document.getElementById('customerSuggestions');
+      const query = val.trim().toLowerCase();
+      
+      if(query.length < 2) {
+        dropdown.classList.add('hidden');
+        dropdown.innerHTML = '';
+        return;
+      }
+
+      const matches = Object.values(customerMap).filter(c => 
+        c.name.toLowerCase().includes(query) || c.phone.includes(query)
+      ).slice(0, 6);
+
+      if(matches.length === 0) {
+        dropdown.classList.add('hidden');
+        dropdown.innerHTML = '';
+        return;
+      }
+
+      dropdown.innerHTML = matches.map(m => `
+        <div onclick="selectCustomerFromSuggestion('${m.name}', '${m.phone}')" class="p-2.5 hover:bg-slate-800 cursor-pointer border-b border-slate-800 text-xs flex justify-between items-center">
+          <span class="font-bold text-white">${m.name}</span>
+          <span class="text-slate-400 font-mono">${m.phone}</span>
+        </div>
+      `).join('');
+      dropdown.classList.remove('hidden');
+    };
+
+    window.selectCustomerFromSuggestion = function(name, phone) {
+      document.getElementById('newCustName').value = name;
+      document.getElementById('newCustPhone').value = phone;
+      document.getElementById('customerSuggestions').classList.add('hidden');
+      checkCustomerPoints(phone);
+    };
 
     function checkCustomerPoints(phoneNum) {
       const clean = phoneNum.replace(/[^0-9]/g, '');
@@ -1531,7 +1572,7 @@
         const earnedPoints = Math.floor(amount * 0.01);
         const expiryDateStr = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
-        const thankyouText = `Namaste ${name} ji! 🙏\n\nAapka Khushali Chemicals se order successfully dispatch ho gaya hai! 📦\n\n🎉 Aapke is order par ₹${earnedPoints} cashback points (1% value) add ho chuke hain.\n⏳ Ye points agle 60 dino tak valid hain (${expiryDateStr} tak) aur aap apne next order par isse redeem kar sakte hain.\n\nThank you for choosing Khushali Chemicals! ✨`;
+        const thankyouText = `Namaste ${name} ji! 🙏\n\nAapka Khushali Sales se order successfully dispatch ho gaya hai! 📦\n\n🎉 Aapke is order par ₹${earnedPoints} cashback points (1% value) add ho chuke hain.\n⏳ Ye points agle 60 dino tak valid hain (${expiryDateStr} tak) aur aap apne next order par isse redeem kar sakte hain.\n\nThank you for choosing Khushali Sales! ✨`;
 
         document.getElementById('whatsappMessageBoxPreview').innerText = thankyouText;
         document.getElementById('sendWhatsappBtn').href = `https://wa.me/91${phone}?text=${encodeURIComponent(thankyouText)}`;
@@ -1603,6 +1644,8 @@
     window.addOrderItemRow = addOrderItemRow;
     window.handleNewOrderSubmit = handleNewOrderSubmit;
     window.handleAuthLogin = handleAuthLogin;
+    window.handleCustomerNameInput = handleCustomerNameInput;
+    window.selectCustomerFromSuggestion = selectCustomerFromSuggestion;
 
     window.onload = function() {
       processAllData();
