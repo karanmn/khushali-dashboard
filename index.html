@@ -397,7 +397,7 @@
     </div>
   </div>
 
-  <!-- Add New Order Modal (With Customer Search Auto-Suggest) -->
+  <!-- Add New Order Modal -->
   <div id="addOrderModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
       <div class="p-4 bg-slate-900 border-b border-slate-700 flex justify-between items-center">
@@ -412,7 +412,6 @@
           <label class="block text-slate-300 font-medium mb-1">Customer Name *</label>
           <input type="text" id="newCustName" oninput="handleCustomerNameInput(this.value)" required autocomplete="off" placeholder="e.g. Ramesh Sharma (Naam type karein)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100">
           
-          <!-- Auto-Suggest Dropdown List -->
           <div id="customerSuggestions" class="absolute left-0 right-0 top-16 bg-slate-950 border border-slate-700 rounded-xl shadow-2xl max-h-40 overflow-y-auto z-20 hidden custom-scrollbar"></div>
         </div>
         
@@ -818,7 +817,7 @@
       { id: "hard-272", name: "Siddharth", phone: "7023855371", date: "2026-08-19", amount: 3125, remark: "Order" },
       { id: "hard-273", name: "Adarsh Kumar", phone: "8340284172", date: "2026-08-19", amount: 2290, remark: "Order" },
       { id: "hard-274", name: "Surendra Sikar", phone: "8619320352", date: "2026-08-19", amount: 12600, remark: "Order" },
-      { id: "hard-275", name: "Jai Agnihotri", phone: "9812901042", date: "2026-08-19", amount: 1550, remark: "Order" },
+      { id: "hard-275", name: "Jai Agnihotri", phone: "9812901042", date: "2026-08-19", customerDetails: "Order" },
       { id: "hard-276", name: "Sharvan Deb", phone: "9863104840", date: "2026-08-21", amount: 4800, remark: "Order" },
       { id: "hard-277", name: "Julee Rajput", phone: "8840814739", date: "2026-08-24", amount: 5250, remark: "Order" },
       { id: "hard-278", name: "Bijender Kumar", phone: "7891235846", date: "2026-08-24", amount: 19400, remark: "Order" },
@@ -1223,7 +1222,7 @@
     }
 
     // --- CUSTOMER AUTO-SUGGEST / SEARCH DROPDOWN LOGIC ---
-    window.handleCustomerNameInput = function(val) {
+    function handleCustomerNameInput(val) {
       const dropdown = document.getElementById('customerSuggestions');
       const query = val.trim().toLowerCase();
       
@@ -1250,14 +1249,14 @@
         </div>
       `).join('');
       dropdown.classList.remove('hidden');
-    };
+    }
 
-    window.selectCustomerFromSuggestion = function(name, phone) {
+    function selectCustomerFromSuggestion(name, phone) {
       document.getElementById('newCustName').value = name;
       document.getElementById('newCustPhone').value = phone;
       document.getElementById('customerSuggestions').classList.add('hidden');
       checkCustomerPoints(phone);
-    };
+    }
 
     function checkCustomerPoints(phoneNum) {
       const clean = phoneNum.replace(/[^0-9]/g, '');
