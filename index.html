@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="hi" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Khushali Sells - Secure Portal & Cashback System</title>
+  <title>Khushali Sales - Modern CRM & Cashback Portal</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome Icons -->
@@ -12,82 +12,131 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-    body {
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+    
+    * {
+      box-sizing: border-box;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
+
+    body {
+      background-color: #030712;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.12) 0px, transparent 45%),
+        radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.10) 0px, transparent 45%),
+        radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.6) 0px, transparent 100%);
+      background-attachment: fixed;
+    }
+
+    /* Soft, Elegant Custom Scrollbar */
     .custom-scrollbar::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 999px;
+    }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 4px;
+      background: rgba(51, 65, 85, 0.8);
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
+      background: rgba(16, 185, 129, 0.6);
+    }
+
+    /* Ultra Modern Glass Cards */
+    .glass-card {
+      background: rgba(17, 24, 39, 0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+    .glass-card-hover {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-card-hover:hover {
+      transform: translateY(-2px);
+      border-color: rgba(16, 185, 129, 0.35);
+      box-shadow: 0 16px 36px -12px rgba(16, 185, 129, 0.18);
+    }
+
+    /* Timeline Styling */
+    .timeline-container {
+      position: relative;
+    }
+    .timeline-container::before {
+      content: '';
+      position: absolute;
+      top: 14px;
+      bottom: 14px;
+      left: 17px;
+      width: 2px;
+      background: linear-gradient(to bottom, rgba(16, 185, 129, 0.6), rgba(51, 65, 85, 0.3));
     }
   </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500 selection:text-white">
+<body class="text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500 selection:text-white antialiased">
 
   <!-- PASSWORD PROTECT GATEWAY MODAL (PIN: 7568) -->
-  <div id="authLockModal" class="fixed inset-0 bg-slate-950 z-50 flex items-center justify-center p-4">
-    <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-sm p-6 shadow-2xl text-center space-y-4">
-      <div class="w-14 h-14 bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-lg">
+  <div id="authLockModal" class="fixed inset-0 bg-[#030712]/95 backdrop-blur-xl z-50 flex items-center justify-center p-4">
+    <div class="glass-card rounded-3xl w-full max-w-sm p-7 text-center space-y-5 shadow-2xl border border-slate-700/80">
+      <div class="w-16 h-16 bg-gradient-to-tr from-emerald-600 to-teal-400 text-white rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-lg shadow-emerald-500/30">
         <i class="fa-solid fa-lock"></i>
       </div>
       <div>
-        <h2 class="text-lg font-bold text-white">Khushali Sales Portal</h2>
-        <p class="text-xs text-slate-400 mt-1">Access karne ke liye 4-digit PIN enter karein</p>
+        <h2 class="text-xl font-black text-white tracking-tight">Khushali Sales Portal</h2>
+        <p class="text-xs text-slate-400 mt-1 font-medium">Access unlock karne ke liye 4-digit PIN enter karein</p>
       </div>
-      <form onsubmit="handleAuthLogin(event)" class="space-y-3">
-        <input type="password" id="authPinInput" required maxlength="6" placeholder="Enter PIN" class="w-full bg-slate-900 border border-slate-700 text-center text-lg tracking-widest text-emerald-400 p-3 rounded-xl focus:outline-none focus:border-emerald-500">
-        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-emerald-600/30">
-          Unlock Dashboard
+      <form onsubmit="handleAuthLogin(event)" class="space-y-3.5">
+        <input type="password" id="authPinInput" required maxlength="6" placeholder="Enter PIN" class="w-full bg-slate-900/90 border border-slate-700 text-center text-xl tracking-[0.35em] text-emerald-400 p-3.5 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all font-mono">
+        <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold py-3.5 rounded-xl text-sm transition shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2">
+          <span>Unlock Dashboard</span>
+          <i class="fa-solid fa-arrow-right text-xs"></i>
         </button>
-        <p id="authErrorMsg" class="text-xs text-rose-400 hidden">Galat PIN! Kripya dobara try karein.</p>
+        <p id="authErrorMsg" class="text-xs text-rose-400 font-semibold hidden bg-rose-950/40 py-2 rounded-lg border border-rose-800/40">Galat PIN! Kripya dobara try karein.</p>
       </form>
     </div>
   </div>
 
-  <!-- Top Navigation Bar -->
-  <header class="bg-slate-800/90 backdrop-blur-md border-b border-slate-700/80 sticky top-0 z-30 shadow-xl">
+  <!-- Top Sticky Header -->
+  <header class="glass-card sticky top-0 z-30 border-b border-slate-800/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap justify-between items-center gap-4">
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-emerald-500/20">
-          <i class="fa-solid fa-users-gear"></i>
+      <div class="flex items-center space-x-3.5">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-600 via-emerald-500 to-teal-400 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-emerald-500/25">
+          <i class="fa-solid fa-boxes-stacked text-lg"></i>
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">Khushali Sales</h1>
-            <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[11px] font-bold px-2 py-0.5 rounded-full">Secure Portal</span>
+            <h1 class="text-lg sm:text-xl font-black text-white tracking-tight">Khushali Sales</h1>
+            <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">Live CRM</span>
           </div>
-          <p class="text-xs text-slate-400">Customer Retention, Points Ledger & Master Orders</p>
+          <p class="text-xs text-slate-400">Customer Retention, Points Ledger & Dispatch Records</p>
         </div>
       </div>
 
       <div class="flex items-center flex-wrap gap-2.5">
-        <button onclick="openAddOrderModal()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold py-2 px-3.5 rounded-lg flex items-center gap-2 transition shadow-md shadow-emerald-600/20">
-          <i class="fa-solid fa-plus"></i> Naya Order Jodein
+        <button onclick="openAddOrderModal()" class="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shadow-md shadow-emerald-600/25 hover:shadow-emerald-600/40">
+          <i class="fa-solid fa-plus text-xs"></i> Naya Order Jodein
         </button>
-        <button onclick="exportToCSV()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-medium py-2 px-3.5 rounded-lg border border-slate-600 flex items-center gap-2 transition">
-          <i class="fa-solid fa-file-excel text-emerald-400"></i> Export Excel/CSV
+        <button onclick="exportToCSV()" class="bg-slate-800/90 hover:bg-slate-700 text-slate-200 text-xs font-semibold py-2.5 px-3.5 rounded-xl border border-slate-700 flex items-center gap-2 transition hover:text-emerald-400">
+          <i class="fa-solid fa-file-excel text-emerald-400"></i> Export CSV
         </button>
       </div>
     </div>
 
     <!-- TAB SWITCHING MENU -->
-    <div class="bg-slate-900/80 border-t border-slate-700/60 px-4 sm:px-6 lg:px-8 py-2 flex items-center gap-2 overflow-x-auto custom-scrollbar">
-      <span class="text-xs text-slate-400 font-bold uppercase tracking-wider mr-2"><i class="fa-solid fa-bars"></i> Views:</span>
-      <button onclick="switchTab('customers')" id="tab-btn-customers" class="tab-btn px-4 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 text-white transition flex items-center gap-2 shadow">
+    <div class="bg-slate-950/70 border-t border-slate-800/80 px-4 sm:px-6 lg:px-8 py-2.5 flex items-center gap-2 overflow-x-auto custom-scrollbar">
+      <button onclick="switchTab('customers')" id="tab-btn-customers" class="tab-btn px-4 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 text-white transition flex items-center gap-2 shadow-md shadow-emerald-600/30">
         <i class="fa-solid fa-users"></i> Customer Dashboard
       </button>
-      <button onclick="switchTab('points')" id="tab-btn-points" class="tab-btn px-4 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-2 border border-slate-700">
+      <button onclick="switchTab('points')" id="tab-btn-points" class="tab-btn px-4 py-1.5 text-xs font-semibold rounded-lg bg-slate-900 text-slate-300 hover:bg-slate-800 transition flex items-center gap-2 border border-slate-800">
         <i class="fa-solid fa-coins text-amber-400"></i> Cashback Points Ledger
       </button>
-      <button onclick="switchTab('master')" id="tab-btn-master" class="tab-btn px-4 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-2 border border-slate-700">
-        <i class="fa-solid fa-list-check text-amber-400"></i> All Orders Master View
+      <button onclick="switchTab('master')" id="tab-btn-master" class="tab-btn px-4 py-1.5 text-xs font-semibold rounded-lg bg-slate-900 text-slate-300 hover:bg-slate-800 transition flex items-center gap-2 border border-slate-800">
+        <i class="fa-solid fa-list-check text-sky-400"></i> All Orders Master View
       </button>
     </div>
   </header>
@@ -97,61 +146,63 @@
 
     <!-- TAB 1: CUSTOMER DASHBOARD VIEW -->
     <div id="tab-content-customers" class="space-y-6">
+      <!-- TOP KPI CARDS -->
       <div class="grid grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4">
-        <div onclick="setFilter('all')" class="cursor-pointer bg-slate-800/80 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/60 shadow-lg transition-all hover:scale-[1.02]">
+        <div onclick="setFilter('all')" class="glass-card glass-card-hover cursor-pointer p-4 rounded-2xl">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold text-slate-400">Total Customers</span>
-            <span class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center text-sm"><i class="fa-solid fa-users"></i></span>
+            <span class="text-xs font-bold text-slate-400">Total Customers</span>
+            <span class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center text-sm border border-blue-500/20"><i class="fa-solid fa-users"></i></span>
           </div>
-          <h3 id="statTotalCustomers" class="text-2xl font-bold text-white mt-2">0</h3>
-          <p class="text-[11px] text-slate-400 mt-1">100% database 1 March se</p>
+          <h3 id="statTotalCustomers" class="text-2xl font-black text-white mt-2 tracking-tight">0</h3>
+          <p class="text-[11px] text-slate-400 mt-1">100% database March se</p>
         </div>
 
-        <div onclick="setFilter('regular')" class="cursor-pointer bg-slate-800/80 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/60 shadow-lg transition-all hover:scale-[1.02]">
+        <div onclick="setFilter('regular')" class="glass-card glass-card-hover cursor-pointer p-4 rounded-2xl">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold text-emerald-400">Regular / Repeat</span>
-            <span class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-sm"><i class="fa-solid fa-repeat"></i></span>
+            <span class="text-xs font-bold text-emerald-400">Regular / Repeat</span>
+            <span class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-sm border border-emerald-500/20"><i class="fa-solid fa-repeat"></i></span>
           </div>
           <div class="flex items-baseline gap-2 mt-2">
-            <h3 id="statRegularCustomers" class="text-2xl font-bold text-emerald-400">0</h3>
-            <span id="statRepeatRate" class="text-xs text-emerald-500 font-semibold">(0%)</span>
+            <h3 id="statRegularCustomers" class="text-2xl font-black text-emerald-400">0</h3>
+            <span id="statRepeatRate" class="text-xs text-emerald-500 font-bold">(0%)</span>
           </div>
-          <p class="text-[11px] text-slate-400 mt-1">2+ orders</p>
+          <p class="text-[11px] text-slate-400 mt-1">2+ purchases</p>
         </div>
 
-        <div onclick="setFilter('churn_risk')" class="cursor-pointer bg-slate-800/80 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/60 shadow-lg transition-all hover:scale-[1.02]">
+        <div onclick="setFilter('churn_risk')" class="glass-card glass-card-hover cursor-pointer p-4 rounded-2xl">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold text-rose-400">Repeat Nahi Aaya</span>
-            <span class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center text-sm"><i class="fa-solid fa-bell-slash"></i></span>
+            <span class="text-xs font-bold text-rose-400">Repeat Nahi Aaya</span>
+            <span class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center text-sm border border-rose-500/20"><i class="fa-solid fa-bell-slash"></i></span>
           </div>
-          <h3 id="statNoRepeat" class="text-2xl font-bold text-rose-400 mt-2">0</h3>
+          <h3 id="statNoRepeat" class="text-2xl font-black text-rose-400 mt-2">0</h3>
           <p class="text-[11px] text-rose-300/80 mt-1">45+ din se inactive</p>
         </div>
 
-        <div onclick="setFilter('low_ticket')" class="cursor-pointer bg-slate-800/80 hover:bg-slate-800 p-4 rounded-2xl border border-slate-700/60 shadow-lg transition-all hover:scale-[1.02]">
+        <div onclick="setFilter('low_ticket')" class="glass-card glass-card-hover cursor-pointer p-4 rounded-2xl">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold text-amber-400">Orders &lt; ₹1,000</span>
-            <span class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-sm"><i class="fa-solid fa-coins"></i></span>
+            <span class="text-xs font-bold text-amber-400">Orders &lt; ₹1,000</span>
+            <span class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-sm border border-amber-500/20"><i class="fa-solid fa-coins"></i></span>
           </div>
-          <h3 id="statLowTicket" class="text-2xl font-bold text-amber-400 mt-2">0</h3>
+          <h3 id="statLowTicket" class="text-2xl font-black text-amber-400 mt-2">0</h3>
           <p class="text-[11px] text-slate-400 mt-1">Small ticket / Sample</p>
         </div>
 
-        <div class="col-span-2 lg:col-span-1 bg-gradient-to-br from-emerald-900/40 to-slate-800 p-4 rounded-2xl border border-emerald-500/30 shadow-lg">
+        <div class="col-span-2 lg:col-span-1 bg-gradient-to-br from-emerald-950/70 via-slate-900 to-slate-900 p-4 rounded-2xl border border-emerald-500/40 shadow-xl">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold text-emerald-300">Total Sales</span>
-            <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-sm"><i class="fa-solid fa-indian-rupee-sign"></i></span>
+            <span class="text-xs font-bold text-emerald-300">Total Sales (LTV)</span>
+            <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-sm border border-emerald-400/30"><i class="fa-solid fa-indian-rupee-sign"></i></span>
           </div>
-          <h3 id="statTotalRevenue" class="text-2xl font-black text-white mt-2">₹0</h3>
-          <p id="statTotalOrdersCount" class="text-[11px] text-emerald-400 mt-1">0 total orders</p>
+          <h3 id="statTotalRevenue" class="text-2xl font-black text-white mt-2 tracking-tight">₹0</h3>
+          <p id="statTotalOrdersCount" class="text-[11px] text-emerald-400 mt-1 font-semibold">0 total orders</p>
         </div>
       </div>
 
+      <!-- ANALYTICS & INSIGHTS -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div class="bg-slate-800/60 p-4 rounded-2xl border border-slate-700/60 lg:col-span-2">
+        <div class="glass-card p-4 rounded-2xl lg:col-span-2">
           <div class="flex items-center justify-between mb-3">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-              <i class="fa-solid fa-chart-simple text-emerald-400"></i> Mahina-Vaar Sales (March - October 2026)
+            <h4 class="text-xs font-black uppercase tracking-wider text-slate-300 flex items-center gap-2">
+              <i class="fa-solid fa-chart-column text-emerald-400"></i> Mahina-Vaar Sales Trend (2026)
             </h4>
           </div>
           <div class="h-44 w-full">
@@ -159,88 +210,90 @@
           </div>
         </div>
 
-        <div class="bg-slate-800/60 p-4 rounded-2xl border border-slate-700/60 flex flex-col justify-between">
+        <div class="glass-card p-4 rounded-2xl flex flex-col justify-between">
           <div>
-            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2">
-              <i class="fa-solid fa-bullseye text-amber-400"></i> Action Summary
+            <h4 class="text-xs font-black uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-bullseye text-amber-400"></i> Action Priority
             </h4>
-            <div class="space-y-2 text-xs">
-              <div class="flex justify-between items-center p-2 rounded-lg bg-slate-900/60 border border-slate-700">
-                <span class="text-slate-300">Top VIPs (> ₹20k):</span>
-                <span id="statVipCount" class="font-bold text-emerald-400">0</span>
+            <div class="space-y-2 text-xs font-medium">
+              <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400">Top VIPs (&gt; ₹20k):</span>
+                <span id="statVipCount" class="font-extrabold text-emerald-400">0</span>
               </div>
-              <div class="flex justify-between items-center p-2 rounded-lg bg-slate-900/60 border border-slate-700">
-                <span class="text-slate-300">Urgent Churn:</span>
-                <span id="statUrgentFollowup" class="font-bold text-rose-400">0</span>
+              <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400">Urgent Churn Call:</span>
+                <span id="statUrgentFollowup" class="font-extrabold text-rose-400">0</span>
               </div>
-              <div class="flex justify-between items-center p-2 rounded-lg bg-slate-900/60 border border-slate-700">
-                <span class="text-slate-300">Upsell Target (&lt; ₹1k):</span>
-                <span id="statUpsellTarget" class="font-bold text-amber-400">0</span>
+              <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
+                <span class="text-slate-400">Upsell Target (&lt; ₹1k):</span>
+                <span id="statUpsellTarget" class="font-extrabold text-amber-400">0</span>
               </div>
             </div>
           </div>
-          <div class="mt-3 pt-3 border-t border-slate-700/60 flex items-center justify-between text-[11px] text-slate-400">
-            <span>Cashback System</span>
-            <span class="text-emerald-400 font-semibold">1% Value (7 Sept onwards)</span>
+          <div class="mt-3 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
+            <span>Cashback Rules</span>
+            <span class="text-emerald-400 font-bold bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/60">1% (60d expiry)</span>
           </div>
         </div>
       </div>
 
-      <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/80 shadow-md flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-3">
+      <!-- SEARCH & FILTER BAR -->
+      <div class="glass-card p-4 rounded-2xl flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-3">
         <div class="relative w-full lg:w-96">
           <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
-          <input type="text" id="searchInput" placeholder="Customer name, mobile number search karein..." 
-            class="w-full bg-slate-900/90 border border-slate-700 text-slate-100 pl-9 pr-4 py-2 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <input type="text" id="searchInput" placeholder="Customer name, phone, item search karein..." 
+            class="w-full bg-slate-900/90 border border-slate-700/80 text-slate-100 pl-9 pr-4 py-2 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
         </div>
 
         <div class="flex flex-wrap items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 custom-scrollbar">
           <button onclick="setFilter('all')" id="btn-all" class="filter-btn active-tab px-3 py-1.5 text-xs font-semibold rounded-lg border bg-emerald-600 border-emerald-500 text-white transition">
             Sabhi (<span id="count-all">0</span>)
           </button>
-          <button onclick="setFilter('regular')" id="btn-regular" class="filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-slate-300 hover:bg-slate-700 transition">
+          <button onclick="setFilter('regular')" id="btn-regular" class="filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-slate-300 hover:bg-slate-800 transition">
             ⭐ Regular (<span id="count-regular">0</span>)
           </button>
-          <button onclick="setFilter('churn_risk')" id="btn-churn_risk" class="filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-rose-300 hover:bg-slate-700 transition">
-            🚨 Repeat Nahi Aaya (<span id="count-churn_risk">0</span>)
+          <button onclick="setFilter('churn_risk')" id="btn-churn_risk" class="filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-rose-300 hover:bg-slate-800 transition">
+            🚨 Repeat Churn (<span id="count-churn_risk">0</span>)
           </button>
-          <button onclick="setFilter('low_ticket')" id="btn-low_ticket" class="filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-amber-300 hover:bg-slate-700 transition">
+          <button onclick="setFilter('low_ticket')" id="btn-low_ticket" class="filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-amber-300 hover:bg-slate-800 transition">
             ⚠️ &lt; ₹1k (<span id="count-low_ticket">0</span>)
           </button>
-          <button onclick="setFilter('vip')" id="btn-vip" class="filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-emerald-300 hover:bg-slate-700 transition">
+          <button onclick="setFilter('vip')" id="btn-vip" class="filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-purple-300 hover:bg-slate-800 transition">
             👑 VIP (<span id="count-vip">0</span>)
           </button>
-          <button onclick="setFilter('one_time')" id="btn-one_time" class="filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-slate-400 hover:bg-slate-700 transition">
+          <button onclick="setFilter('one_time')" id="btn-one_time" class="filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-slate-400 hover:bg-slate-800 transition">
             1-Time (<span id="count-one_time">0</span>)
           </button>
         </div>
       </div>
 
-      <div class="bg-slate-800/90 rounded-2xl border border-slate-700/80 shadow-xl overflow-hidden">
-        <div class="p-4 border-b border-slate-700/80 flex flex-wrap justify-between items-center gap-2">
+      <!-- MAIN CUSTOMER DIRECTORY TABLE -->
+      <div class="glass-card rounded-2xl overflow-hidden shadow-2xl">
+        <div class="p-4 border-b border-slate-800 flex flex-wrap justify-between items-center gap-2 bg-slate-900/60">
           <div class="flex items-center gap-2">
-            <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Customer Records</span>
-            <span id="currentFilterLabel" class="text-xs bg-slate-700 text-emerald-400 px-2.5 py-0.5 rounded-full font-medium">Sabhi</span>
+            <span class="text-xs font-black uppercase tracking-wider text-slate-300">Customer Records</span>
+            <span id="currentFilterLabel" class="text-xs bg-slate-800 text-emerald-400 border border-slate-700 px-2.5 py-0.5 rounded-full font-bold">Sabhi</span>
           </div>
-          <div class="text-xs text-slate-400">
+          <div class="text-xs text-slate-400 font-medium">
             Showing <span id="showingCount" class="font-bold text-white">0</span> customers
           </div>
         </div>
 
         <div class="overflow-x-auto custom-scrollbar">
           <table class="w-full text-left border-collapse text-xs sm:text-sm">
-            <thead class="bg-slate-900/70 text-slate-400 font-semibold border-b border-slate-700 uppercase text-[11px] tracking-wider">
+            <thead class="bg-slate-950/70 text-slate-400 font-semibold border-b border-slate-800 uppercase text-[11px] tracking-wider">
               <tr>
-                <th class="py-3 px-4">Customer Details</th>
-                <th class="py-3 px-4 text-center">Total Orders</th>
-                <th class="py-3 px-4">Total Amount (LTV)</th>
-                <th class="py-3 px-4">Avg. Order</th>
-                <th class="py-3 px-4">Pehla Order</th>
-                <th class="py-3 px-4">Aakhri Order</th>
-                <th class="py-3 px-4">Status / Tag</th>
-                <th class="py-3 px-4 text-right">Action</th>
+                <th class="py-3.5 px-4">Customer Details</th>
+                <th class="py-3.5 px-4 text-center">Orders</th>
+                <th class="py-3.5 px-4">Total Amount (LTV)</th>
+                <th class="py-3.5 px-4">Avg. Order</th>
+                <th class="py-3.5 px-4">Pehla Order</th>
+                <th class="py-3.5 px-4">Aakhri Order</th>
+                <th class="py-3.5 px-4">Status / Tag</th>
+                <th class="py-3.5 px-4 text-right">Action</th>
               </tr>
             </thead>
-            <tbody id="customerTableBody" class="divide-y divide-slate-700/60"></tbody>
+            <tbody id="customerTableBody" class="divide-y divide-slate-800/70"></tbody>
           </table>
         </div>
       </div>
@@ -248,32 +301,32 @@
 
     <!-- TAB 2: CASHBACK POINTS LEDGER VIEW -->
     <div id="tab-content-points" class="space-y-6 hidden">
-      <div class="bg-slate-800/90 rounded-2xl border border-slate-700/80 shadow-xl overflow-hidden">
-        <div class="p-4 border-b border-slate-700/80 flex flex-wrap justify-between items-center gap-4">
+      <div class="glass-card rounded-2xl overflow-hidden shadow-2xl">
+        <div class="p-4 border-b border-slate-800 flex flex-wrap justify-between items-center gap-4 bg-slate-900/60">
           <div class="flex items-center gap-2">
-            <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-              <i class="fa-solid fa-coins"></i> Active Cashback Points Ledger (Points > 0)
+            <span class="text-xs font-black uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-coins"></i> Active Cashback Points Ledger (Points &gt; 0)
             </span>
-            <span class="text-xs bg-emerald-950 text-emerald-300 border border-emerald-800 px-2.5 py-0.5 rounded-full font-medium" id="totalPointsCount">0 Active Pts</span>
+            <span class="text-xs bg-emerald-950 text-emerald-300 border border-emerald-800 px-2.5 py-0.5 rounded-full font-bold" id="totalPointsCount">0 Active Pts</span>
           </div>
           <div class="text-xs text-slate-400">
-            * 7 din ya usse jyada inactive clients ke liye WhatsApp Reminder prompt yahan hai.
+            * 7 din se inactive clients ko WhatsApp reminder bhejein.
           </div>
         </div>
 
         <div class="overflow-x-auto custom-scrollbar">
           <table class="w-full text-left border-collapse text-xs sm:text-sm">
-            <thead class="bg-slate-900/70 text-slate-400 font-semibold border-b border-slate-700 uppercase text-[11px] tracking-wider">
+            <thead class="bg-slate-950/70 text-slate-400 font-semibold border-b border-slate-800 uppercase text-[11px] tracking-wider">
               <tr>
-                <th class="py-3 px-4">Customer Name</th>
-                <th class="py-3 px-4">Phone Number</th>
-                <th class="py-3 px-4 text-center">Available Points</th>
-                <th class="py-3 px-4">Expiry Date (60 Days)</th>
-                <th class="py-3 px-4">7-Day WhatsApp Reminder Status</th>
-                <th class="py-3 px-4 text-right">Action</th>
+                <th class="py-3.5 px-4">Customer Name</th>
+                <th class="py-3.5 px-4">Phone Number</th>
+                <th class="py-3.5 px-4 text-center">Available Points</th>
+                <th class="py-3.5 px-4">Expiry Date (60 Days)</th>
+                <th class="py-3.5 px-4">7-Day WhatsApp Reminder Status</th>
+                <th class="py-3.5 px-4 text-right">Action</th>
               </tr>
             </thead>
-            <tbody id="pointsLedgerTableBody" class="divide-y divide-slate-700/60"></tbody>
+            <tbody id="pointsLedgerTableBody" class="divide-y divide-slate-800/70"></tbody>
           </table>
         </div>
       </div>
@@ -281,37 +334,37 @@
 
     <!-- TAB 3: ALL ORDERS MASTER VIEW -->
     <div id="tab-content-master" class="space-y-6 hidden">
-      <div class="bg-slate-800/90 rounded-2xl border border-slate-700/80 shadow-xl overflow-hidden">
-        <div class="p-4 border-b border-slate-700/80 flex flex-wrap justify-between items-center gap-4">
+      <div class="glass-card rounded-2xl overflow-hidden shadow-2xl">
+        <div class="p-4 border-b border-slate-800 flex flex-wrap justify-between items-center gap-4 bg-slate-900/60">
           <div class="flex items-center gap-2">
-            <span class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-              <i class="fa-solid fa-list-check"></i> All Orders & Master History
+            <span class="text-xs font-black uppercase tracking-wider text-sky-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-list-check"></i> Master Orders Dispatch History
             </span>
-            <span class="text-xs bg-slate-700 text-slate-200 px-2.5 py-0.5 rounded-full font-medium" id="totalMasterOrdersCount">0 Orders</span>
+            <span class="text-xs bg-slate-800 text-slate-200 border border-slate-700 px-2.5 py-0.5 rounded-full font-bold" id="totalMasterOrdersCount">0 Orders</span>
           </div>
           
           <div class="flex flex-wrap items-center gap-2 text-xs">
-            <span class="text-slate-400 font-medium">Sort By:</span>
+            <span class="text-slate-400 font-semibold">Sort:</span>
             <button onclick="sortMasterOrders('date-desc')" id="sort-date-desc" class="px-3 py-1.5 rounded-lg border border-slate-600 bg-slate-700 text-white font-semibold transition">📅 Newest</button>
-            <button onclick="sortMasterOrders('date-asc')" id="sort-date-asc" class="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 text-slate-300 hover:bg-slate-700 transition">📅 Oldest</button>
-            <button onclick="sortMasterOrders('amount-desc')" id="sort-amount-desc" class="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 text-slate-300 hover:bg-slate-700 transition">💰 Highest Amt</button>
-            <button onclick="sortMasterOrders('amount-asc')" id="sort-amount-asc" class="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 text-slate-300 hover:bg-slate-700 transition">🪙 Lowest Amt</button>
+            <button onclick="sortMasterOrders('date-asc')" id="sort-date-asc" class="px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 transition">📅 Oldest</button>
+            <button onclick="sortMasterOrders('amount-desc')" id="sort-amount-desc" class="px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 transition">💰 Highest Amt</button>
+            <button onclick="sortMasterOrders('amount-asc')" id="sort-amount-asc" class="px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 transition">🪙 Lowest Amt</button>
           </div>
         </div>
 
         <div class="overflow-x-auto custom-scrollbar">
           <table class="w-full text-left border-collapse text-xs sm:text-sm">
-            <thead class="bg-slate-900/70 text-slate-400 font-semibold border-b border-slate-700 uppercase text-[11px] tracking-wider">
+            <thead class="bg-slate-950/70 text-slate-400 font-semibold border-b border-slate-800 uppercase text-[11px] tracking-wider">
               <tr>
-                <th class="py-3 px-4">Order Date</th>
-                <th class="py-3 px-4">Customer Name</th>
-                <th class="py-3 px-4">Phone Number</th>
-                <th class="py-3 px-4">Remarks / Items</th>
-                <th class="py-3 px-4">Bill Amount</th>
-                <th class="py-3 px-4 text-right">Action</th>
+                <th class="py-3.5 px-4">Order Date</th>
+                <th class="py-3.5 px-4">Customer Name</th>
+                <th class="py-3.5 px-4">Phone Number</th>
+                <th class="py-3.5 px-4">Remarks / Items</th>
+                <th class="py-3.5 px-4">Bill Amount</th>
+                <th class="py-3.5 px-4 text-right">Action</th>
               </tr>
             </thead>
-            <tbody id="masterOrdersTableBody" class="divide-y divide-slate-700/60"></tbody>
+            <tbody id="masterOrdersTableBody" class="divide-y divide-slate-800/70"></tbody>
           </table>
         </div>
       </div>
@@ -319,120 +372,116 @@
 
   </main>
 
-  <!-- SUCCESS WHATSAPP THANKYOU MODAL (Triggered on New Order Save) -->
-  <div id="whatsappThankyouModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-    <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-md p-6 shadow-2xl text-center space-y-4">
-      <div class="w-14 h-14 bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-lg">
-        <i class="fa-brands fa-whatsapp"></i>
-      </div>
-      <div>
-        <h3 class="text-base font-bold text-white">Order Successfully Dispatched!</h3>
-        <p class="text-xs text-slate-300 mt-1">Client ko WhatsApp par thank you aur cashback points message bhejne ke liye niche click karein:</p>
-      </div>
-      <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 text-left text-xs font-mono text-slate-300 max-h-36 overflow-y-auto" id="whatsappMessageBoxPreview"></div>
-      <div class="flex gap-2 pt-2">
-        <button onclick="document.getElementById('whatsappThankyouModal').classList.add('hidden'); document.getElementById('whatsappThankyouModal').classList.remove('flex');" class="flex-1 px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-xl text-xs font-medium">Skip / Close</button>
-        <a id="sendWhatsappBtn" href="#" target="_blank" class="flex-1 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow">
-          <i class="fa-brands fa-whatsapp text-sm"></i> Send WhatsApp
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Customer Detail Modal (Fixed classes for smooth pop-up) -->
-  <div id="customerModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-    <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
-      <div class="p-5 bg-slate-900/80 border-b border-slate-700 flex justify-between items-center">
-        <div>
-          <div class="flex items-center gap-2">
-            <h3 id="modalCustomerName" class="text-lg font-bold text-white">Customer Name</h3>
-            <span id="modalCustomerBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400">Regular</span>
+  <!-- POPUP: CUSTOMER DETAIL FULL MODAL -->
+  <div id="customerModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="glass-card border border-slate-700 rounded-3xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-fade-in">
+      
+      <!-- Modal Header -->
+      <div class="p-5 bg-gradient-to-r from-slate-900 via-slate-900 to-slate-800 border-b border-slate-800 flex justify-between items-center">
+        <div class="flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-emerald-600/30" id="modalCustomerInitials">
+            C
           </div>
-          <p id="modalCustomerPhone" class="text-xs text-slate-400 mt-0.5"><i class="fa-solid fa-phone text-[10px]"></i> +91 9876543210</p>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 id="modalCustomerName" class="text-lg font-black text-white">Customer Name</h3>
+              <span id="modalCustomerBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Regular</span>
+            </div>
+            <p id="modalCustomerPhone" class="text-xs text-slate-400 mt-0.5 font-mono"><i class="fa-solid fa-phone text-[10px]"></i> +91 0000000000</p>
+          </div>
         </div>
-        <button onclick="closeCustomerModal()" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center">
+        <button onclick="closeCustomerModal()" class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center hover:bg-slate-700 transition">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
-      <div class="p-5 overflow-y-auto custom-scrollbar space-y-5 flex-1">
-        <div class="grid grid-cols-3 gap-3 bg-slate-900/60 p-3.5 rounded-xl border border-slate-700/60 text-center">
+      <!-- Modal Body -->
+      <div class="p-5 overflow-y-auto custom-scrollbar space-y-5 flex-1 bg-slate-900/40">
+        
+        <!-- Metrics Grid -->
+        <div class="grid grid-cols-4 gap-2.5 bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800 text-center">
           <div>
-            <span class="text-[10px] uppercase font-semibold text-slate-400">Total Purchase</span>
-            <p id="modalTotalSpend" class="text-base font-bold text-emerald-400 mt-0.5">₹0</p>
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Total LTV</span>
+            <p id="modalTotalSpend" class="text-base font-black text-emerald-400 mt-0.5">₹0</p>
           </div>
           <div>
-            <span class="text-[10px] uppercase font-semibold text-slate-400">Total Orders</span>
-            <p id="modalOrderCount" class="text-base font-bold text-white mt-0.5">0</p>
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Avg Order</span>
+            <p id="modalAvgOrder" class="text-base font-black text-sky-400 mt-0.5">₹0</p>
           </div>
           <div>
-            <span class="text-[10px] uppercase font-semibold text-slate-400">Cashback Points</span>
-            <p id="modalPointsVal" class="text-base font-bold text-amber-400 mt-0.5">0 pts</p>
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Orders</span>
+            <p id="modalOrderCount" class="text-base font-black text-white mt-0.5">0</p>
+          </div>
+          <div>
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Cashback</span>
+            <p id="modalPointsVal" class="text-base font-black text-amber-400 mt-0.5">0 pts</p>
           </div>
         </div>
 
+        <!-- Orders Vertical Timeline -->
         <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i> Order Date Timeline & Delete Option
+          <h4 class="text-xs font-black uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i> Puraane Orders & Timeline History
           </h4>
-          <div id="modalOrderTimeline" class="space-y-2"></div>
+          <div id="modalOrderTimeline" class="timeline-container space-y-2.5 pl-2"></div>
         </div>
 
-        <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-700/60 space-y-2">
-          <label class="text-xs font-semibold text-slate-300 flex items-center gap-2">
-            <i class="fa-solid fa-note-sticky text-amber-400"></i> Calling Note
+        <!-- Calling Note Section -->
+        <div class="bg-slate-950/70 p-4 rounded-2xl border border-slate-800 space-y-2">
+          <label class="text-xs font-bold text-slate-300 flex items-center gap-2">
+            <i class="fa-solid fa-note-sticky text-amber-400"></i> Client CRM / Calling Note
           </label>
-          <textarea id="modalCustomerNote" rows="2" placeholder="Note likhein..." class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-slate-200"></textarea>
-          <button onclick="saveCustomerNote()" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1.5 rounded-md">Save Note</button>
+          <textarea id="modalCustomerNote" rows="2" placeholder="Customer preference ya discussion note likhein..." class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none focus:border-emerald-500"></textarea>
+          <button onclick="saveCustomerNote()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3.5 py-1.5 rounded-lg border border-slate-700 transition">Save Note</button>
         </div>
       </div>
 
-      <div class="p-4 bg-slate-900/90 border-t border-slate-700 flex justify-between items-center gap-2">
-        <button onclick="closeCustomerModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg text-xs">Close</button>
+      <!-- Modal Footer -->
+      <div class="p-4 bg-slate-950/90 border-t border-slate-800 flex justify-between items-center gap-2">
+        <button onclick="closeCustomerModal()" class="px-4 py-2 bg-slate-800 text-slate-300 hover:text-white rounded-xl text-xs font-semibold">Band Karein</button>
         <div class="flex items-center gap-2">
-          <a id="modalCallBtn" href="#" class="px-3.5 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5"><i class="fa-solid fa-phone"></i> Call</a>
-          <a id="modalWhatsappBtn" href="#" target="_blank" class="px-3.5 py-2 bg-emerald-600 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+          <a id="modalCallBtn" href="#" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md shadow-blue-600/30"><i class="fa-solid fa-phone"></i> Call</a>
+          <a id="modalWhatsappBtn" href="#" target="_blank" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md shadow-emerald-600/30"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Add New Order Modal -->
-  <div id="addOrderModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-    <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
-      <div class="p-4 bg-slate-900 border-b border-slate-700 flex justify-between items-center">
-        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+  <!-- POPUP: ADD NEW ORDER MODAL -->
+  <div id="addOrderModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="glass-card border border-slate-700 rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden">
+      <div class="p-4 bg-slate-900 border-b border-slate-800 flex justify-between items-center">
+        <h3 class="text-sm font-black text-white flex items-center gap-2">
           <i class="fa-solid fa-circle-plus text-emerald-400"></i> Naya Sales Record Jodein
         </h3>
         <button onclick="closeAddOrderModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
       </div>
       
-      <form onsubmit="handleNewOrderSubmit(event)" class="p-5 space-y-3.5 text-xs">
+      <form onsubmit="handleNewOrderSubmit(event)" class="p-5 space-y-3.5 text-xs bg-slate-900/50">
         <div class="relative">
-          <label class="block text-slate-300 font-medium mb-1">Customer Name *</label>
-          <input type="text" id="newCustName" oninput="handleCustomerNameInput(this.value)" required autocomplete="off" placeholder="e.g. Ramesh Sharma (Naam type karein)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100">
-          
+          <label class="block text-slate-300 font-bold mb-1">Customer Name *</label>
+          <input type="text" id="newCustName" oninput="handleCustomerNameInput(this.value)" required autocomplete="off" placeholder="e.g. Ramesh Sharma" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-2.5 text-slate-100 focus:outline-none focus:border-emerald-500">
           <div id="customerSuggestions" class="absolute left-0 right-0 top-16 bg-slate-950 border border-slate-700 rounded-xl shadow-2xl max-h-40 overflow-y-auto z-20 hidden custom-scrollbar"></div>
         </div>
         
         <div>
-          <label class="block text-slate-300 font-medium mb-1">Mobile / Phone Number *</label>
-          <input type="text" id="newCustPhone" onblur="checkCustomerPoints(this.value)" required placeholder="e.g. 9876543210" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100">
-          <p id="availablePointsNotice" class="text-[11px] text-amber-400 mt-1 hidden"></p>
+          <label class="block text-slate-300 font-bold mb-1">Mobile / Phone Number *</label>
+          <input type="text" id="newCustPhone" onblur="checkCustomerPoints(this.value)" required placeholder="e.g. 9876543210" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-2.5 text-slate-100 font-mono focus:outline-none focus:border-emerald-500">
+          <p id="availablePointsNotice" class="text-[11px] font-bold text-amber-400 mt-1 hidden"></p>
         </div>
 
-        <div class="space-y-2 pt-1 border-t border-slate-700/60">
+        <div class="space-y-2 pt-1 border-t border-slate-800">
           <div class="flex items-center justify-between">
-            <label class="block text-slate-300 font-semibold text-xs">Ordered Products & Samples *</label>
-            <button type="button" onclick="addOrderItemRow()" class="text-xs text-emerald-400 font-bold flex items-center gap-1 bg-emerald-950/60 px-2 py-1 rounded border border-emerald-800">
+            <label class="block text-slate-300 font-bold text-xs">Ordered Products & Raw Materials *</label>
+            <button type="button" onclick="addOrderItemRow()" class="text-xs text-emerald-400 font-bold flex items-center gap-1 bg-emerald-950/60 px-2 py-1 rounded-lg border border-emerald-800/80">
               <i class="fa-solid fa-plus"></i> + Item Jodein
             </button>
           </div>
 
           <div id="orderItemsContainer" class="space-y-2 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
-            <div class="order-item-row grid grid-cols-12 gap-2 bg-slate-900/90 p-2.5 rounded-xl border border-slate-700 items-center">
+            <div class="order-item-row grid grid-cols-12 gap-2 bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 items-center">
               <div class="col-span-7">
-                <select class="prod-select w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100" onchange="toggleCustomProduct(this)" required>
+                <select class="prod-select w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100" onchange="toggleCustomProduct(this)" required>
                   <option value="KHU-001">White Phenyl Raw Material</option>
                   <option value="KHU-002">Colour Phenyl (Rose)</option>
                   <option value="KHU-003">Black Phenyl Raw Material</option>
@@ -450,10 +499,10 @@
                   <option value="KHU-015">Room Freshener (Lavender)</option>
                   <option value="OTHER_CUSTOM" class="text-amber-300 font-bold">✨ Other Product / Sample (Manual)</option>
                 </select>
-                <input type="text" placeholder="Custom product name" class="custom-prod-name w-full bg-slate-950 border border-amber-500 rounded-lg p-1.5 text-xs text-amber-200 mt-1 hidden">
+                <input type="text" placeholder="Custom product name" class="custom-prod-name w-full bg-slate-900 border border-amber-500 rounded-lg p-1.5 text-xs text-amber-200 mt-1 hidden">
               </div>
               <div class="col-span-4">
-                <input type="number" step="any" min="0.01" required placeholder="Qty / Pcs" class="prod-qty w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 font-mono">
+                <input type="number" step="any" min="0.01" required placeholder="Qty / Pcs" class="prod-qty w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 font-mono">
               </div>
               <div class="col-span-1 text-center"></div>
             </div>
@@ -462,37 +511,57 @@
 
         <div class="grid grid-cols-2 gap-2 pt-1">
           <div>
-            <label class="block text-slate-300 font-medium mb-1">Total Bill Amount (₹) *</label>
-            <input type="number" id="newCustAmount" required placeholder="e.g. 3500" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100">
+            <label class="block text-slate-300 font-bold mb-1">Total Bill Amount (₹) *</label>
+            <input type="number" id="newCustAmount" required placeholder="e.g. 3500" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-2.5 text-slate-100 font-bold focus:outline-none focus:border-emerald-500">
           </div>
           <div>
-            <label class="block text-slate-300 font-medium mb-1">Order Date *</label>
-            <input type="date" id="newCustDate" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100">
+            <label class="block text-slate-300 font-bold mb-1">Order Date *</label>
+            <input type="date" id="newCustDate" required class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-2.5 text-slate-100 focus:outline-none focus:border-emerald-500">
           </div>
         </div>
 
-        <div id="redemptionBox" class="bg-slate-900/90 p-3 rounded-xl border border-amber-500/40 hidden">
+        <div id="redemptionBox" class="bg-amber-950/30 p-3 rounded-xl border border-amber-500/40 hidden">
           <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" id="redeemPointsCheck" onchange="togglePointsRedemption()" class="w-4 h-4 rounded border-slate-700 text-emerald-600">
-            <span class="text-amber-300 font-semibold text-xs" id="redeemLabelText">Client ke available points minus karein?</span>
+            <span class="text-amber-300 font-bold text-xs" id="redeemLabelText">Client ke available points minus karein?</span>
           </label>
         </div>
 
         <div>
-          <label class="block text-slate-300 font-medium mb-1">Notes / Remarks (Optional)</label>
-          <input type="text" id="newCustRemark" placeholder="e.g. Sample added" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100">
+          <label class="block text-slate-300 font-bold mb-1">Notes / Remarks (Optional)</label>
+          <input type="text" id="newCustRemark" placeholder="e.g. Sample kit added" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-2.5 text-slate-100 focus:outline-none focus:border-emerald-500">
         </div>
 
-        <div class="pt-2 flex justify-end gap-2 border-t border-slate-700/60">
-          <button type="button" onclick="closeAddOrderModal()" class="px-4 py-2 bg-slate-700 rounded-lg text-slate-200">Cancel</button>
-          <button type="submit" class="px-4 py-2 bg-emerald-600 font-semibold text-white rounded-lg shadow-md">Save Order & Update Points</button>
+        <div class="pt-2 flex justify-end gap-2 border-t border-slate-800">
+          <button type="button" onclick="closeAddOrderModal()" class="px-4 py-2 bg-slate-800 rounded-xl text-slate-300 font-semibold">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 font-bold text-white rounded-xl shadow-md shadow-emerald-600/30">Save & Update</button>
         </div>
       </form>
     </div>
   </div>
 
-  <footer class="bg-slate-900 border-t border-slate-800 text-center py-4 text-xs text-slate-500">
-    Khushali Sales Retention System • Tabbed Views & Cashback System
+  <!-- POPUP: SUCCESS WHATSAPP THANK YOU -->
+  <div id="whatsappThankyouModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="glass-card border border-slate-700 rounded-3xl w-full max-w-md p-6 shadow-2xl text-center space-y-4">
+      <div class="w-14 h-14 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-lg">
+        <i class="fa-brands fa-whatsapp"></i>
+      </div>
+      <div>
+        <h3 class="text-base font-black text-white">Order Successfully Dispatched!</h3>
+        <p class="text-xs text-slate-300 mt-1">Client ko WhatsApp par thank you aur cashback points message bhejne ke liye click karein:</p>
+      </div>
+      <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800 text-left text-xs font-mono text-slate-300 max-h-36 overflow-y-auto custom-scrollbar" id="whatsappMessageBoxPreview"></div>
+      <div class="flex gap-2 pt-2">
+        <button onclick="document.getElementById('whatsappThankyouModal').classList.add('hidden'); document.getElementById('whatsappThankyouModal').classList.remove('flex');" class="flex-1 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold">Skip / Close</button>
+        <a id="sendWhatsappBtn" href="#" target="_blank" class="flex-1 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md shadow-emerald-600/30">
+          <i class="fa-brands fa-whatsapp text-sm"></i> Send WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-slate-950/90 border-t border-slate-800/80 text-center py-4 text-xs text-slate-500 font-semibold">
+    Khushali Sales CRM System • 100% Retained Database & Points Automation
   </footer>
 
   <!-- Application Logic -->
@@ -504,7 +573,7 @@
       addDoc, 
       doc, 
       updateDoc, 
-      deleteDoc,
+      deleteDoc, 
       increment, 
       setDoc, 
       onSnapshot 
@@ -542,6 +611,7 @@
     let monthlyChart = null;
     let currentMasterSort = 'date-desc';
 
+    // 100% COMPLETE ORIGINAL HARDCODED DATA (hard-1 to hard-285)
     const initialHardcodedData = [
       { id: "hard-1", name: "Vivek Varma", phone: "9875575483", date: "2026-03-01", amount: 700, remark: "Kit" },
       { id: "hard-2", name: "Pawan Prajapati", phone: "7722942236", date: "2026-03-03", amount: 999, remark: "Combo" },
@@ -830,7 +900,7 @@
       { id: "hard-285", name: "Amit Das", phone: "7005055254", date: "2026-08-27", amount: 13159, remark: "Order" }
     ];
 
-    // Password Login Handler (PIN: 7568)
+    // Password Check PIN: 7568
     window.handleAuthLogin = function(e) {
       e.preventDefault();
       const pin = document.getElementById('authPinInput').value.trim();
@@ -942,7 +1012,6 @@
       renderPointsLedgerTable();
     }
 
-    // --- TAB SWITCHING FUNCTION ---
     function switchTab(tabName) {
       ['customers', 'points', 'master'].forEach(t => {
         const content = document.getElementById(`tab-content-${t}`);
@@ -950,10 +1019,10 @@
         if(content && btn) {
           if(t === tabName) {
             content.classList.remove('hidden');
-            btn.className = "tab-btn px-4 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 text-white transition flex items-center gap-2 shadow";
+            btn.className = "tab-btn px-4 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 text-white transition flex items-center gap-2 shadow-md shadow-emerald-600/30";
           } else {
             content.classList.add('hidden');
-            btn.className = "tab-btn px-4 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition flex items-center gap-2 border border-slate-700";
+            btn.className = "tab-btn px-4 py-1.5 text-xs font-semibold rounded-lg bg-slate-900 text-slate-300 hover:bg-slate-800 transition flex items-center gap-2 border border-slate-800";
           }
         }
       });
@@ -991,7 +1060,6 @@
       document.getElementById('count-one_time').innerText = customers.filter(c => c.orderCount === 1).length;
     }
 
-    // --- MONTHLY CHART WITH OCTOBER COLUMN ---
     function renderMonthlyChart() {
       const months = {
         '2026-03': { name: 'March', amount: 0, orders: 0 },
@@ -1026,14 +1094,14 @@
             label: 'Sales (₹)',
             data: revenueData,
             backgroundColor: [
-              'rgba(16, 185, 129, 0.7)',
-              'rgba(59, 130, 246, 0.7)',
-              'rgba(245, 158, 11, 0.7)',
-              'rgba(139, 92, 246, 0.7)',
-              'rgba(236, 72, 153, 0.7)',
-              'rgba(16, 185, 129, 0.9)',
-              'rgba(14, 165, 233, 0.8)',
-              'rgba(245, 158, 11, 0.9)'
+              'rgba(16, 185, 129, 0.75)',
+              'rgba(59, 130, 246, 0.75)',
+              'rgba(245, 158, 11, 0.75)',
+              'rgba(139, 92, 246, 0.75)',
+              'rgba(236, 72, 153, 0.75)',
+              'rgba(16, 185, 129, 0.85)',
+              'rgba(14, 165, 233, 0.85)',
+              'rgba(245, 158, 11, 0.85)'
             ],
             borderColor: '#10b981',
             borderRadius: 6
@@ -1056,7 +1124,7 @@
               ticks: { color: '#94a3b8', font: { size: 10 } }
             },
             y: {
-              grid: { color: 'rgba(51, 65, 85, 0.5)' },
+              grid: { color: 'rgba(51, 65, 85, 0.4)' },
               ticks: {
                 color: '#94a3b8',
                 font: { size: 10 },
@@ -1081,7 +1149,7 @@
       document.getElementById('currentFilterLabel').innerText = labels[type] || 'Filtered';
 
       document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.className = 'filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-slate-300 hover:bg-slate-700 transition';
+        btn.className = 'filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-slate-300 hover:bg-slate-800 transition';
       });
       const activeBtn = document.getElementById('btn-' + type);
       if (activeBtn) {
@@ -1139,36 +1207,36 @@
         const waMsg = encodeURIComponent(`Namaste ${c.name} ji! Khushali team ki taraf se follow-up call. Aapka pichhla order date ${lastDate} ko record hua tha.`);
 
         return `
-          <tr class="hover:bg-slate-700/40 transition border-b border-slate-700/60">
+          <tr class="hover:bg-slate-800/50 transition border-b border-slate-800/80">
             <td class="py-3.5 px-4 cursor-pointer" onclick="window.openCustomerModal('${c.id}')">
               <div class="font-bold text-white text-sm hover:text-emerald-400 transition flex items-center gap-1.5">
                 ${c.name}
                 ${c.orderCount > 1 ? '<i class="fa-solid fa-star text-amber-400 text-[10px]"></i>' : ''}
               </div>
-              <div class="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
+              <div class="text-xs text-slate-400 flex items-center gap-1 mt-0.5 font-mono">
                 <i class="fa-solid fa-phone text-[10px] text-slate-500"></i> ${c.phone}
               </div>
             </td>
             <td class="py-3.5 px-4 text-center cursor-pointer" onclick="window.openCustomerModal('${c.id}')">
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${c.orderCount > 1 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-slate-700 text-slate-300'}">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${c.orderCount > 1 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-slate-800 text-slate-300'}">
                 ${c.orderCount} Order${c.orderCount > 1 ? 's' : ''}
               </span>
             </td>
-            <td class="py-3.5 px-4 font-bold text-slate-100 text-sm">₹${c.totalSpend.toLocaleString('en-IN')}</td>
-            <td class="py-3.5 px-4 text-slate-300">₹${c.avgOrderValue.toLocaleString('en-IN')}</td>
-            <td class="py-3.5 px-4 text-slate-400 text-xs">${firstDate}</td>
+            <td class="py-3.5 px-4 font-black text-slate-100 text-sm">₹${c.totalSpend.toLocaleString('en-IN')}</td>
+            <td class="py-3.5 px-4 text-slate-300 font-medium">₹${c.avgOrderValue.toLocaleString('en-IN')}</td>
+            <td class="py-3.5 px-4 text-slate-400 text-xs font-mono">${firstDate}</td>
             <td class="py-3.5 px-4">
-              <div class="text-xs text-slate-200 font-medium">${lastDate}</div>
+              <div class="text-xs text-slate-200 font-medium font-mono">${lastDate}</div>
               <div class="text-[10px] text-slate-400">${c.daysSinceLastOrder} din pehle</div>
             </td>
             <td class="py-3.5 px-4">
               <span class="text-[11px] font-semibold px-2.5 py-1 rounded-md ${c.tagClass}">${c.tagLabel}</span>
             </td>
             <td class="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
-              <button onclick="window.openCustomerModal('${c.id}')" title="Timeline" class="p-1.5 rounded-lg bg-slate-700 text-slate-300 hover:text-white transition"><i class="fa-solid fa-eye text-xs"></i></button>
+              <button onclick="window.openCustomerModal('${c.id}')" title="Timeline & Details" class="p-1.5 rounded-lg bg-slate-800 hover:bg-emerald-600 text-slate-300 hover:text-white transition border border-slate-700"><i class="fa-solid fa-eye text-xs"></i></button>
               ${c.phone !== 'Not available' ? `
-                <a href="https://wa.me/91${c.phone}?text=${waMsg}" target="_blank" title="WhatsApp" class="inline-block p-1.5 rounded-lg bg-emerald-600/20 text-emerald-400 border border-emerald-500/30"><i class="fa-brands fa-whatsapp text-xs"></i></a>
-                <a href="tel:+91${c.phone}" title="Call" class="inline-block p-1.5 rounded-lg bg-blue-600/20 text-blue-400 border border-blue-500/30"><i class="fa-solid fa-phone text-xs"></i></a>
+                <a href="https://wa.me/91${c.phone}?text=${waMsg}" target="_blank" title="WhatsApp" class="inline-block p-1.5 rounded-lg bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white border border-emerald-500/30 transition"><i class="fa-brands fa-whatsapp text-xs"></i></a>
+                <a href="tel:+91${c.phone}" title="Call" class="inline-block p-1.5 rounded-lg bg-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-white border border-blue-500/30 transition"><i class="fa-solid fa-phone text-xs"></i></a>
               ` : ''}
             </td>
           </tr>
@@ -1196,10 +1264,10 @@
         const waReminderMsg = encodeURIComponent(`Namaste ${p.name} ji! Khushali Chemicals se reminder. Aapke account me ₹${p.points} cashback points available hain jo ki ${expiryStr} ko expire hone wale hain. Apne raw materials / samples restock karne ke liye points redeem karein!`);
 
         return `
-          <tr class="hover:bg-slate-700/40 transition border-b border-slate-700/60">
+          <tr class="hover:bg-slate-800/50 transition border-b border-slate-800/80">
             <td class="py-3 px-4 font-bold text-white">${p.name}</td>
             <td class="py-3 px-4 text-slate-400 font-mono text-xs">${p.phone || 'N/A'}</td>
-            <td class="py-3 px-4 text-center font-extrabold text-amber-400 text-sm">⭐ ${p.points} Pts (₹${p.points})</td>
+            <td class="py-3 px-4 text-center font-black text-amber-400 text-sm">⭐ ${p.points} Pts (₹${p.points})</td>
             <td class="py-3 px-4 text-slate-300 font-mono text-xs">${expiryStr}</td>
             <td class="py-3 px-4">
               ${isEligibleForReminder ? `
@@ -1207,7 +1275,7 @@
                   <i class="fa-solid fa-bell"></i> 7+ Days Inactive (${lastOrderDaysAgo}d)
                 </span>
               ` : `
-                <span class="bg-slate-700 text-slate-300 px-2 py-0.5 rounded text-[11px]">Active (${lastOrderDaysAgo}d ago)</span>
+                <span class="bg-slate-800 text-slate-300 px-2 py-0.5 rounded text-[11px]">Active (${lastOrderDaysAgo}d ago)</span>
               `}
             </td>
             <td class="py-3 px-4 text-right">
@@ -1222,7 +1290,6 @@
       }).join('');
     }
 
-    // --- CUSTOMER AUTO-SUGGEST / SEARCH DROPDOWN LOGIC ---
     function handleCustomerNameInput(val) {
       const dropdown = document.getElementById('customerSuggestions');
       const query = val.trim().toLowerCase();
@@ -1309,7 +1376,7 @@
           if(st === sortType) {
             btn.className = "px-3 py-1.5 rounded-lg border border-slate-600 bg-slate-700 text-white font-semibold transition";
           } else {
-            btn.className = "px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 text-slate-300 hover:bg-slate-700 transition";
+            btn.className = "px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 transition";
           }
         }
       });
@@ -1338,18 +1405,18 @@
       });
 
       tbody.innerHTML = ordersList.map(ord => `
-        <tr class="hover:bg-slate-700/40 transition border-b border-slate-700/60">
+        <tr class="hover:bg-slate-800/50 transition border-b border-slate-800/80">
           <td class="py-3 px-4 text-slate-300 font-mono text-xs">${ord.date || 'N/A'}</td>
           <td class="py-3 px-4 font-bold text-white">${ord.name || 'Unknown'}</td>
           <td class="py-3 px-4 text-slate-400 font-mono text-xs">${ord.phone || 'N/A'}</td>
           <td class="py-3 px-4 text-slate-300 text-xs">${ord.remark || 'Direct Order'}</td>
-          <td class="py-3 px-4 font-extrabold text-emerald-400">₹${(parseFloat(ord.amount) || 0).toLocaleString('en-IN')}</td>
+          <td class="py-3 px-4 font-black text-emerald-400">₹${(parseFloat(ord.amount) || 0).toLocaleString('en-IN')}</td>
           <td class="py-3 px-4 text-right">
             ${ord.id && !ord.id.startsWith('hard-') ? `
               <button onclick="window.deleteCloudOrder('${ord.id}')" title="Delete" class="p-1.5 rounded bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white transition border border-rose-500/30">
                 <i class="fa-solid fa-trash text-xs"></i>
               </button>
-            ` : `<span class="text-[10px] text-slate-500 italic">Hardcoded</span>`}
+            ` : `<span class="text-[10px] text-slate-500 italic">Archived</span>`}
           </td>
         </tr>
       `).join('');
@@ -1365,15 +1432,18 @@
       }
     }
 
+    // FUNCTION FIX: Opens modal and renders full customer history
     function openCustomerModal(customerId) {
       const c = customerMap[customerId];
       if (!c) return;
       selectedCustomerKey = customerId;
 
       document.getElementById('modalCustomerName').innerText = c.name;
+      document.getElementById('modalCustomerInitials').innerText = c.name.charAt(0).toUpperCase();
       document.getElementById('modalCustomerPhone').innerHTML = `<i class="fa-solid fa-phone text-[10px]"></i> +91 ${c.phone}`;
       document.getElementById('modalTotalSpend').innerText = `₹${c.totalSpend.toLocaleString('en-IN')}`;
-      document.getElementById('modalOrderCount').innerText = `${c.orderCount} Times`;
+      document.getElementById('modalOrderCount').innerText = `${c.orderCount} Orders`;
+      document.getElementById('modalAvgOrder').innerText = `₹${c.avgOrderValue.toLocaleString('en-IN')}`;
       
       const ptsObj = customerPointsMap[c.phone.replace(/[^0-9]/g, '')];
       document.getElementById('modalPointsVal').innerText = ptsObj ? `${ptsObj.points} pts` : '0 pts';
@@ -1384,21 +1454,24 @@
 
       const timelineDiv = document.getElementById('modalOrderTimeline');
       timelineDiv.innerHTML = c.orders.map((o, idx) => `
-        <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900/80 border border-slate-700/60 text-xs">
-          <div class="flex items-center gap-3">
-            <span class="w-6 h-6 rounded-full bg-slate-800 text-slate-400 font-bold flex items-center justify-center text-[10px]">#${c.orders.length - idx}</span>
+        <div class="relative pl-7 py-1.5">
+          <div class="absolute left-0 top-3.5 w-3.5 h-3.5 rounded-full bg-slate-900 border-2 border-emerald-500 z-10 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
+          <div class="flex items-center justify-between p-3 rounded-xl bg-slate-900/90 border border-slate-800 text-xs">
             <div>
-              <p class="font-bold text-slate-200">Date: ${o.date}</p>
-              <p class="text-[11px] text-slate-400">${o.remark || 'Regular Purchase'}</p>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-white">Date: ${o.date}</span>
+                <span class="text-[9px] uppercase font-bold tracking-wider bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded">#${c.orders.length - idx}</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">${o.remark || 'Regular Purchase'}</p>
             </div>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="font-extrabold text-emerald-400 text-sm">₹${o.amount.toLocaleString('en-IN')}</span>
-            ${o.docId && !o.docId.startsWith('hard-') ? `
-              <button onclick="window.deleteCloudOrder('${o.docId}')" title="Delete" class="text-rose-400 hover:text-rose-300 p-1">
-                <i class="fa-solid fa-trash"></i>
-              </button>
-            ` : ''}
+            <div class="flex items-center gap-3">
+              <span class="font-black text-emerald-400 text-sm">₹${o.amount.toLocaleString('en-IN')}</span>
+              ${o.docId && !o.docId.startsWith('hard-') ? `
+                <button onclick="window.deleteCloudOrder('${o.docId}')" title="Delete" class="text-rose-400 hover:text-rose-300 p-1">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              ` : ''}
+            </div>
           </div>
         </div>
       `).join('');
@@ -1457,10 +1530,10 @@
     function addOrderItemRow() {
       const container = document.getElementById('orderItemsContainer');
       const div = document.createElement('div');
-      div.className = "order-item-row grid grid-cols-12 gap-2 bg-slate-900/90 p-2.5 rounded-xl border border-slate-700 items-center";
+      div.className = "order-item-row grid grid-cols-12 gap-2 bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 items-center";
       div.innerHTML = `
         <div class="col-span-7">
-          <select class="prod-select w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100" onchange="window.toggleCustomProduct(this)" required>
+          <select class="prod-select w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100" onchange="window.toggleCustomProduct(this)" required>
             <option value="KHU-001">White Phenyl Raw Material</option>
             <option value="KHU-002">Colour Phenyl (Rose)</option>
             <option value="KHU-003">Black Phenyl Raw Material</option>
@@ -1478,10 +1551,10 @@
             <option value="KHU-015">Room Freshener (Lavender)</option>
             <option value="OTHER_CUSTOM" class="text-amber-300 font-bold">✨ Other Product / Sample (Manual)</option>
           </select>
-          <input type="text" placeholder="Custom product name" class="custom-prod-name w-full bg-slate-950 border border-amber-500 rounded-lg p-1.5 text-xs text-amber-200 mt-1 hidden">
+          <input type="text" placeholder="Custom product name" class="custom-prod-name w-full bg-slate-900 border border-amber-500 rounded-lg p-1.5 text-xs text-amber-200 mt-1 hidden">
         </div>
         <div class="col-span-4">
-          <input type="number" step="any" min="0.01" required placeholder="Qty / Pcs" class="prod-qty w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 font-mono">
+          <input type="number" step="any" min="0.01" required placeholder="Qty / Pcs" class="prod-qty w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 font-mono">
         </div>
         <div class="col-span-1 text-center">
           <button type="button" onclick="this.closest('.order-item-row').remove()" class="text-rose-400 hover:text-rose-300 text-xs"><i class="fa-solid fa-trash"></i></button>
@@ -1622,6 +1695,7 @@
       document.body.removeChild(link);
     }
 
+    // Live Snapshot Listener (Combines Initial 285 orders with live Firebase additions)
     onSnapshot(salesRef, (snapshot) => {
       let firebaseOrders = [];
       snapshot.forEach((docSnap) => {
@@ -1635,7 +1709,7 @@
       processAllData();
     });
 
-    // Explicit Global Window Bindings for all interactive functions
+    // Global Bindings
     window.setFilter = setFilter;
     window.openCustomerModal = openCustomerModal;
     window.closeCustomerModal = closeCustomerModal;
@@ -1656,9 +1730,23 @@
     window.handleCustomerNameInput = handleCustomerNameInput;
     window.selectCustomerFromSuggestion = selectCustomerFromSuggestion;
 
-    window.onload = function() {
+        window.onload = function() {
+      if(!sessionStorage.getItem('khushaliAuth')) {
+        document.getElementById('authLockModal').classList.remove('hidden');
+        document.getElementById('authLockModal').classList.add('flex');
+      } else {
+        document.getElementById('authLockModal').classList.add('hidden');
+        document.getElementById('authLockModal').classList.remove('flex');
+      }
+      
+      // FIX: Agar cloud data aane me time lag raha hai, to pehle hardcoded data set kar do
+      if(!window.rawSalesDatabase) {
+        window.rawSalesDatabase = [...initialHardcodedData];
+      }
+      
       processAllData();
     };
+
   </script>
 </body>
 </html>
