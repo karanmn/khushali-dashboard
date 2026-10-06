@@ -320,7 +320,7 @@
   </main>
 
   <!-- SUCCESS WHATSAPP THANKYOU MODAL (Triggered on New Order Save) -->
-  <div id="whatsappThankyouModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+  <div id="whatsappThankyouModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
     <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-md p-6 shadow-2xl text-center space-y-4">
       <div class="w-14 h-14 bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-lg">
         <i class="fa-brands fa-whatsapp"></i>
@@ -331,7 +331,7 @@
       </div>
       <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 text-left text-xs font-mono text-slate-300 max-h-36 overflow-y-auto" id="whatsappMessageBoxPreview"></div>
       <div class="flex gap-2 pt-2">
-        <button onclick="document.getElementById('whatsappThankyouModal').classList.add('hidden')" class="flex-1 px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-xl text-xs font-medium">Skip / Close</button>
+        <button onclick="document.getElementById('whatsappThankyouModal').classList.add('hidden'); document.getElementById('whatsappThankyouModal').classList.remove('flex');" class="flex-1 px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-xl text-xs font-medium">Skip / Close</button>
         <a id="sendWhatsappBtn" href="#" target="_blank" class="flex-1 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow">
           <i class="fa-brands fa-whatsapp text-sm"></i> Send WhatsApp
         </a>
@@ -339,8 +339,8 @@
     </div>
   </div>
 
-  <!-- Customer Detail Modal -->
-  <div id="customerModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+  <!-- Customer Detail Modal (Fixed classes for smooth pop-up) -->
+  <div id="customerModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
     <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
       <div class="p-5 bg-slate-900/80 border-b border-slate-700 flex justify-between items-center">
         <div>
@@ -398,7 +398,7 @@
   </div>
 
   <!-- Add New Order Modal -->
-  <div id="addOrderModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+  <div id="addOrderModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
     <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
       <div class="p-4 bg-slate-900 border-b border-slate-700 flex justify-between items-center">
         <h3 class="text-sm font-bold text-white flex items-center gap-2">
@@ -817,7 +817,7 @@
       { id: "hard-272", name: "Siddharth", phone: "7023855371", date: "2026-08-19", amount: 3125, remark: "Order" },
       { id: "hard-273", name: "Adarsh Kumar", phone: "8340284172", date: "2026-08-19", amount: 2290, remark: "Order" },
       { id: "hard-274", name: "Surendra Sikar", phone: "8619320352", date: "2026-08-19", amount: 12600, remark: "Order" },
-      { id: "hard-275", name: "Jai Agnihotri", phone: "9812901042", date: "2026-08-19", customerDetails: "Order" },
+      { id: "hard-275", name: "Jai Agnihotri", phone: "9812901042", date: "2026-08-19", amount: 1550, remark: "Order" },
       { id: "hard-276", name: "Sharvan Deb", phone: "9863104840", date: "2026-08-21", amount: 4800, remark: "Order" },
       { id: "hard-277", name: "Julee Rajput", phone: "8840814739", date: "2026-08-24", amount: 5250, remark: "Order" },
       { id: "hard-278", name: "Bijender Kumar", phone: "7891235846", date: "2026-08-24", amount: 19400, remark: "Order" },
@@ -836,6 +836,7 @@
       const pin = document.getElementById('authPinInput').value.trim();
       if(pin === '7568') {
         document.getElementById('authLockModal').classList.add('hidden');
+        document.getElementById('authLockModal').classList.remove('flex');
         sessionStorage.setItem('khushaliAuth', 'true');
       } else {
         const err = document.getElementById('authErrorMsg');
@@ -1006,7 +1007,7 @@
       window.rawSalesDatabase.forEach(item => {
         const mKey = (item.date || '').substring(0, 7);
         if (months[mKey]) {
-          months[mKey].amount += item.amount;
+          months[mKey].amount += (parseFloat(item.amount) || 0);
           months[mKey].orders += 1;
         }
       });
@@ -1139,7 +1140,7 @@
 
         return `
           <tr class="hover:bg-slate-700/40 transition border-b border-slate-700/60">
-            <td class="py-3.5 px-4 cursor-pointer" onclick="openCustomerModal('${c.id}')">
+            <td class="py-3.5 px-4 cursor-pointer" onclick="window.openCustomerModal('${c.id}')">
               <div class="font-bold text-white text-sm hover:text-emerald-400 transition flex items-center gap-1.5">
                 ${c.name}
                 ${c.orderCount > 1 ? '<i class="fa-solid fa-star text-amber-400 text-[10px]"></i>' : ''}
@@ -1148,7 +1149,7 @@
                 <i class="fa-solid fa-phone text-[10px] text-slate-500"></i> ${c.phone}
               </div>
             </td>
-            <td class="py-3.5 px-4 text-center cursor-pointer" onclick="openCustomerModal('${c.id}')">
+            <td class="py-3.5 px-4 text-center cursor-pointer" onclick="window.openCustomerModal('${c.id}')">
               <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${c.orderCount > 1 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-slate-700 text-slate-300'}">
                 ${c.orderCount} Order${c.orderCount > 1 ? 's' : ''}
               </span>
@@ -1164,7 +1165,7 @@
               <span class="text-[11px] font-semibold px-2.5 py-1 rounded-md ${c.tagClass}">${c.tagLabel}</span>
             </td>
             <td class="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
-              <button onclick="openCustomerModal('${c.id}')" title="Timeline" class="p-1.5 rounded-lg bg-slate-700 text-slate-300 hover:text-white transition"><i class="fa-solid fa-eye text-xs"></i></button>
+              <button onclick="window.openCustomerModal('${c.id}')" title="Timeline" class="p-1.5 rounded-lg bg-slate-700 text-slate-300 hover:text-white transition"><i class="fa-solid fa-eye text-xs"></i></button>
               ${c.phone !== 'Not available' ? `
                 <a href="https://wa.me/91${c.phone}?text=${waMsg}" target="_blank" title="WhatsApp" class="inline-block p-1.5 rounded-lg bg-emerald-600/20 text-emerald-400 border border-emerald-500/30"><i class="fa-brands fa-whatsapp text-xs"></i></a>
                 <a href="tel:+91${c.phone}" title="Call" class="inline-block p-1.5 rounded-lg bg-blue-600/20 text-blue-400 border border-blue-500/30"><i class="fa-solid fa-phone text-xs"></i></a>
@@ -1243,7 +1244,7 @@
       }
 
       dropdown.innerHTML = matches.map(m => `
-        <div onclick="selectCustomerFromSuggestion('${m.name}', '${m.phone}')" class="p-2.5 hover:bg-slate-800 cursor-pointer border-b border-slate-800 text-xs flex justify-between items-center">
+        <div onclick="window.selectCustomerFromSuggestion('${m.name.replace(/'/g, "\\'")}', '${m.phone}')" class="p-2.5 hover:bg-slate-800 cursor-pointer border-b border-slate-800 text-xs flex justify-between items-center">
           <span class="font-bold text-white">${m.name}</span>
           <span class="text-slate-400 font-mono">${m.phone}</span>
         </div>
@@ -1345,7 +1346,7 @@
           <td class="py-3 px-4 font-extrabold text-emerald-400">₹${(parseFloat(ord.amount) || 0).toLocaleString('en-IN')}</td>
           <td class="py-3 px-4 text-right">
             ${ord.id && !ord.id.startsWith('hard-') ? `
-              <button onclick="deleteCloudOrder('${ord.id}')" title="Delete" class="p-1.5 rounded bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white transition border border-rose-500/30">
+              <button onclick="window.deleteCloudOrder('${ord.id}')" title="Delete" class="p-1.5 rounded bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white transition border border-rose-500/30">
                 <i class="fa-solid fa-trash text-xs"></i>
               </button>
             ` : `<span class="text-[10px] text-slate-500 italic">Hardcoded</span>`}
@@ -1395,7 +1396,7 @@
           <div class="flex items-center gap-3">
             <span class="font-extrabold text-emerald-400 text-sm">₹${o.amount.toLocaleString('en-IN')}</span>
             ${o.docId && !o.docId.startsWith('hard-') ? `
-              <button onclick="deleteCloudOrder('${o.docId}')" title="Delete" class="text-rose-400 hover:text-rose-300 p-1">
+              <button onclick="window.deleteCloudOrder('${o.docId}')" title="Delete" class="text-rose-400 hover:text-rose-300 p-1">
                 <i class="fa-solid fa-trash"></i>
               </button>
             ` : ''}
@@ -1409,11 +1410,15 @@
       document.getElementById('modalWhatsappBtn').href = `https://wa.me/91${c.phone}?text=${waMsg}`;
       document.getElementById('modalCallBtn').href = `tel:+91${c.phone}`;
 
-      document.getElementById('customerModal').classList.remove('hidden');
+      const modal = document.getElementById('customerModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
     }
 
     function closeCustomerModal() {
-      document.getElementById('customerModal').classList.add('hidden');
+      const modal = document.getElementById('customerModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
     }
 
     function saveCustomerNote() {
@@ -1427,11 +1432,15 @@
 
     function openAddOrderModal() {
       document.getElementById('newCustDate').value = new Date().toISOString().split('T')[0];
-      document.getElementById('addOrderModal').classList.remove('hidden');
+      const modal = document.getElementById('addOrderModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
     }
 
     function closeAddOrderModal() {
-      document.getElementById('addOrderModal').classList.add('hidden');
+      const modal = document.getElementById('addOrderModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
     }
 
     function toggleCustomProduct(selectEl) {
@@ -1452,7 +1461,7 @@
       div.className = "order-item-row grid grid-cols-12 gap-2 bg-slate-900/90 p-2.5 rounded-xl border border-slate-700 items-center";
       div.innerHTML = `
         <div class="col-span-7">
-          <select class="prod-select w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100" onchange="toggleCustomProduct(this)" required>
+          <select class="prod-select w-full bg-slate-950 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100" onchange="window.toggleCustomProduct(this)" required>
             <option value="KHU-001">White Phenyl Raw Material</option>
             <option value="KHU-002">Colour Phenyl (Rose)</option>
             <option value="KHU-003">Black Phenyl Raw Material</option>
@@ -1567,7 +1576,6 @@
           container.removeChild(container.lastChild);
         }
 
-        // Calculate earned points for WhatsApp popup (1% of order amount)
         const earnedPoints = Math.floor(amount * 0.01);
         const expiryDateStr = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
@@ -1575,7 +1583,10 @@
 
         document.getElementById('whatsappMessageBoxPreview').innerText = thankyouText;
         document.getElementById('sendWhatsappBtn').href = `https://wa.me/91${phone}?text=${encodeURIComponent(thankyouText)}`;
-        document.getElementById('whatsappThankyouModal').classList.remove('hidden');
+        
+        const waModal = document.getElementById('whatsappThankyouModal');
+        waModal.classList.remove('hidden');
+        waModal.classList.add('flex');
 
       } catch (err) {
         console.error("Order error:", err);
