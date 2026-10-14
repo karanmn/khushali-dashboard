@@ -459,29 +459,29 @@
       
       <form onsubmit="handleNewOrderSubmit(event)" class="p-5 space-y-3.5 text-xs bg-slate-900/50">
         <div class="relative">
-          <label class="block text-slate-300 font-bold mb-1">Customer Name *</label>
-          <input type="text" id="newCustName" oninput="handleCustomerNameInput(this.value)" required autocomplete="off" placeholder="e.g. Ramesh Sharma" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-2.5 text-slate-100 focus:outline-none focus:border-emerald-500">
-          <div id="customerSuggestions" class="absolute left-0 right-0 top-16 bg-slate-950 border border-slate-700 rounded-xl shadow-2xl max-h-40 overflow-y-auto z-20 hidden custom-scrollbar"></div>
+          <label class="block text-slate-300 font-bold uppercase tracking-wider text-[10px] mb-1.5">Customer Name *</label>
+          <input type="text" id="newCustName" oninput="handleCustomerNameInput(this.value)" required autocomplete="off" placeholder="e.g. Ramesh Sharma" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-3 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition">
+          <div id="customerSuggestions" class="absolute left-0 right-0 top-16 bg-slate-950 border border-slate-700 rounded-xl shadow-2xl max-h-48 overflow-y-auto z-20 hidden custom-scrollbar divide-y divide-slate-800"></div>
         </div>
         
         <div>
-          <label class="block text-slate-300 font-bold mb-1">Mobile / Phone Number *</label>
-          <input type="text" id="newCustPhone" onblur="checkCustomerPoints(this.value)" required placeholder="e.g. 9876543210" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-2.5 text-slate-100 font-mono focus:outline-none focus:border-emerald-500">
-          <p id="availablePointsNotice" class="text-[11px] font-bold text-amber-400 mt-1 hidden"></p>
+          <label class="block text-slate-300 font-bold uppercase tracking-wider text-[10px] mb-1.5">Mobile / Phone Number *</label>
+          <input type="text" id="newCustPhone" onblur="checkCustomerPoints(this.value)" required placeholder="e.g. 9876543210" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-3 text-sm text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition">
+          <p id="availablePointsNotice" class="text-[11px] font-bold text-amber-400 mt-2 hidden flex items-center gap-1"><i class="fa-solid fa-bolt"></i></p>
         </div>
 
-        <div class="space-y-2 pt-1 border-t border-slate-800">
+        <div class="space-y-2.5 pt-2 border-t border-slate-700/60">
           <div class="flex items-center justify-between">
-            <label class="block text-slate-300 font-bold text-xs">Ordered Products & Raw Materials *</label>
-            <button type="button" onclick="addOrderItemRow()" class="text-xs text-emerald-400 font-bold flex items-center gap-1 bg-emerald-950/60 px-2 py-1 rounded-lg border border-emerald-800/80">
-              <i class="fa-solid fa-plus"></i> + Item Jodein
+            <label class="block text-slate-300 font-bold uppercase tracking-wider text-[10px]">Ordered Products *</label>
+            <button type="button" onclick="addOrderItemRow()" class="text-[10px] uppercase tracking-wider text-emerald-400 font-bold flex items-center gap-1.5 bg-emerald-500/10 px-2.5 py-1.5 rounded-lg border border-emerald-500/30 hover:bg-emerald-500/20 transition">
+              <i class="fa-solid fa-plus"></i> Add Item
             </button>
           </div>
 
-          <div id="orderItemsContainer" class="space-y-2 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
-            <div class="order-item-row grid grid-cols-12 gap-2 bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 items-center">
+          <div id="orderItemsContainer" class="space-y-2.5 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
+            <div class="order-item-row grid grid-cols-12 gap-2.5 bg-slate-900/80 p-3 rounded-xl border border-slate-700 items-center shadow-inner">
               <div class="col-span-7">
-                <select class="prod-select w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100" onchange="toggleCustomProduct(this)" required>
+                <select class="prod-select w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500" onchange="toggleCustomProduct(this)" required>
                   <option value="KHU-001">White Phenyl Raw Material</option>
                   <option value="KHU-002">Colour Phenyl (Rose)</option>
                   <option value="KHU-003">Black Phenyl Raw Material</option>
@@ -497,44 +497,46 @@
                   <option value="KHU-013">Car Wash Shampoo</option>
                   <option value="KHU-014">Room Freshener (Rose)</option>
                   <option value="KHU-015">Room Freshener (Lavender)</option>
-                  <option value="OTHER_CUSTOM" class="text-amber-300 font-bold">✨ Other Product / Sample (Manual)</option>
+                  <option value="OTHER_CUSTOM" class="text-amber-300 font-bold">✨ Other/Sample (Manual)</option>
                 </select>
-                <input type="text" placeholder="Custom product name" class="custom-prod-name w-full bg-slate-900 border border-amber-500 rounded-lg p-1.5 text-xs text-amber-200 mt-1 hidden">
+                <input type="text" placeholder="Product name" class="custom-prod-name w-full bg-slate-950 border border-amber-500/50 rounded-lg p-2 text-xs text-amber-200 mt-2 hidden focus:outline-none focus:border-amber-400">
               </div>
               <div class="col-span-4">
-                <input type="number" step="any" min="0.01" required placeholder="Qty / Pcs" class="prod-qty w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100 font-mono">
+                <input type="number" step="any" min="0.01" required placeholder="Qty" class="prod-qty w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs text-slate-100 font-mono text-center focus:outline-none focus:border-emerald-500">
               </div>
               <div class="col-span-1 text-center"></div>
             </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-2 pt-1">
+        <div class="grid grid-cols-2 gap-3 pt-2">
           <div>
-            <label class="block text-slate-300 font-bold mb-1">Total Bill Amount (₹) *</label>
-            <input type="number" id="newCustAmount" required placeholder="e.g. 3500" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-2.5 text-slate-100 font-bold focus:outline-none focus:border-emerald-500">
+            <label class="block text-slate-300 font-bold uppercase tracking-wider text-[10px] mb-1.5">Bill Amount (₹) *</label>
+            <input type="number" id="newCustAmount" required placeholder="₹ 0" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-emerald-400 font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition text-center">
           </div>
           <div>
-            <label class="block text-slate-300 font-bold mb-1">Order Date *</label>
-            <input type="date" id="newCustDate" required class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-2.5 text-slate-100 focus:outline-none focus:border-emerald-500">
+            <label class="block text-slate-300 font-bold uppercase tracking-wider text-[10px] mb-1.5">Order Date *</label>
+            <input type="date" id="newCustDate" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition">
           </div>
         </div>
 
-        <div id="redemptionBox" class="bg-amber-950/30 p-3 rounded-xl border border-amber-500/40 hidden">
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" id="redeemPointsCheck" onchange="togglePointsRedemption()" class="w-4 h-4 rounded border-slate-700 text-emerald-600">
-            <span class="text-amber-300 font-bold text-xs" id="redeemLabelText">Client ke available points minus karein?</span>
+        <div id="redemptionBox" class="bg-gradient-to-r from-amber-500/10 to-transparent p-3.5 rounded-xl border border-amber-500/30 hidden">
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <input type="checkbox" id="redeemPointsCheck" onchange="togglePointsRedemption()" class="w-4 h-4 rounded border-slate-700 bg-slate-900 text-amber-500 focus:ring-amber-500 focus:ring-offset-slate-900">
+            <span class="text-amber-400 font-bold text-xs" id="redeemLabelText">Redeem Points</span>
           </label>
         </div>
 
         <div>
-          <label class="block text-slate-300 font-bold mb-1">Notes / Remarks (Optional)</label>
-          <input type="text" id="newCustRemark" placeholder="e.g. Sample kit added" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-2.5 text-slate-100 focus:outline-none focus:border-emerald-500">
+          <label class="block text-slate-300 font-bold uppercase tracking-wider text-[10px] mb-1.5">Remarks (Optional)</label>
+          <input type="text" id="newCustRemark" placeholder="e.g. Courier via Trackon" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition">
         </div>
 
-        <div class="pt-2 flex justify-end gap-2 border-t border-slate-800">
-          <button type="button" onclick="closeAddOrderModal()" class="px-4 py-2 bg-slate-800 rounded-xl text-slate-300 font-semibold">Cancel</button>
-          <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 font-bold text-white rounded-xl shadow-md shadow-emerald-600/30">Save & Update</button>
+        <div class="pt-4 flex justify-end gap-3 border-t border-slate-700/60 mt-2">
+          <button type="button" onclick="closeAddOrderModal()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-slate-300 font-bold transition">Cancel</button>
+          <button type="submit" class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 font-bold text-white rounded-xl shadow-lg shadow-emerald-600/30 flex items-center gap-2 transition">
+            <i class="fa-solid fa-check"></i> Save Order
+          </button>
         </div>
       </form>
     </div>
@@ -920,6 +922,9 @@
       customerPointsMap = {};
       const pointsEffectiveDate = new Date('2026-09-07');
 
+      // Sort chronological to accurately track point consumption
+      window.rawSalesDatabase.sort((a, b) => new Date(a.date) - new Date(b.date));
+
       window.rawSalesDatabase.forEach(item => {
         const cleanPhone = (item.phone || '').replace(/[^0-9]/g, '');
         const cleanName = (item.name || 'Unknown').trim();
@@ -956,7 +961,12 @@
           customerPointsMap[key] = { name: cleanName, phone: cleanPhone, points: 0, lastOrderDate: orderDateObj, expiryDate: null };
         }
 
-        if (orderDateObj >= pointsEffectiveDate) {
+        // Logic to track logic (Earn vs Redeem)
+        if (item.remark && item.remark.includes('[POINTS REDEEMED]')) {
+           // Client used points on this order, set to 0.
+           customerPointsMap[key].points = 0;
+        } else if (orderDateObj >= pointsEffectiveDate) {
+          // Earn points (1%)
           const earnedPts = Math.floor(amt * 0.01);
           customerPointsMap[key].points += earnedPts;
           
@@ -1012,7 +1022,7 @@
       renderPointsLedgerTable();
     }
 
-    function switchTab(tabName) {
+    window.switchTab = function(tabName) {
       ['customers', 'points', 'master'].forEach(t => {
         const content = document.getElementById(`tab-content-${t}`);
         const btn = document.getElementById(`tab-btn-${t}`);
@@ -1026,7 +1036,7 @@
           }
         }
       });
-    }
+    };
 
     function updateTopKPIs() {
       const customers = Object.values(customerMap);
@@ -1136,7 +1146,7 @@
       });
     }
 
-    function setFilter(type) {
+    window.setFilter = function(type) {
       currentFilter = type;
       const labels = {
         all: 'Sabhi Customers',
@@ -1149,15 +1159,15 @@
       document.getElementById('currentFilterLabel').innerText = labels[type] || 'Filtered';
 
       document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.className = 'filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-slate-300 hover:bg-slate-800 transition';
+        btn.className = 'filter-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-slate-300 hover:bg-slate-800 transition';
       });
       const activeBtn = document.getElementById('btn-' + type);
       if (activeBtn) {
-        activeBtn.className = 'filter-btn px-3 py-1.5 text-xs font-semibold rounded-lg border bg-emerald-600 border-emerald-500 text-white transition';
+        activeBtn.className = 'filter-btn active-tab px-3.5 py-1.5 text-xs font-bold rounded-lg border bg-emerald-600 border-emerald-500 text-white transition shadow';
       }
 
       applyFilterAndRender();
-    }
+    };
 
     document.getElementById('searchInput').addEventListener('input', applyFilterAndRender);
 
@@ -1207,9 +1217,9 @@
         const waMsg = encodeURIComponent(`Namaste ${c.name} ji! Khushali team ki taraf se follow-up call. Aapka pichhla order date ${lastDate} ko record hua tha.`);
 
         return `
-          <tr class="hover:bg-slate-800/50 transition border-b border-slate-800/80">
+          <tr class="hover:bg-slate-800/50 transition border-b border-slate-800/80 group">
             <td class="py-3.5 px-4 cursor-pointer" onclick="window.openCustomerModal('${c.id}')">
-              <div class="font-bold text-white text-sm hover:text-emerald-400 transition flex items-center gap-1.5">
+              <div class="font-bold text-white text-sm group-hover:text-emerald-400 transition flex items-center gap-1.5">
                 ${c.name}
                 ${c.orderCount > 1 ? '<i class="fa-solid fa-star text-amber-400 text-[10px]"></i>' : ''}
               </div>
@@ -1230,7 +1240,7 @@
               <div class="text-[10px] text-slate-400">${c.daysSinceLastOrder} din pehle</div>
             </td>
             <td class="py-3.5 px-4">
-              <span class="text-[11px] font-semibold px-2.5 py-1 rounded-md ${c.tagClass}">${c.tagLabel}</span>
+              <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md ${c.tagClass}">${c.tagLabel}</span>
             </td>
             <td class="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
               <button onclick="window.openCustomerModal('${c.id}')" title="Timeline & Details" class="p-1.5 rounded-lg bg-slate-800 hover:bg-emerald-600 text-slate-300 hover:text-white transition border border-slate-700"><i class="fa-solid fa-eye text-xs"></i></button>
@@ -1275,13 +1285,13 @@
                   <i class="fa-solid fa-bell"></i> 7+ Days Inactive (${lastOrderDaysAgo}d)
                 </span>
               ` : `
-                <span class="bg-slate-800 text-slate-300 px-2 py-0.5 rounded text-[11px]">Active (${lastOrderDaysAgo}d ago)</span>
+                <span class="bg-slate-800 text-slate-300 px-2 py-0.5 rounded text-[11px] font-bold">Active (${lastOrderDaysAgo}d ago)</span>
               `}
             </td>
             <td class="py-3 px-4 text-right">
               ${p.phone && p.phone !== 'Not available' ? `
-                <a href="https://wa.me/91${p.phone}?text=${waReminderMsg}" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold inline-flex items-center gap-1.5 shadow transition">
-                  <i class="fa-brands fa-whatsapp"></i> WhatsApp Reminder
+                <a href="https://wa.me/91${p.phone}?text=${waReminderMsg}" target="_blank" class="bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white px-3.5 py-2 rounded-xl text-xs font-bold inline-flex items-center gap-1.5 shadow-lg shadow-emerald-600/20 transition">
+                  <i class="fa-brands fa-whatsapp"></i> Reminder Message
                 </a>
               ` : '<span class="text-xs text-slate-500">No Phone</span>'}
             </td>
@@ -1290,7 +1300,7 @@
       }).join('');
     }
 
-    function handleCustomerNameInput(val) {
+    window.handleCustomerNameInput = function(val) {
       const dropdown = document.getElementById('customerSuggestions');
       const query = val.trim().toLowerCase();
       
@@ -1311,45 +1321,49 @@
       }
 
       dropdown.innerHTML = matches.map(m => `
-        <div onclick="window.selectCustomerFromSuggestion('${m.name.replace(/'/g, "\\'")}', '${m.phone}')" class="p-2.5 hover:bg-slate-800 cursor-pointer border-b border-slate-800 text-xs flex justify-between items-center">
+        <div onclick="window.selectCustomerFromSuggestion('${m.name.replace(/'/g, "\\'")}', '${m.phone}')" class="p-3 hover:bg-slate-800 cursor-pointer text-xs flex justify-between items-center transition">
           <span class="font-bold text-white">${m.name}</span>
-          <span class="text-slate-400 font-mono">${m.phone}</span>
+          <span class="text-slate-400 font-mono bg-slate-900 px-1.5 py-0.5 rounded">${m.phone}</span>
         </div>
       `).join('');
       dropdown.classList.remove('hidden');
-    }
+    };
 
-    function selectCustomerFromSuggestion(name, phone) {
+    window.selectCustomerFromSuggestion = function(name, phone) {
       document.getElementById('newCustName').value = name;
       document.getElementById('newCustPhone').value = phone;
       document.getElementById('customerSuggestions').classList.add('hidden');
-      checkCustomerPoints(phone);
-    }
+      window.checkCustomerPoints(phone);
+    };
 
-    function checkCustomerPoints(phoneNum) {
+    window.checkCustomerPoints = function(phoneNum) {
       const clean = phoneNum.replace(/[^0-9]/g, '');
       const notice = document.getElementById('availablePointsNotice');
       const redeemBox = document.getElementById('redemptionBox');
       const redeemLabel = document.getElementById('redeemLabelText');
+      const redeemCheckbox = document.getElementById('redeemPointsCheck');
 
       if(clean.length >= 8 && customerPointsMap[clean]) {
         const pts = customerPointsMap[clean].points;
         if(pts > 0) {
-          notice.innerText = `💡 Is client ke paas ₹${pts} ke cashback points available hain!`;
+          notice.innerHTML = `<i class="fa-solid fa-gift"></i> Is client ke paas <b>₹${pts}</b> ke points hain!`;
           notice.classList.remove('hidden');
           redeemBox.classList.remove('hidden');
-          redeemLabel.innerText = `Client ke available ₹${pts} points order amount se minus karein?`;
+          redeemLabel.innerText = `Redeem ₹${pts} Points? (Bill se minus hoga)`;
+          redeemCheckbox.checked = false; 
         } else {
           notice.classList.add('hidden');
           redeemBox.classList.add('hidden');
+          redeemCheckbox.checked = false;
         }
       } else {
         notice.classList.add('hidden');
         redeemBox.classList.add('hidden');
+        if(redeemCheckbox) redeemCheckbox.checked = false;
       }
-    }
+    };
 
-    function togglePointsRedemption() {
+    window.togglePointsRedemption = function() {
       const isChecked = document.getElementById('redeemPointsCheck').checked;
       const phone = document.getElementById('newCustPhone').value.replace(/[^0-9]/g, '');
       const amtInput = document.getElementById('newCustAmount');
@@ -1366,22 +1380,22 @@
           amtInput.value = amtInput.dataset.originalAmt;
         }
       }
-    }
+    };
 
-    function sortMasterOrders(sortType) {
+    window.sortMasterOrders = function(sortType) {
       currentMasterSort = sortType;
       ['date-desc', 'date-asc', 'amount-desc', 'amount-asc'].forEach(st => {
         const btn = document.getElementById(`sort-${st}`);
         if(btn) {
           if(st === sortType) {
-            btn.className = "px-3 py-1.5 rounded-lg border border-slate-600 bg-slate-700 text-white font-semibold transition";
+            btn.className = "px-3 py-1.5 rounded-lg border border-slate-600 bg-slate-700 text-white font-bold transition shadow";
           } else {
             btn.className = "px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 transition";
           }
         }
       });
       renderMasterOrdersTable();
-    }
+    };
 
     function renderMasterOrdersTable() {
       const tbody = document.getElementById('masterOrdersTableBody');
@@ -1416,13 +1430,13 @@
               <button onclick="window.deleteCloudOrder('${ord.id}')" title="Delete" class="p-1.5 rounded bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white transition border border-rose-500/30">
                 <i class="fa-solid fa-trash text-xs"></i>
               </button>
-            ` : `<span class="text-[10px] text-slate-500 italic">Archived</span>`}
+            ` : `<span class="text-[10px] text-slate-500 italic font-medium">Hardcoded</span>`}
           </td>
         </tr>
       `).join('');
     }
 
-    async function deleteCloudOrder(docId) {
+    window.deleteCloudOrder = async function(docId) {
       if(!confirm("Kya aap sach me is order ko delete karna chahte hain?")) return;
       try {
         await deleteDoc(doc(salesDb, "sales_orders", docId));
@@ -1430,10 +1444,9 @@
       } catch(err) {
         alert("Delete error: " + err.message);
       }
-    }
+    };
 
-    // FUNCTION FIX: Opens modal and renders full customer history
-    function openCustomerModal(customerId) {
+    window.openCustomerModal = function(customerId) {
       const c = customerMap[customerId];
       if (!c) return;
       selectedCustomerKey = customerId;
@@ -1446,10 +1459,10 @@
       document.getElementById('modalAvgOrder').innerText = `₹${c.avgOrderValue.toLocaleString('en-IN')}`;
       
       const ptsObj = customerPointsMap[c.phone.replace(/[^0-9]/g, '')];
-      document.getElementById('modalPointsVal').innerText = ptsObj ? `${ptsObj.points} pts` : '0 pts';
+      document.getElementById('modalPointsVal').innerHTML = ptsObj ? `${ptsObj.points} <span class="text-xs">pts</span>` : '0 <span class="text-xs">pts</span>';
 
       const badge = document.getElementById('modalCustomerBadge');
-      badge.className = `text-[10px] font-bold px-2 py-0.5 rounded-full ${c.tagClass}`;
+      badge.className = `text-[10px] font-bold px-2.5 py-0.5 rounded-full ${c.tagClass}`;
       badge.innerText = c.tagLabel;
 
       const timelineDiv = document.getElementById('modalOrderTimeline');
@@ -1459,7 +1472,7 @@
           <div class="flex items-center justify-between p-3 rounded-xl bg-slate-900/90 border border-slate-800 text-xs">
             <div>
               <div class="flex items-center gap-2">
-                <span class="font-bold text-white">Date: ${o.date}</span>
+                <span class="font-bold text-white font-mono text-xs">${o.date}</span>
                 <span class="text-[9px] uppercase font-bold tracking-wider bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded">#${c.orders.length - idx}</span>
               </div>
               <p class="text-[11px] text-slate-400 mt-1">${o.remark || 'Regular Purchase'}</p>
@@ -1467,7 +1480,7 @@
             <div class="flex items-center gap-3">
               <span class="font-black text-emerald-400 text-sm">₹${o.amount.toLocaleString('en-IN')}</span>
               ${o.docId && !o.docId.startsWith('hard-') ? `
-                <button onclick="window.deleteCloudOrder('${o.docId}')" title="Delete" class="text-rose-400 hover:text-rose-300 p-1">
+                <button onclick="window.deleteCloudOrder('${o.docId}')" title="Delete Order" class="text-rose-400 hover:text-rose-300 p-1.5 bg-rose-500/10 rounded border border-rose-500/20 transition">
                   <i class="fa-solid fa-trash"></i>
                 </button>
               ` : ''}
@@ -1485,37 +1498,43 @@
       const modal = document.getElementById('customerModal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
-    }
+    };
 
-    function closeCustomerModal() {
+    window.closeCustomerModal = function() {
       const modal = document.getElementById('customerModal');
       modal.classList.add('hidden');
       modal.classList.remove('flex');
-    }
+    };
 
-    function saveCustomerNote() {
+    window.saveCustomerNote = function(event) {
       if (!selectedCustomerKey) return;
       const noteText = document.getElementById('modalCustomerNote').value.trim();
       customerNotes[selectedCustomerKey] = noteText;
       const btn = event.target;
+      const original = btn.innerHTML;
       btn.innerHTML = `<i class="fa-solid fa-check"></i> Saved!`;
-      setTimeout(() => btn.innerHTML = 'Save Note', 1500);
-    }
+      setTimeout(() => btn.innerHTML = original, 1500);
+    };
 
-    function openAddOrderModal() {
+    window.openAddOrderModal = function() {
       document.getElementById('newCustDate').value = new Date().toISOString().split('T')[0];
       const modal = document.getElementById('addOrderModal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
-    }
+    };
 
-    function closeAddOrderModal() {
+    window.closeAddOrderModal = function() {
       const modal = document.getElementById('addOrderModal');
       modal.classList.add('hidden');
       modal.classList.remove('flex');
-    }
+      
+      // Reset inputs when closed
+      document.querySelector('#addOrderModal form').reset();
+      const amtInput = document.getElementById('newCustAmount');
+      if(amtInput.dataset.originalAmt) delete amtInput.dataset.originalAmt;
+    };
 
-    function toggleCustomProduct(selectEl) {
+    window.toggleCustomProduct = function(selectEl) {
       const row = selectEl.closest('.order-item-row');
       const customInput = row.querySelector('.custom-prod-name');
       if (selectEl.value === 'OTHER_CUSTOM') {
@@ -1525,12 +1544,12 @@
         customInput.classList.add('hidden');
         customInput.required = false;
       }
-    }
+    };
 
-    function addOrderItemRow() {
+    window.addOrderItemRow = function() {
       const container = document.getElementById('orderItemsContainer');
       const div = document.createElement('div');
-      div.className = "order-item-row grid grid-cols-12 gap-2 bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 items-center";
+      div.className = "order-item-row grid grid-cols-12 gap-2.5 bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 items-center mt-2.5";
       div.innerHTML = `
         <div class="col-span-7">
           <select class="prod-select w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-slate-100" onchange="window.toggleCustomProduct(this)" required>
@@ -1561,16 +1580,18 @@
         </div>
       `;
       container.appendChild(div);
-    }
+    };
 
-    async function handleNewOrderSubmit(e) {
+    window.handleNewOrderSubmit = async function(e) {
       e.preventDefault();
 
       const name = document.getElementById('newCustName').value.trim();
       const phone = document.getElementById('newCustPhone').value.trim();
-      const amount = parseFloat(document.getElementById('newCustAmount').value) || 0;
+      let amount = parseFloat(document.getElementById('newCustAmount').value) || 0;
       const date = document.getElementById('newCustDate').value;
       const userRemark = document.getElementById('newCustRemark')?.value.trim() || '';
+      
+      const isRedeeming = document.getElementById('redeemPointsCheck')?.checked;
 
       const rows = document.querySelectorAll('.order-item-row');
       const items = [];
@@ -1601,7 +1622,11 @@
         return;
       }
 
-      const combinedRemark = remarkParts.join(', ') + (userRemark ? ` | ${userRemark}` : '');
+      // Automatically add [POINTS REDEEMED] tag if checkbox is true
+      let combinedRemark = remarkParts.join(', ') + (userRemark ? ` | ${userRemark}` : '');
+      if (isRedeeming) {
+         combinedRemark += ' [POINTS REDEEMED]';
+      }
 
       try {
         await addDoc(salesRef, {
@@ -1639,34 +1664,35 @@
         }
 
         closeAddOrderModal();
-        document.querySelector('#addOrderModal form').reset();
-        document.getElementById('redemptionBox').classList.add('hidden');
-        document.getElementById('availablePointsNotice').classList.add('hidden');
 
         const container = document.getElementById('orderItemsContainer');
         while (container.children.length > 1) {
           container.removeChild(container.lastChild);
         }
 
-        const earnedPoints = Math.floor(amount * 0.01);
-        const expiryDateStr = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+        // Send Thankyou message ONLY IF points were NOT redeemed on this order
+        if (!isRedeeming) {
+            const earnedPoints = Math.floor(amount * 0.01);
+            const expiryDateStr = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+            const thankyouText = `Namaste ${name} ji! 🙏\n\nAapka Khushali Chemicals se order successfully dispatch ho gaya hai! 📦\n\n🎉 Aapke is order par ₹${earnedPoints} cashback points (1% value) add ho chuke hain.\n⏳ Ye points agle 60 dino tak valid hain (${expiryDateStr} tak) aur aap apne next order par isse redeem kar sakte hain.\n\nThank you for choosing Khushali Chemicals! ✨`;
 
-        const thankyouText = `Namaste ${name} ji! 🙏\n\nAapka Khushali Sales se order successfully dispatch ho gaya hai! 📦\n\n🎉 Aapke is order par ₹${earnedPoints} cashback points (1% value) add ho chuke hain.\n⏳ Ye points agle 60 dino tak valid hain (${expiryDateStr} tak) aur aap apne next order par isse redeem kar sakte hain.\n\nThank you for choosing Khushali Sales! ✨`;
-
-        document.getElementById('whatsappMessageBoxPreview').innerText = thankyouText;
-        document.getElementById('sendWhatsappBtn').href = `https://wa.me/91${phone}?text=${encodeURIComponent(thankyouText)}`;
-        
-        const waModal = document.getElementById('whatsappThankyouModal');
-        waModal.classList.remove('hidden');
-        waModal.classList.add('flex');
+            document.getElementById('whatsappMessageBoxPreview').innerText = thankyouText;
+            document.getElementById('sendWhatsappBtn').href = `https://wa.me/91${phone}?text=${encodeURIComponent(thankyouText)}`;
+            
+            const waModal = document.getElementById('whatsappThankyouModal');
+            waModal.classList.remove('hidden');
+            waModal.classList.add('flex');
+        } else {
+             alert(`✅ Order save ho gaya aur Cashback Points deduct ho gaye!`);
+        }
 
       } catch (err) {
         console.error("Order error:", err);
         alert("Error: " + err.message);
       }
-    }
+    };
 
-    function exportToCSV() {
+    window.exportToCSV = function() {
       let csv = 'Customer Name,Phone Number,Total Orders,Total Spend (INR),Avg Order (INR),First Order Date,Last Order Date,Days Inactive,Status Tag\n';
       Object.values(customerMap).forEach(c => {
         const firstDate = c.firstOrderDate ? c.firstOrderDate.toISOString().split('T')[0] : '';
@@ -1693,9 +1719,8 @@
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    }
+    };
 
-    // Live Snapshot Listener (Combines Initial 285 orders with live Firebase additions)
     onSnapshot(salesRef, (snapshot) => {
       let firebaseOrders = [];
       snapshot.forEach((docSnap) => {
@@ -1709,28 +1734,7 @@
       processAllData();
     });
 
-    // Global Bindings
-    window.setFilter = setFilter;
-    window.openCustomerModal = openCustomerModal;
-    window.closeCustomerModal = closeCustomerModal;
-    window.saveCustomerNote = saveCustomerNote;
-    window.openAddOrderModal = openAddOrderModal;
-    window.closeAddOrderModal = closeAddOrderModal;
-    window.exportToCSV = exportToCSV;
-    window.processAllData = processAllData;
-    window.sortMasterOrders = sortMasterOrders;
-    window.deleteCloudOrder = deleteCloudOrder;
-    window.checkCustomerPoints = checkCustomerPoints;
-    window.togglePointsRedemption = togglePointsRedemption;
-    window.toggleCustomProduct = toggleCustomProduct;
-    window.switchTab = switchTab;
-    window.addOrderItemRow = addOrderItemRow;
-    window.handleNewOrderSubmit = handleNewOrderSubmit;
-    window.handleAuthLogin = handleAuthLogin;
-    window.handleCustomerNameInput = handleCustomerNameInput;
-    window.selectCustomerFromSuggestion = selectCustomerFromSuggestion;
-
-        window.onload = function() {
+    window.onload = function() {
       if(!sessionStorage.getItem('khushaliAuth')) {
         document.getElementById('authLockModal').classList.remove('hidden');
         document.getElementById('authLockModal').classList.add('flex');
@@ -1739,7 +1743,6 @@
         document.getElementById('authLockModal').classList.remove('flex');
       }
       
-      // FIX: Agar cloud data aane me time lag raha hai, to pehle hardcoded data set kar do
       if(!window.rawSalesDatabase) {
         window.rawSalesDatabase = [...initialHardcodedData];
       }
