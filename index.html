@@ -432,7 +432,7 @@
             <i class="fa-solid fa-note-sticky text-amber-400"></i> Client CRM / Calling Note
           </label>
           <textarea id="modalCustomerNote" rows="2" placeholder="Customer preference ya discussion note likhein..." class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none focus:border-emerald-500"></textarea>
-          <button onclick="saveCustomerNote(event)" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3.5 py-1.5 rounded-lg border border-slate-700 transition">Save Note</button>
+          <button onclick="saveCustomerNote()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3.5 py-1.5 rounded-lg border border-slate-700 transition">Save Note</button>
         </div>
       </div>
 
@@ -1279,7 +1279,7 @@
           <tr class="hover:bg-slate-800/50 transition border-b border-slate-800/80">
             <td class="py-3 px-4 font-bold text-white">${p.name}</td>
             <td class="py-3 px-4 text-slate-400 font-mono text-xs">${p.phone || 'N/A'}</td>
-            <td class="py-3 px-4 text-center font-black text-amber-400 text-sm">⭐ ${p.points} Pts (₹${p.points})</td>
+            <td class="py-3 px-4 text-center font-extrabold text-amber-400 text-sm">⭐ ${p.points} Pts (₹${p.points})</td>
             <td class="py-3 px-4 text-slate-300 font-mono text-xs">${expiryStr}</td>
             <td class="py-3 px-4">
               ${isEligibleForReminder ? `
@@ -1595,6 +1595,8 @@
       const userRemark = document.getElementById('newCustRemark')?.value.trim() || '';
       
       const isRedeeming = document.getElementById('redeemPointsCheck')?.checked;
+      const phoneClean = phone.replace(/[^0-9]/g, '');
+      const oldPoints = customerPointsMap[phoneClean] ? customerPointsMap[phoneClean].points : 0;
 
       const rows = document.querySelectorAll('.order-item-row');
       const items = [];
@@ -1666,10 +1668,6 @@
           }
         }
 
-        // WhatsApp Message Setup
-        const phoneClean = phone.replace(/[^0-9]/g, '');
-        const oldPoints = customerPointsMap[phoneClean] ? customerPointsMap[phoneClean].points : 0;
-        
         window.closeAddOrderModal();
 
         const container = document.getElementById('orderItemsContainer');
@@ -1682,10 +1680,10 @@
         const expiryDateStr = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
         let orderItemsList = items.map(i => `▪ ${i.qty} x ${i.productName}`).join('\n');
         
-        let thankyouText = `Namaste ${name} ji! 🙏\n\nAapka Khushali Chemicals se naya order successfully dispatch ho gaya hai! 📦✨\n\n📝 *Order Details:*\n${orderItemsList}\n\n💰 *Total Bill:* ₹${amount}\n`;
+        let thankyouText = `Namaste ${name} ji! 🙏\n\nAapka Khushali Chemicals se naya order successfully confirm ho gaya hai! 📦✨\n\n📝 *Order Details:*\n${orderItemsList}\n\n💰 *Total Bill:* ₹${amount}\n`;
         
-        if (isRedeeming && pts > 0) {
-            thankyouText += `\n✅ *Points Redeemed:* Purane ₹${pts} aapke bill se pehle hi minus kar diye gaye hain!\n`;
+        if (isRedeeming && oldPoints > 0) {
+            thankyouText += `\n✅ *Points Redeemed:* Purane ₹${oldPoints} aapke bill se pehle hi minus kar diye gaye hain!\n`;
         }
 
         thankyouText += `\n🎉 *Naye Cashback Points:*\nIs order par aapko *₹${earnedPoints}* naye cashback points mile hain!\n⏳ Ye naye points *${expiryDateStr}* tak valid hain jise aap next order me minus karwa sakte hain.\n\nThank you for choosing Khushali Chemicals! 🌿`;
