@@ -1682,10 +1682,10 @@
         const expiryDateStr = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
         let orderItemsList = items.map(i => `▪ ${i.qty} x ${i.productName}`).join('\n');
         
-        let thankyouText = `Namaste ${name} ji! 🙏\n\nAapka Khushali Chemicals se naya order successfully confirm ho gaya hai! 📦✨\n\n📝 *Order Details:*\n${orderItemsList}\n\n💰 *Total Bill:* ₹${amount}\n`;
+        let thankyouText = `Namaste ${name} ji! 🙏\n\nAapka Khushali Chemicals se naya order successfully dispatch ho gaya hai! 📦✨\n\n📝 *Order Details:*\n${orderItemsList}\n\n💰 *Total Bill:* ₹${amount}\n`;
         
-        if (isRedeeming && oldPoints > 0) {
-            thankyouText += `\n✅ *Points Redeemed:* Purane ₹${oldPoints} aapke bill se pehle hi minus kar diye gaye hain!\n`;
+        if (isRedeeming && pts > 0) {
+            thankyouText += `\n✅ *Points Redeemed:* Purane ₹${pts} aapke bill se pehle hi minus kar diye gaye hain!\n`;
         }
 
         thankyouText += `\n🎉 *Naye Cashback Points:*\nIs order par aapko *₹${earnedPoints}* naye cashback points mile hain!\n⏳ Ye naye points *${expiryDateStr}* tak valid hain jise aap next order me minus karwa sakte hain.\n\nThank you for choosing Khushali Chemicals! 🌿`;
