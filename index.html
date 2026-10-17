@@ -80,26 +80,27 @@
 </head>
 <body class="text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500 selection:text-white antialiased">
 
-  <!-- PASSWORD PROTECT GATEWAY MODAL (PIN: 7568) -->
+    <!-- GOOGLE AUTHENTICATOR GATEWAY MODAL -->
   <div id="authLockModal" class="fixed inset-0 bg-[#030712]/95 backdrop-blur-xl z-50 flex items-center justify-center p-4">
     <div class="glass-card rounded-3xl w-full max-w-sm p-7 text-center space-y-5 shadow-2xl border border-slate-700/80">
       <div class="w-16 h-16 bg-gradient-to-tr from-emerald-600 to-teal-400 text-white rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-lg shadow-emerald-500/30">
-        <i class="fa-solid fa-lock"></i>
+        <i class="fa-solid fa-shield-halved"></i>
       </div>
       <div>
         <h2 class="text-xl font-black text-white tracking-tight">Khushali Sales Portal</h2>
-        <p class="text-xs text-slate-400 mt-1 font-medium">Access unlock karne ke liye 4-digit PIN enter karein</p>
+        <p class="text-xs text-slate-400 mt-1 font-medium">Google Authenticator app se 6-digit code enter karein</p>
       </div>
       <form onsubmit="handleAuthLogin(event)" class="space-y-3.5">
-        <input type="password" id="authPinInput" required maxlength="6" placeholder="Enter PIN" class="w-full bg-slate-900/90 border border-slate-700 text-center text-xl tracking-[0.35em] text-emerald-400 p-3.5 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all font-mono">
-        <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold py-3.5 rounded-xl text-sm transition shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2">
-          <span>Unlock Dashboard</span>
+        <input type="text" id="authPinInput" required maxlength="6" pattern="[0-9]*" inputmode="numeric" autocomplete="one-time-code" placeholder="000000" class="w-full bg-slate-900/90 border border-slate-700 text-center text-2xl tracking-[0.4em] text-emerald-400 p-3.5 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all font-mono">
+        <button type="submit" id="authSubmitBtn" class="w-full bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold py-3.5 rounded-xl text-sm transition shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2">
+          <span>Verify & Unlock</span>
           <i class="fa-solid fa-arrow-right text-xs"></i>
         </button>
-        <p id="authErrorMsg" class="text-xs text-rose-400 font-semibold hidden bg-rose-950/40 py-2 rounded-lg border border-rose-800/40">Galat PIN! Kripya dobara try karein.</p>
+        <p id="authErrorMsg" class="text-xs text-rose-400 font-semibold hidden bg-rose-950/40 py-2 rounded-lg border border-rose-800/40"></p>
       </form>
     </div>
   </div>
+
 
   <!-- Top Sticky Header -->
   <header class="glass-card sticky top-0 z-30 border-b border-slate-800/80">
@@ -131,6 +132,9 @@
     <div class="bg-slate-950/70 border-t border-slate-800/80 px-4 sm:px-6 lg:px-8 py-2.5 flex items-center gap-2 overflow-x-auto custom-scrollbar">
       <button onclick="switchTab('customers')" id="tab-btn-customers" class="tab-btn px-4 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 text-white transition flex items-center gap-2 shadow-md shadow-emerald-600/30">
         <i class="fa-solid fa-users"></i> Customer Dashboard
+      </button>
+      <button onclick="switchTab('leads')" id="tab-btn-leads" class="tab-btn px-4 py-1.5 text-xs font-semibold rounded-lg bg-slate-900 text-slate-300 hover:bg-slate-800 transition flex items-center gap-2 border border-slate-800">
+        <i class="fa-solid fa-fire text-amber-500"></i> New Leads (Sheet Sync)
       </button>
       <button onclick="switchTab('points')" id="tab-btn-points" class="tab-btn px-4 py-1.5 text-xs font-semibold rounded-lg bg-slate-900 text-slate-300 hover:bg-slate-800 transition flex items-center gap-2 border border-slate-800">
         <i class="fa-solid fa-coins text-amber-400"></i> Cashback Points Ledger
@@ -299,7 +303,40 @@
       </div>
     </div>
 
-    <!-- TAB 2: CASHBACK POINTS LEDGER VIEW -->
+    <!-- TAB 2: NEW LEADS SHEET SYNC VIEW -->
+    <div id="tab-content-leads" class="space-y-6 hidden">
+      <div class="glass-card p-4 rounded-2xl flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+            <i class="fa-solid fa-fire"></i> Google Sheet Calling Leads
+          </span>
+          <span class="text-xs bg-slate-800 text-slate-200 border border-slate-700 px-2.5 py-0.5 rounded-full font-bold" id="totalLeadsCount">0 Leads</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="fetchLeadsFromSheet()" class="px-3.5 py-2 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-amber-600/30">
+            <i class="fa-solid fa-rotate-right" id="syncSpinner"></i> Sync from Sheet
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Category Filters -->
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="filterLeads('all')" id="lead-filter-all" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 text-white transition shadow">All Leads (<span id="count-lead-all">0</span>)</button>
+        <button onclick="filterLeads('HOT')" id="lead-filter-hot" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-rose-400 hover:bg-slate-800 transition">🔴 HOT (<span id="count-lead-hot">0</span>)</button>
+        <button onclick="filterLeads('WARM')" id="lead-filter-warm" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-amber-400 hover:bg-slate-800 transition">🟡 WARM (<span id="count-lead-warm">0</span>)</button>
+        <button onclick="filterLeads('COLD')" id="lead-filter-cold" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-blue-400 hover:bg-slate-800 transition">🔵 COLD (<span id="count-lead-cold">0</span>)</button>
+      </div>
+
+      <!-- Leads Grid Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="leadsCardsContainer">
+        <div class="col-span-full p-8 text-center text-slate-400 glass-card rounded-2xl">
+          <i class="fa-solid fa-table-list text-3xl mb-2 text-slate-600 block"></i>
+          Data load karne ke liye <b>'Sync from Sheet'</b> par click karein.
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: CASHBACK POINTS LEDGER VIEW -->
     <div id="tab-content-points" class="space-y-6 hidden">
       <div class="glass-card rounded-2xl overflow-hidden shadow-2xl">
         <div class="p-4 border-b border-slate-800 flex flex-wrap justify-between items-center gap-4 bg-slate-900/60">
@@ -332,7 +369,7 @@
       </div>
     </div>
 
-    <!-- TAB 3: ALL ORDERS MASTER VIEW -->
+    <!-- TAB 4: ALL ORDERS MASTER VIEW -->
     <div id="tab-content-master" class="space-y-6 hidden">
       <div class="glass-card rounded-2xl overflow-hidden shadow-2xl">
         <div class="p-4 border-b border-slate-800 flex flex-wrap justify-between items-center gap-4 bg-slate-900/60">
@@ -581,6 +618,9 @@
       onSnapshot 
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+    // 🔗 GOOGLE APPS SCRIPT WEB APP URL (अपनी Google Apps Script का डिप्लॉयड URL यहाँ पेस्ट करें)
+    const GOOGLE_SHEET_API_URL = "PASTE_YOUR_APPS_SCRIPT_URL_HERE";
+
     const salesConfig = {
       apiKey: "AIzaSyCi6iBEUdcftB0-KMefq62V7Iv3N76r9P4",
       authDomain: "khushali-sales.firebaseapp.com",
@@ -612,6 +652,10 @@
     let customerNotes = {};
     let monthlyChart = null;
     let currentMasterSort = 'date-desc';
+
+    // State for Google Sheets leads
+    let currentSheetLeads = [];
+    let activeLeadFilter = 'all';
 
     // 100% COMPLETE ORIGINAL HARDCODED DATA (hard-1 to hard-285)
     const initialHardcodedData = [
@@ -902,27 +946,54 @@
       { id: "hard-285", name: "Amit Das", phone: "7005055254", date: "2026-08-27", amount: 13159, remark: "Order" }
     ];
 
-    // Password Check PIN: 7568
-    window.handleAuthLogin = function(e) {
+        // Google Authenticator Serverless Login
+    window.handleAuthLogin = async function(e) {
       e.preventDefault();
-      const pin = document.getElementById('authPinInput').value.trim();
-      if(pin === '7568') {
-        document.getElementById('authLockModal').classList.add('hidden');
-        document.getElementById('authLockModal').classList.remove('flex');
-        sessionStorage.setItem('khushaliAuth', 'true');
-      } else {
-        const err = document.getElementById('authErrorMsg');
+      const input = document.getElementById('authPinInput');
+      const otp = input.value.trim();
+      const btn = document.getElementById('authSubmitBtn');
+      const err = document.getElementById('authErrorMsg');
+
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Verifying...`;
+      err.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ otp: otp })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          sessionStorage.setItem('khushaliAuth', data.token);
+          document.getElementById('authLockModal').classList.add('hidden');
+          document.getElementById('authLockModal').classList.remove('flex');
+          input.value = '';
+        } else {
+          err.innerText = data.message || "Galat OTP! Kripya dobara try karein.";
+          err.classList.remove('hidden');
+          input.value = '';
+          input.focus();
+          setTimeout(() => err.classList.add('hidden'), 3500);
+        }
+      } catch (networkErr) {
+        err.innerText = "Network / API error: " + networkErr.message;
         err.classList.remove('hidden');
-        setTimeout(() => err.classList.add('hidden'), 2500);
+        setTimeout(() => err.classList.add('hidden'), 3500);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>Verify & Unlock</span> <i class="fa-solid fa-arrow-right text-xs"></i>`;
       }
     };
+
 
     function processAllData() {
       customerMap = {};
       customerPointsMap = {};
       const pointsEffectiveDate = new Date('2026-09-07');
 
-      // Sort chronological to accurately track point consumption
       window.rawSalesDatabase.sort((a, b) => new Date(a.date) - new Date(b.date));
 
       window.rawSalesDatabase.forEach(item => {
@@ -961,13 +1032,10 @@
           customerPointsMap[key] = { name: cleanName, phone: cleanPhone, points: 0, lastOrderDate: orderDateObj, expiryDate: null };
         }
 
-        // Logic to track logic (Earn vs Redeem)
         if (item.remark && item.remark.includes('[POINTS REDEEMED]')) {
-           // Client used points on this order, set to 0.
            customerPointsMap[key].points = 0;
         }
 
-        // Har order par (chahe redeem kiya ho ya nahi), 1% naye points milenge
         if (orderDateObj >= pointsEffectiveDate) {
           const earnedPts = Math.floor(amt * 0.01);
           customerPointsMap[key].points += earnedPts;
@@ -1024,8 +1092,9 @@
       renderPointsLedgerTable();
     }
 
+    // TAB SWITCHING (INCLUDES NEW LEADS TAB)
     window.switchTab = function(tabName) {
-      ['customers', 'points', 'master'].forEach(t => {
+      ['customers', 'points', 'master', 'leads'].forEach(t => {
         const content = document.getElementById(`tab-content-${t}`);
         const btn = document.getElementById(`tab-btn-${t}`);
         if(content && btn) {
@@ -1038,6 +1107,10 @@
           }
         }
       });
+
+      if(tabName === 'leads' && currentSheetLeads.length === 0) {
+        window.fetchLeadsFromSheet();
+      }
     };
 
     function updateTopKPIs() {
@@ -1302,6 +1375,134 @@
       }).join('');
     }
 
+    // --- GOOGLE SHEET TWO-WAY LIVE SYNC FUNCTIONS ---
+    window.fetchLeadsFromSheet = async function() {
+      if(!GOOGLE_SHEET_API_URL || GOOGLE_SHEET_API_URL.includes("PASTE_YOUR_APPS_SCRIPT_URL_HERE")) {
+        alert("⚠️ Kripya index.html script me GOOGLE_SHEET_API_URL apna Apps Script Web App URL set karein.");
+        return;
+      }
+
+      const spinner = document.getElementById('syncSpinner');
+      if(spinner) spinner.classList.add('fa-spin');
+      const container = document.getElementById('leadsCardsContainer');
+      container.innerHTML = '<div class="col-span-full p-8 text-center text-emerald-400 glass-card rounded-2xl"><i class="fa-solid fa-spinner fa-spin text-3xl mb-2 block"></i>Google Sheet se leads sync ho rahi hain...</div>';
+
+      try {
+        const res = await fetch(GOOGLE_SHEET_API_URL);
+        const data = await res.json();
+        currentSheetLeads = Array.isArray(data) ? data : [];
+        renderLeadsCards();
+      } catch(err) {
+        container.innerHTML = `<div class="col-span-full p-8 text-center text-rose-400 glass-card rounded-2xl"><i class="fa-solid fa-circle-exclamation text-3xl mb-2 block"></i>Sync Error: ${err.message}</div>`;
+      } finally {
+        if(spinner) spinner.classList.remove('fa-spin');
+      }
+    };
+
+    window.filterLeads = function(cat) {
+      activeLeadFilter = cat;
+      ['all', 'hot', 'warm', 'cold'].forEach(f => {
+        const btn = document.getElementById(`lead-filter-${f}`);
+        if(btn) {
+          if(f.toUpperCase() === cat.toUpperCase() || (f === 'all' && cat === 'all')) {
+            btn.className = "px-3 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 text-white transition shadow";
+          } else {
+            btn.className = "px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-900/80 text-slate-300 hover:bg-slate-800 transition";
+          }
+        }
+      });
+      renderLeadsCards();
+    };
+
+    function renderLeadsCards() {
+      const container = document.getElementById('leadsCardsContainer');
+      if(!container) return;
+
+      // Filter out completed/closed deals
+      let list = currentSheetLeads.filter(l => (l.stage || '').toLowerCase() !== 'order closed');
+
+      document.getElementById('totalLeadsCount').innerText = `${list.length} Leads`;
+      document.getElementById('count-lead-all').innerText = list.length;
+      document.getElementById('count-lead-hot').innerText = list.filter(l => (l.category || '').toUpperCase() === 'HOT').length;
+      document.getElementById('count-lead-warm').innerText = list.filter(l => (l.category || '').toUpperCase() === 'WARM').length;
+      document.getElementById('count-lead-cold').innerText = list.filter(l => (l.category || '').toUpperCase() === 'COLD').length;
+
+      if(activeLeadFilter !== 'all') {
+        list = list.filter(l => (l.category || '').toUpperCase() === activeLeadFilter.toUpperCase());
+      }
+
+      if(list.length === 0) {
+        container.innerHTML = `<div class="col-span-full p-8 text-center text-slate-400 glass-card rounded-2xl"><i class="fa-regular fa-folder-open text-3xl mb-2 text-slate-600 block"></i>Is category me koi active lead nahi hai.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(l => {
+        const cat = (l.category || 'COLD').toUpperCase();
+        let badgeClass = 'bg-blue-500/20 text-blue-400 border-blue-500/30';
+        if(cat === 'HOT') badgeClass = 'bg-rose-500/20 text-rose-400 border-rose-500/30';
+        if(cat === 'WARM') badgeClass = 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+
+        let waText = '';
+        if(cat === 'HOT') {
+          waText = `Namaste ${l.name} ji, Khushali Chemicals (Jaipur) se. Aapke ${l.product} ke quotation ke according trial kit ya order aaj dispatch karwa dein?`;
+        } else if(cat === 'WARM') {
+          waText = `Namaste ${l.name} ji, Khushali Chemicals se. Humne aapko ${l.product} ke rates bheje the. Hamari quality aur thickness market mein best hai. Kya aapne check kiya?`;
+        } else {
+          waText = `Namaste ${l.name} ji, Khushali Chemicals (Jaipur) se. Hamare paas sabhi cleaning concentrates (in Kg) best wholesale rate par available hain. Kabhi bhi requirement ho toh zaroor batayega.`;
+        }
+
+        return `
+          <div class="glass-card glass-card-hover p-4 rounded-2xl flex flex-col justify-between border border-slate-800">
+            <div>
+              <div class="flex justify-between items-start gap-2 mb-2">
+                <div>
+                  <h4 class="font-bold text-white text-sm">${l.name}</h4>
+                  <p class="text-[11px] text-slate-400 mt-0.5"><i class="fa-solid fa-location-dot text-slate-500"></i> ${l.city || 'Location N/A'} • <span class="font-mono text-slate-300">${l.phone}</span></p>
+                </div>
+                <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded border ${badgeClass}">${cat}</span>
+              </div>
+              
+              <div class="my-2.5 p-2 rounded-xl bg-slate-950/60 border border-slate-800/80">
+                <span class="text-[10px] uppercase font-bold text-slate-400 block">Requirement:</span>
+                <p class="text-xs font-semibold text-emerald-400 mt-0.5">${l.product || 'Cleaning Concentrate'}</p>
+              </div>
+
+              <div class="text-[11px] text-slate-300">
+                <span class="text-slate-500 font-semibold">Remark:</span> ${l.remark || 'Direct Lead'}
+              </div>
+              
+              ${l.nextCall ? `<div class="text-[10px] text-amber-400 mt-1 font-mono"><i class="fa-regular fa-clock"></i> Next Call: ${l.nextCall}</div>` : ''}
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+              <div class="flex items-center gap-1.5">
+                <a href="tel:+91${l.phone}" class="p-2 rounded-xl bg-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-white border border-blue-500/30 transition text-xs font-bold" title="Call">
+                  <i class="fa-solid fa-phone"></i>
+                </a>
+                <a href="https://wa.me/91${l.phone}?text=${encodeURIComponent(waText)}" target="_blank" class="p-2 rounded-xl bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white border border-emerald-500/30 transition text-xs font-bold" title="WhatsApp">
+                  <i class="fa-brands fa-whatsapp"></i>
+                </a>
+              </div>
+              <button onclick="window.convertLeadToOrder('${l.name.replace(/'/g, "\\'")}', '${l.phone}', ${l.rowNum || 0}, '${(l.product || '').replace(/'/g, "\\'")}')" class="px-3 py-2 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md shadow-emerald-600/30 transition">
+                <i class="fa-solid fa-circle-check"></i> Convert to Order
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.convertLeadToOrder = function(name, phone, rowNum, product) {
+      window.openAddOrderModal();
+      document.getElementById('newCustName').value = name;
+      document.getElementById('newCustPhone').value = phone;
+      if(product) {
+        document.getElementById('newCustRemark').value = `Converted from Lead: ${product}`;
+      }
+      document.querySelector('#addOrderModal form').dataset.leadRowNum = rowNum;
+      window.checkCustomerPoints(phone);
+    };
+
     // --- CUSTOMER AUTO-SUGGEST / SEARCH DROPDOWN LOGIC ---
     window.handleCustomerNameInput = function(val) {
       const dropdown = document.getElementById('customerSuggestions');
@@ -1531,10 +1732,10 @@
       modal.classList.add('hidden');
       modal.classList.remove('flex');
       
-      // Reset inputs when closed
       document.querySelector('#addOrderModal form').reset();
       const amtInput = document.getElementById('newCustAmount');
       if(amtInput.dataset.originalAmt) delete amtInput.dataset.originalAmt;
+      delete document.querySelector('#addOrderModal form').dataset.leadRowNum;
     };
 
     window.toggleCustomProduct = function(selectEl) {
@@ -1627,7 +1828,6 @@
         return;
       }
 
-      // Automatically add [POINTS REDEEMED] tag if checkbox is true
       let combinedRemark = remarkParts.join(', ') + (userRemark ? ` | ${userRemark}` : '');
       if (isRedeeming) {
          combinedRemark += ' [POINTS REDEEMED]';
@@ -1668,6 +1868,20 @@
           }
         }
 
+        // Two-Way Sync: Update Sheet to 'Order Closed' if order was converted from Sheet lead
+        const leadRowNum = document.querySelector('#addOrderModal form').dataset.leadRowNum;
+        if(leadRowNum && GOOGLE_SHEET_API_URL && !GOOGLE_SHEET_API_URL.includes("PASTE_YOUR_APPS_SCRIPT_URL_HERE")) {
+          fetch(GOOGLE_SHEET_API_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'close_lead', rowNum: parseInt(leadRowNum) })
+          }).then(() => {
+            console.log("Lead marked as closed in Google Sheet");
+            setTimeout(window.fetchLeadsFromSheet, 2000);
+          }).catch(e => console.error("Sheet update err:", e));
+        }
+
         window.closeAddOrderModal();
 
         const container = document.getElementById('orderItemsContainer');
@@ -1675,7 +1889,6 @@
           container.removeChild(container.lastChild);
         }
 
-        // Generate dynamic WhatsApp Message with Order Details
         const earnedPoints = Math.floor(amount * 0.01);
         const expiryDateStr = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
         let orderItemsList = items.map(i => `▪ ${i.qty} x ${i.productName}`).join('\n');
@@ -1722,7 +1935,7 @@
 
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement('link');
       link.setAttribute('href', url);
       link.setAttribute('download', `Khushali_Customer_Tracking_${new Date().toISOString().split('T')[0]}.csv`);
       document.body.appendChild(link);
